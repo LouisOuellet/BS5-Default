@@ -1,0 +1,12 @@
+// Z-Index
+
+$count: 0;
+@while $count < 20 {
+  $index: calc((5 * $count) + 1000);
+
+  .z-#{$index} {
+      z-index: $index;
+  }
+
+  $count: $count + 1;
+}
