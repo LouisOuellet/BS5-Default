@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/themes/cyborg/styles.css" data-theme="cyborg" disabled>
     <link rel="stylesheet" href="css/themes/darkly/styles.css" data-theme="darkly" disabled>
     <link rel="stylesheet" href="css/themes/flathy/styles.css" data-theme="flathy" disabled>
+    <link rel="stylesheet" href="css/themes/glass/styles.css" data-theme="glass" disabled>
     <link rel="stylesheet" href="css/themes/journal/styles.css" data-theme="journal" disabled>
     <link rel="stylesheet" href="css/themes/litera/styles.css" data-theme="litera" disabled>
     <link rel="stylesheet" href="css/themes/lumen/styles.css" data-theme="lumen" disabled>
@@ -109,6 +110,11 @@
           <li>
             <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="flathy" aria-pressed="false">
               Flathy
+            </button>
+          </li>
+          <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="glass" aria-pressed="false">
+              Glass
             </button>
           </li>
           <li>
@@ -221,259 +227,470 @@
     <!-- ======= Main ======= -->
     <main>
     
-      <!-- ======= Header ======= -->
-      <div class="fixed-top shadow">
-        <header class="d-flex flex-wrap justify-content-center px-5 py-3 border-bottom bg-body">
-          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <i class="bi bi-bootstrap-fill me-2" style="font-size:32px;"></i>
-            <span class="fs-4">Website</span>
-          </a>
-    
-          <ul id="main-nav" class="nav nav-pills my-1">
-            <li class="nav-item"><a href="#home" class="nav-link active" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
-            <li class="nav-item"><a href="#pricing" class="nav-link">Pricing</a></li>
-            <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
-          </ul>
+      <!-- ======= Panel ======= -->
+      <div class="container-fluid">
+        <div class="row">
 
-          <a href="panel.html" class="btn btn-outline-primary ms-2 my-1">Sign in</a>
-        </header>
-      </div>
-      <!-- ======= End Header ======= -->
-
-      <!-- ======= Home ======= -->
-      <div id="home" class="p-5 mt-5 text-center border-bottom">
-        <h1 class="display-4 fw-bold text-body-emphasis">Home</h1>
-        <div class="col-lg-6 mx-auto">
-          <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-            <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3">Primary button</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Secondary</button>
-          </div>
-        </div>
-        <div class="overflow-hidden" style="max-height: 30vh;">
-          <div class="container px-5">
-            <img src="https://getbootstrap.com/docs/5.3/examples/heroes/bootstrap-docs.png" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Example image" width="700" height="500" loading="lazy">
-          </div>
-        </div>
-      </div>
-      <!-- ======= End Home ======= -->
-
-      <!-- ======= About ======= -->
-      <div id="about" class="p-5">
-        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-          <div class="col-10 col-sm-8 col-lg-6">
-            <img src="https://getbootstrap.com/docs/5.3/examples/heroes/bootstrap-themes.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
-          </div>
-          <div class="col-lg-6">
-            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">About</h1>
-            <p class="lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-              <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
-              <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- ======= End About ======= -->
-
-      <!-- ======= Services ======= -->
-      <div id="services" class="p-5">
-        <h2 class="pb-2 border-bottom">Services</h2>
-    
-        <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
-          <div class="col d-flex flex-column align-items-start gap-2">
-            <h3 class="fw-bold">Left-aligned title explaining these awesome features</h3>
-            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-            <a href="#" class="btn btn-primary btn-lg">Primary button</a>
-          </div>
-    
-          <div class="col">
-            <div class="row row-cols-1 row-cols-sm-2 g-4">
-              <div class="col d-flex flex-column gap-2">
-                <div class="d-inline-flex align-items-center justify-content-center text-bg-primary fs-4 rounded-3 p-2" style="width:3rem;">
-                  <i class="bi bi-collection-fill" style="font-size:1em;"></i>
-                </div>
-                <h4 class="fw-semibold mb-0">Featured title</h4>
-                <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
-              </div>
-    
-              <div class="col d-flex flex-column gap-2">
-                <div class="d-inline-flex align-items-center justify-content-center text-bg-primary fs-4 rounded-3 p-2" style="width:3rem;">
-                  <i class="bi bi-gear-fill" style="font-size:1em;"></i>
-                </div>
-                <h4 class="fw-semibold mb-0">Featured title</h4>
-                <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
-              </div>
-    
-              <div class="col d-flex flex-column gap-2">
-                <div class="d-inline-flex align-items-center justify-content-center text-bg-primary fs-4 rounded-3 p-2" style="width:3rem;">
-                  <i class="bi bi-speedometer" style="font-size:1em;"></i>
-                </div>
-                <h4 class="fw-semibold mb-0">Featured title</h4>
-                <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
-              </div>
-    
-              <div class="col d-flex flex-column gap-2">
-                <div class="d-inline-flex align-items-center justify-content-center text-bg-primary fs-4 rounded-3 p-2" style="width:3rem;">
-                  <i class="bi bi-table" style="font-size:1em;"></i>
-                </div>
-                <h4 class="fw-semibold mb-0">Featured title</h4>
-                <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- ======= End Services ======= -->
-
-      <!-- ======= Pricing ======= -->
-      <div id="pricing" class="p-5">
-        <div class="p-3 pb-md-4 mx-auto text-center">
-          <h1 class="display-4 fw-normal">Pricing</h1>
-          <p class="fs-5 text-body-secondary">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>
-        </div>
-        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-          <div class="col">
-            <div class="card mb-4 rounded-3 shadow-sm">
-              <div class="card-header py-3">
-                <h4 class="my-0 fw-normal">Free</h4>
-              </div>
-              <div class="card-body">
-                <h1 class="card-title pricing-card-title">$0<small class="text-body-secondary fw-light">/mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                  <li>10 users included</li>
-                  <li>2 GB of storage</li>
-                  <li>Email support</li>
-                  <li>Help center access</li>
-                </ul>
-                <button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign up for free</button>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card mb-4 rounded-3 shadow-sm">
-              <div class="card-header py-3">
-                <h4 class="my-0 fw-normal">Pro</h4>
-              </div>
-              <div class="card-body">
-                <h1 class="card-title pricing-card-title">$15<small class="text-body-secondary fw-light">/mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                  <li>20 users included</li>
-                  <li>10 GB of storage</li>
-                  <li>Priority email support</li>
-                  <li>Help center access</li>
-                </ul>
-                <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card mb-4 rounded-3 shadow-sm border-primary">
-              <div class="card-header py-3 text-bg-primary border-primary">
-                <h4 class="my-0 fw-normal">Enterprise</h4>
-              </div>
-              <div class="card-body">
-                <h1 class="card-title pricing-card-title">$29<small class="text-body-secondary fw-light">/mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                  <li>30 users included</li>
-                  <li>15 GB of storage</li>
-                  <li>Phone and email support</li>
-                  <li>Help center access</li>
-                </ul>
-                <button type="button" class="w-100 btn btn-lg btn-primary">Contact us</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- ======= End Pricing ======= -->
-
-      <!-- ======= Contact ======= -->
-      <div id="contact" class="p-5">
-        <div class="row align-items-center g-lg-5 py-5">
-          <div class="col-lg-7 text-center text-lg-start">
-            <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">Contact</h1>
-            <p class="col-lg-10 fs-4">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
-          </div>
-          <div class="col-md-10 mx-auto col-lg-5">
-            <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-              <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
-              </div>
-              <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword">Password</label>
-              </div>
-              <div class="checkbox mb-3">
-                <label>
-                  <input type="checkbox" value="remember-me"> Remember me
-                </label>
-              </div>
-              <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
-              <hr class="my-4">
-              <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
-            </form>
-          </div>
-        </div>
-      </div>
-      <!-- ======= End Contact ======= -->
-
-      <!-- ======= Footer ======= -->
-      <div class="p-5 mt-5 border-top shadow">
-        <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5">
-          <div class="col mb-3">
-            <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
-              <i class="bi bi-bootstrap-fill me-2" style="font-size:32px;"></i>
-            </a>
-            <p class="text-body-secondary">&copy; 2023</p>
-          </div>
-      
-          <div class="col mb-3">
-      
-          </div>
-      
-          <div class="col mb-3">
-            <h5>Section</h5>
-            <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+          <!-- ======= Sidebar ======= -->
+          <div class="col-md-2 sidebar vh-100 bg-dark bg-glass position-fixed vh-100 overflow-y collapse collapse-horizontal show" id="sidebar">
+            <div class="container-fluid">
+              <a class="sidebar-brand w-100 d-flex justify-content-center align-items-center py-4 fs-4 text-decoration-none" href="/">
+                <i class="bi bi-bootstrap-fill me-2 fs-1"></i>
+                <h4 class="brand m-0">Admin Panel</h4>
+              </a>
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                      <i class="bi bi-speedometer2 me-1"></i>
+                      <span class="">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#submenu" role="button" aria-expanded="false" aria-controls="submenu">
+                      <i class="bi bi-file-post me-1"></i>
+                      <span class="">Posts</span>
+                    </a>
+                    <div class="collapse" id="submenu">
+                        <ul class="nav flex-column">
+                            <li class="nav-item ps-3">
+                                <a class="nav-link active" href="#">
+                                  <i class="bi bi-plus me-1"></i>
+                                  <span class="">New</span>
+                                </a>
+                            </li>
+                            <li class="nav-item ps-3">
+                                <a class="nav-link" href="#">
+                                  <i class="bi bi-list me-1"></i>
+                                  <span class="">All</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="page.html">
+                      <i class="bi bi-circle me-1"></i>
+                      <span class="">Page</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                      <i class="bi bi-gear me-1"></i>
+                      <span class="">Settings</span>
+                    </a>
+                </li>
             </ul>
+            </div>
           </div>
-      
-          <div class="col mb-3">
-            <h5>Section</h5>
-            <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
-            </ul>
+          <!-- ======= End Sidebar ======= -->
+    
+          <!-- ======= Main Content ======= -->
+          <div id="content" class="col-12 col-md-10 d-md-block p-0" style="margin-left: 16.666667%;">
+
+            <!-- ======= Navbar ======= -->
+            <nav class="navbar navbar-expand-md navbar-light px-3">
+              <div class="container-fluid">
+
+                <!-- ======= Sidebar Toggler ======= -->
+                <a id="sidebarToggle" class="cursor-pointer pe-3" role="button" aria-expanded="true" aria-controls="Toggle Sidebar">
+                  <i class="bi bi-list fs-2"></i>
+                </a>
+                <!-- ======= End Sidebar Toggler ======= -->
+
+                <!-- ======= Nav ======= -->
+                <div class="nav nav-pills d-flex align-items-center">
+                  <a class="nav-link active" href="#">
+                    <i class="bi bi-speedometer2 me-1"></i>
+                    <span class="brand">Dashboard</span>
+                  </a>
+                  <a class="nav-link" href="#">
+                    <i class="bi bi-people me-1"></i>
+                    <span class="brand">Users</span>
+                  </a>
+                </div>
+                <!-- ======= End Nav ======= -->
+
+                <!-- ======= Widgets ======= -->
+                <ul class="nav nav-pills ms-3 d-flex align-items-center ms-auto">
+
+                  <!-- ======= Search Field ======= -->
+                  <li id="searchField" class="nav-item collapse collapse-horizontal">
+                    <form class="d-flex">
+                      <input id="search" type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="searchBtn">
+                    </form>
+                  </li>
+                  <!-- ======= End Search Field ======= -->
+
+                  <!-- ======= Search Button ======= -->
+                  <li class="nav-item">
+                    <a id="searchBtn" href="#searchField" class="nav-link text-decoration-none py-2" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="Toggle Search Field">
+                      <i class="bi bi-search fs-4"></i>
+                    </a>
+                  </li>
+                  <!-- ======= End Search Button ======= -->
+
+                  <!-- ======= Tasks ======= -->
+                  <li class="nav-item dropdown">
+                    <a id="taskMenu" href="#" class="nav-link text-decoration-none py-2" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-list-task fs-4"></i>
+                      <span class="position-absolute top-25 start-75 translate-middle text-bg-primary border border-light rounded-circle" style="padding: 8px; display:block;"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-list dropdown-menu-end pb-0" aria-labelledby="notificationMenu" style="min-width:350px;max-width:500px;">
+                      <li>
+                        <h5 class="py-2 px-3 m-0 text-center cursor-default">
+                          Tasks
+                        </h5>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item d-flex flex-column py-2" href="#">
+                          <div>
+                            <span class="text-wrap">Lorem Ipsum</span>
+                            <small class="text-muted float-end">
+                              20%
+                            </small>
+                          </div>
+                          <div>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"></div>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item d-flex flex-column py-2" href="#">
+                          <div>
+                            <span class="text-wrap">Lorem Ipsum</span>
+                            <small class="text-muted float-end">
+                              75%
+                            </small>
+                          </div>
+                          <div>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item d-flex flex-column py-2" href="#">
+                          <div>
+                            <span class="text-wrap">Lorem Ipsum</span>
+                            <small class="text-muted float-end">
+                              50%
+                            </small>
+                          </div>
+                          <div>
+                            <div class="progress">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item text-center py-2 rounded-bottom" href="#">
+                          <small>View All Tasks</small>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- ======= End Tasks ======= -->
+
+                  <!-- ======= Messages ======= -->
+                  <li class="nav-item dropdown">
+                    <a id="messageMenu" href="#" class="nav-link text-decoration-none py-2" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-envelope fs-4"></i>
+                      <span class="position-absolute top-25 start-75 translate-middle text-bg-info border border-light rounded-circle" style="padding: 8px; display:block;"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-list dropdown-menu-end pb-0" aria-labelledby="notificationMenu" style="min-width:350px;max-width:500px;">
+                      <li>
+                        <h5 class="py-2 px-3 m-0 text-center cursor-default">
+                          Messages
+                        </h5>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center py-2" href="#">
+                          <div class="me-3">
+                            <img src="https://github.com/mdo.png" alt="mdo" width="48" height="48" class="rounded-circle">
+                          </div>
+                          <div class="d-flex flex-column align-items-justify">
+                            <span class="text-wrap">A new monthly report is ready to download!</span>
+                            <small class="text-muted">
+                              <span>John Doe</span>
+                              <timeago class="ms-2">December 12, 2019</timeago>
+                            </small>
+                          </div>
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item text-center py-2 rounded-bottom" href="#">
+                          <small>Read More</small>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- ======= End Messages ======= -->
+
+                  <!-- ======= Notifications ======= -->
+                  <li class="nav-item dropdown">
+                    <a id="notificationMenu" href="#" class="nav-link text-decoration-none py-2" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-bell fs-4"></i>
+                      <span class="position-absolute top-25 start-75 translate-middle text-bg-danger border border-light rounded-circle" style="padding: 8px; display:block;"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-list dropdown-menu-end pb-0" aria-labelledby="notificationMenu" style="min-width:350px;max-width:500px;">
+                      <li>
+                        <h5 class="py-2 px-3 m-0 text-center cursor-default">
+                          Notifications
+                        </h5>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item d-flex align-items-center py-2" href="#">
+                          <div class="me-3">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary" style="width:48px;height:48px;">
+                              <i class="bi bi-bell text-white"></i>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-column align-items-justify">
+                            <small class="text-muted">
+                              <timeago>December 12, 2019</timeago>
+                            </small>
+                            <span class="text-wrap">A new monthly report is ready to download!</span>
+                          </div>
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider m-0"></li>
+                      <li>
+                        <a class="dropdown-item text-center py-2 rounded-bottom" href="#">
+                          <small>Mark All as Read</small>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- ======= End Notifications ======= -->
+
+                  <!-- ======= FullScreen ======= -->
+                  <li class="nav-item">
+                    <a id="fullscreenToggle" href="#" class="nav-link text-decoration-none py-2">
+                      <i class="bi bi-fullscreen fs-4"></i>
+                    </a>
+                  </li>
+                  <!-- ======= End FullScreen ======= -->
+
+                  <!-- ======= Profile ======= -->
+                  <li class="nav-item dropdown">
+                    <a id="profileMenu" href="#" class="nav-link text-decoration-none py-0" data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="https://github.com/mdo.png" alt="mdo" width="48" height="48" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-person me-1"></i>
+                          <span>Profile</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-gear me-1"></i>
+                          <span>Settings</span>
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-box-arrow-right me-1"></i>
+                          <span>Sign Out</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- ======= End Profile ======= -->
+
+                </ul>
+                <!-- ======= End Widgets ======= -->
+
+              </div>
+            </nav>
+            <!-- ======= End Navbar ======= -->
+    
+            <!-- ======= Page Title and Breadcrumbs ======= -->
+            <div class="row py-2 px-3 mx-0 d-flex align-items-center">
+              <div class="col-md-6 d-flex align-items-center justify-content-start">
+                <h1 class="m-0">Dashboard</h1>
+              </div>
+              <div class="col-md-6 d-flex justify-content-end">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+            <!-- ======= End Page Title and Breadcrumbs ======= -->
+    
+            <!-- ======= Page Content ======= -->
+            <div class="row mt-4 px-3 mx-0">
+
+              <!-- ======= Dashboard ======= -->
+              <div class="col-12">
+                <div class="row">
+
+                  <!-- ======= Badge Bonus ======= -->
+                  <div class="col-3 my-2" id="badgeBonus">
+                  </div>
+                  <!-- ======= End Badge Bonus ======= -->
+
+                  <!-- ======= Badge Tasks ======= -->
+                  <div class="col-3 my-2" id="badgeTasks">
+                  </div>
+                  <!-- ======= End Badge Tasks ======= -->
+
+                  <!-- ======= Badge Transactions ======= -->
+                  <div class="col-3 my-2" id="badgeTransactions">
+                  </div>
+                  <!-- ======= End Badge Transactions ======= -->
+
+                  <!-- ======= Badge Tickets ======= -->
+                  <div class="col-3 my-2" id="badgeTickets">
+                  </div>
+                  <!-- ======= End Badge Tickets ======= -->
+
+                  <!-- ======= Monthly Recap Report ======= -->
+                  <div class="col-12 my-2">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="card-title">Monthly Recap Report</h5>
+                      </div>
+                      <div class="card-body pb-1">
+                        <div class="row">
+                          <div class="col-md-8">
+                            <p class="text-center">
+                              <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                            </p>
+                            <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                              <canvas id="salesChart" style="max-height:200px;"></canvas>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <p class="text-center">
+                              <strong>Goal Completion</strong>
+                            </p>
+                            <div class="progress-group">
+                              Add Products to Cart
+                              <span class="float-right"><b>160</b>/200</span>
+                              <div class="progress progress-sm">
+                                <div class="progress-bar bg-primary" style="width: 80%"></div>
+                              </div>
+                            </div>
+                            <div class="progress-group">
+                              Complete Purchase
+                              <span class="float-right"><b>310</b>/400</span>
+                              <div class="progress progress-sm">
+                                <div class="progress-bar bg-danger" style="width: 75%"></div>
+                              </div>
+                            </div>
+                            <div class="progress-group">
+                              <span class="progress-text">Visit Premium Page</span>
+                              <span class="float-right"><b>480</b>/800</span>
+                              <div class="progress progress-sm">
+                                <div class="progress-bar bg-success" style="width: 60%"></div>
+                              </div>
+                            </div>
+                            <div class="progress-group">
+                              Send Inquiries
+                              <span class="float-right"><b>250</b>/500</span>
+                              <div class="progress progress-sm">
+                                <div class="progress-bar bg-warning" style="width: 50%"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="row">
+                          <div class="col-sm-3 col-6">
+                            <div class="d-flex flex-column justify-content-center align-items-center border-end">
+                              <span class="text-success"><i class="bi bi-caret-up me-1"></i>17%</span>
+                              <h5 class="my-2">$340,600.00</h5>
+                              <span class="description-text">TOTAL REVENUE</span>
+                            </div>
+                          </div>
+                          <div class="col-sm-3 col-6">
+                            <div class="d-flex flex-column justify-content-center align-items-center border-end">
+                              <span class="text-warning"><i class="bi bi-caret-up me-1"></i>0%</span>
+                              <h5 class="my-2">$341,300.00</h5>
+                              <span class="description-text">TOTAL COST</span>
+                            </div>
+                          </div>
+                          <div class="col-sm-3 col-6">
+                            <div class="d-flex flex-column justify-content-center align-items-center border-end">
+                              <span class="text-danger"><i class="bi bi-caret-down me-1"></i>20%</span>
+                              <h5 class="my-2">- $700.00</h5>
+                              <span class="description-text">TOTAL PROFIT</span>
+                            </div>
+                          </div>
+                          <div class="col-sm-3 col-6">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                              <span class="text-danger"><i class="bi bi-caret-down me-1"></i>18%</span>
+                              <h5 class="my-2">$0.00</h5>
+                              <span class="description-text">GOAL COMPLETIONS</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ======= End Monthly Recap Report ======= -->
+
+                  <!-- ======= Timeline ======= -->
+                  <div class="col-12 my-2">
+                    <div class="card card-body">
+                      <div id="timelineContainer"></div>
+                    </div>
+                  </div>
+                  <!-- ======= End Timeline ======= -->
+
+                  <!-- ======= Feed ======= -->
+                  <div class="col-12 my-2">
+                    <div class="card card-body">
+                      <div id="feedContainer"></div>
+                    </div>
+                  </div>
+                  <!-- ======= End Feed ======= -->
+
+                  <!-- ======= Spacer ======= -->
+                  <div class="col-12 my-5"></div>
+                  <!-- ======= End Spacer ======= -->
+
+                </div>
+              </div>
+              <!-- ======= End Dashboard ======= -->
+
+            </div>
+            <!-- ======= End Page Content ======= -->
+
           </div>
-      
-          <div class="col mb-3">
-            <h5>Section</h5>
-            <ul class="nav flex-column">
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
-              <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
-            </ul>
-          </div>
-        </footer>
+          <!-- ======= End Main Content ======= -->
+
+        </div>
       </div>
-      <!-- ======= End Footer ======= -->
+      <!-- ======= End Panel ======= -->
 
     </main>
     <!-- ======= End Main ======= -->
       
-    <script type="module" src="js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.7/jquery.timeago.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/default.js"></script>
+    <script src="/js/builder.js"></script>
+    <script src="/js/dashboard.js"></script>
   </body>
 </html>
