@@ -514,11 +514,8 @@ class Card {
         // Configure Card Tools
         // Close Button
         if(self.#options.close){
-            console.log('close')
             this.#card.collapse.bs = new bootstrap.Collapse(this.#card.collapse,{toggle:false});
-            console.log(this.#card.tools.close)
             this.#card.tools.close.click(function(){
-                console.log(self.#card.collapse)
                 self.#card.collapse.bs.hide();
                 self.#card.collapse.on('hidden.bs.collapse',function(){
                     self.#card.collapse.remove();
@@ -664,6 +661,497 @@ class Card {
         
         // Prepend Object
         this.#card.collapse.prepend(object);
+
+        // Return Object
+        return this;
+    }
+}
+
+// List
+class List {
+
+    #list = null;
+    #options = {
+        class: {
+            list: null,
+        },
+        callback: {
+            tool: null,
+            action: null,
+            item: null,
+            click: null,
+            dblclick: null,
+        },
+        icon: null,
+        tools:{},
+        actions:{},
+    };
+    #tools = {};
+    #actions = {};
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string') {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Create List
+		this.#list = $(document.createElement('ul')).attr('id','list' + builderCount).addClass('list-group list-group-flush');
+
+        // Add List Class
+		if(this.#options.class.list){
+			this.#list.addClass(this.#options.class.list);
+		}
+
+        // Add Tools Container
+        this.#list.start = $(document.createElement('li')).addClass('list-group-item user-select-none d-none').appendTo(this.#list);
+        this.#list.start.container = $(document.createElement('div')).addClass('d-flex justify-content-center align-items-center').appendTo(this.#list.start);
+        this.#list.tools = $(document.createElement('div')).addClass('btn-group w-100').appendTo(this.#list.start.container);
+
+        // Add Tools
+        if(typeof this.#options.tools !== 'undefined' && this.#options.tools){
+            for(var [name, tool] of Object.entries(this.#options.tools)){
+                tool.name = name
+                self.tool(tool);
+            }
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this);
+        }
+
+        // Add List to Search
+	    Search.add(this.#list);
+
+        // Check if Selector is Set
+        if(selector != null){
+
+            // Append to Selector
+            this.appendTo(selector);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    case"tools":
+                    case"actions":
+                        for(const [name, opts] of Object.entries(value)){
+                            if(typeof this.#options[key][name] === 'undefined'){
+                                this.#options[key][name] = opts;
+                            }
+                        }
+                        break;
+                    case"callback":
+                        for(const [name, opts] of Object.entries(value)){
+                            if(typeof this.#options[key][name] !== 'undefined'){
+                                this.#options[key][name] = opts;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    item(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        let defaults = {
+            icon: null,
+            field: null,
+            click: null,
+            dblclick: null,
+        };
+        for(const [key, value] of Object.entries(this.#options)){
+            switch(key){
+                case"callback":
+                    for(const [callname, callfunc] of Object.entries(value)){
+                        if(typeof defaults[callname] !== 'undefined'){
+                            defaults[callname] = callfunc
+                        }
+                    }
+                    break
+                default:
+                    if(typeof defaults[key] !== 'undefined'){
+                        defaults[key] = value
+                    }
+                    break
+            }
+        }
+        for(const [key, value] of Object.entries(options)){
+            if(typeof defaults[key] !== 'undefined'){
+                defaults[key] = value;
+            }
+        }
+
+        // Create Item
+		let item = $(document.createElement('li')).addClass('list-group-item user-select-none').css('transition','all 300ms ease 0s').appendTo(this.#list);
+
+        // Save Options
+        item.options = defaults;
+
+        // Add Item Row
+        item.container = $(document.createElement('div')).addClass('d-flex align-items-center').appendTo(item);
+
+        // Add Item Icon
+        if(defaults.icon){
+            item.container.icon = $(document.createElement('div')).addClass('flex-shrink-1 px-1').appendTo(item.container);
+            item.icon = $(document.createElement('i')).appendTo(item.container.icon);
+            item.icon.addClass('bi-' + defaults.icon);
+        }
+
+        // Add Item Field
+        item.field = $(document.createElement('div')).addClass('flex-grow-1 px-1 text-break').appendTo(item.container);
+
+        // Add Item Field Content
+        if(defaults.field){
+            item.field.html(defaults.field);
+        }
+
+        // Add Item Actions
+        item.actions = $(document.createElement('div')).addClass('flex-shrink-1 mx-1 btn-group d-none').appendTo(item.container);
+
+        // Add Item Click and Double Click Events
+        if(defaults.click || defaults.dblclick){
+
+            // Add Item Cursor Pointer
+            item.addClass('cursor-pointer')
+
+            // Add Item Hover Effect
+            item.hover(function(){
+                item.addClass("text-bg-primary");
+            }, function(){
+                item.removeClass("text-bg-primary");
+            });
+
+            // Add Item Click Event
+            if(defaults.click){
+                item.field.click(function(){
+                    defaults.click(item, self);
+                });
+                if(defaults.icon){
+                    item.icon.click(function(){
+                        defaults.click(item, self);
+                    });
+                }
+            }
+
+            // Add Item Double Click Event
+            if(defaults.dblclick){
+                item.field.dblclick(function(){
+                    defaults.dblclick(item, self);
+                });
+                if(defaults.icon){
+                    item.icon.dblclick(function(){
+                        defaults.dblclick(item, self);
+                    });
+                }
+            }
+        }
+
+        // Add Item Actions Function
+        item.addAction = function(param1 = null, param2 = null){
+            self.#action(item, param1, param2);
+        }
+
+        // Add Item Actions
+        if(typeof self.#options.actions !== 'undefined' && self.#options.actions){
+            for(var [name, action] of Object.entries(self.#options.actions)){
+                action.name = name
+                item.addAction(action);
+            }
+        }
+
+        // Add List Callback
+	    if(typeof this.#options.callback.item === 'function'){
+            this.#options.callback.item(item,self);
+	    }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(item,self);
+        }
+
+        // Set Item Search
+        Search.set(item);
+
+        // Return Object
+        return this;
+    }
+
+    tool(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        let defaults = {
+            icon: null,
+            label: null,
+            color: null,
+            class: null,
+            callback: null,
+            name:null,
+        };
+        for(const [key, value] of Object.entries(options)){
+            if(typeof defaults[key] !== 'undefined'){
+                defaults[key] = value;
+            }
+        }
+
+        // Show Tools
+        this.#list.start.removeClass('d-none');
+
+        // Create Tool
+		let tool = $(document.createElement('button')).addClass('btn btn-light').appendTo(this.#list.tools);
+
+        // Save Options
+        tool.options = defaults;
+
+        // Add Tool Name
+        if(defaults.name){
+            tool.attr('data-action',defaults.name);
+            this.#tools[defaults.name] = tool;
+        }
+
+        // Add Tool Class
+        if(defaults.class){
+            tool.addClass(defaults.class)
+        }
+
+        // Add Tool Color
+        if(defaults.color){
+            tool.removeClass('btn-light').addClass('btn-' + defaults.color)
+        }
+
+        // Add Tool Icon
+        if(defaults.icon){
+            tool.icon = $(document.createElement('i')).addClass('bi-' + defaults.icon).appendTo(tool)
+        }
+
+        // Add Tool Label
+        if(defaults.label){
+            tool.label = $(document.createElement('span')).addClass('text-capitalize').html(defaults.label).appendTo(tool)
+        }
+
+        // Add Icon Spacing
+        if(defaults.icon && defaults.label){
+            tool.icon.addClass('me-2')
+        }
+
+        // Add Tool Callback
+        tool.click(function(){
+            if(typeof defaults.callback === 'function'){
+                defaults.callback(tool)
+            }
+        });
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(tool,this);
+        }
+
+        // Return Object
+        return this;
+    }
+
+    #action(item, param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        let defaults = {
+            icon: null,
+            label: null,
+            color: null,
+            class: null,
+            callback: null,
+            name:null,
+        };
+        for(const [key, value] of Object.entries(options)){
+            if(typeof defaults[key] !== 'undefined'){
+                defaults[key] = value;
+            }
+        }
+
+        // Display Item Actions
+        item.actions.removeClass('d-none');
+
+        // Add Item Action
+        let action = $(document.createElement('button')).addClass('btn btn-sm btn-light').appendTo(item.actions);
+
+        // Save Options
+        action.options = defaults;
+
+        // Add Item Action Class
+        if(defaults.class){
+            action.addClass(defaults.class);
+        }
+
+        // Add Item Action Name
+        if(defaults.name){
+            action.attr('data-action',defaults.name);
+            self.#actions[defaults.name] = action;
+        }
+
+        // Set Item Action Color
+        if(defaults.color){
+            action.removeClass('btn-light').addClass('btn-' + defaults.color);
+        }
+
+        // Add Item Action Icon
+        if(defaults.icon){
+            action.icon = $(document.createElement('i')).addClass('bi-' + defaults.icon).appendTo(action);
+        }
+
+        // Add Item Action Label
+        if(defaults.label){
+            action.label = $(document.createElement('span')).addClass('text-capitalize').html(defaults.label).appendTo(action)
+        }
+
+        // Add Icon Spacing
+        if(defaults.icon && defaults.label){
+            action.icon.addClass('me-2')
+        }
+
+        // Add Item Action Click Event
+        action.click(function(){
+            if(typeof defaults.callback === 'function'){
+                defaults.callback(action,self);
+            }
+        });
+        if(typeof self.#options.callback.action === 'function'){
+            self.#options.callback.action(action,self);
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(action,self);
+        }
+
+        // Return Object
+        return this;
+    }
+
+    appendTo(object){
+        
+        // Append Object To
+        this.#list.appendTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    prependTo(object){
+        
+        // Prepend Object To
+        this.#list.prependTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    append(object){
+        
+        // Append Object
+        this.#list.append(object);
+
+        // Return Object
+        return this;
+    }
+
+    prepend(object){
+        
+        // Prepend Object
+        this.#list.prepend(object);
 
         // Return Object
         return this;
@@ -924,7 +1412,7 @@ class Timeline {
 
         // Execute Callback
         if(typeof callback === 'function'){
-            callback(this.#timeline);
+            callback(this);
         }
 
         // Check if Selector is Set
@@ -1352,7 +1840,7 @@ class Feed {
 
         // Execute Callback
         if(typeof callback === 'function'){
-            callback(this.#feed);
+            callback(this);
         }
 
         // Check if Selector is Set

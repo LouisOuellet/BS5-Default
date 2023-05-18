@@ -1,4 +1,5 @@
 // General
+@import "extra/background";
 @import "extra/border";
 @import "extra/cursor";
 @import "extra/opacity";
@@ -7,6 +8,7 @@
 
 // Components
 @import "extra/dashboard";
+@import "extra/sidebar";
 @import "extra/feed";
 @import "extra/list";
 @import "extra/timeline";

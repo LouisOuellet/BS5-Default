@@ -35,7 +35,7 @@ $frosted-opacity: .3 !default;
 // Body
 
 body {
-  background-image: url("/img/blue-mountain.jpg") !important;
+  background-image: url("img/blue-mountain.jpg") !important;
   background-repeat: no-repeat;
   background-size: 100%;
   background-attachment: fixed;
@@ -328,4 +328,9 @@ body {
 // Card Title
 .card-title {
   margin: 0px;
+}
+
+// Leaflet
+.leaflet-map a {
+  color: $dark;
 }
