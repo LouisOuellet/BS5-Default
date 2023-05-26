@@ -252,8 +252,11 @@ $(document).ready(function() {
 	var breadcrumbArray = []; // create an empty array
 	var currentActive = sidebar.find('.nav-link.active'); // get the active link
 	if(currentActive.length > 0) { // if the active link exists (length > 0
+    let classes = currentActive.find('i').attr('class').split(' ');
+    let iconClass = classes.find(cls => cls.startsWith('bi-'));
+    let icon = iconClass ? iconClass.slice(3) : '';
 		breadcrumbArray.push({
-			icon: currentActive.find('i').attr('class').split(' ')[1].split('-')[1], // get the icon class
+			icon: icon, // get the icon class
 			text: currentActive.text().trim(), // get the text
 			link: currentActive.attr('href') // get the link
 		});

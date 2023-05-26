@@ -50,6 +50,7 @@ $spacer: 1.5rem !default;
 
 $body-bg:                   $dark !default;
 $body-color:                $white !default;
+$body-emphasis-color:       $gray-400 !default;
 
 // Links
 
@@ -176,6 +177,10 @@ $card-cap-bg:                       transparent !default;
 $card-cap-color:                    $white !default;
 $card-color:                        $white !default;
 $card-bg:                           transparent !default;
+
+// Modals
+
+// $modal-inner-padding:               .75rem !default;
 
 // Accordion
 
