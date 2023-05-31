@@ -1,8 +1,223 @@
 // Builder
+// Extend Date Object
+Date.prototype.today = function () {
+	return this.getFullYear() + "-" +(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) + "-" + ((this.getDate() < 10)?"0":"") + this.getDate();
+};
+Date.prototype.timeNow = function () {
+	return ((this.getHours() < 10)?"0":"") + this.getHours() + ":" + ((this.getMinutes() < 10)?"0":"") + this.getMinutes() + ":" + ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+};
+
+// Extend jQuery
+if (typeof $ !== 'undefined') {
+    jQuery.expr[':'].contains = function(a, i, m){
+        return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0
+    };
+} else {
+    alert("jQuery is not loaded");
+}
+
+// Configure Select2
+if(typeof $.fn.select2 !== 'undefined'){
+    $.fn.select2.defaults.set("theme", "bootstrap-5");
+    $.fn.select2.defaults.set("width", "100%");
+    $.fn.select2.defaults.set("allowClear", true);
+}
+
 // Constants and Variables
 var builderCount = 0;
 
 // Utilities
+// Search
+class UtilitySearch {
+
+	#field = null
+
+	constructor(){
+
+        // Set Search Field
+		this.#field = $('input.search');
+	}
+
+	get(){
+
+        // Return Search Field
+		return this.#field;
+	}
+
+	set(object){
+
+        // Set object as Object
+		if(typeof object === 'string'){
+			object = $(object);
+		}
+
+        // Set Search Attribute
+		if(typeof object === 'object' && object != null){
+			object.attr('data-search',object.text().toString().toUpperCase());
+		}
+	}
+
+	add(object){
+
+        // Set object as Object
+		if(typeof object === 'string'){
+			object = $(object);
+		}
+
+        // Add Search Event
+		if(typeof object === 'object' && object != null){
+			this.#field.keyup(function(){
+				if($(this).val() !== ''){
+                    object.find('[data-search]').hide();
+                    object.find('[data-search*="'+$(this).val().toString().toUpperCase()+'"]').show();
+				} else {
+					object.find('[data-search]').show();
+				}
+			});
+		}
+	}
+}
+const Search = new UtilitySearch();
+
+// Helper
+class UtilityHelper {
+
+    // Generate a random number between min and max
+    randomNumber(min = -10, max = 10){
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    // Validate an email address
+    validateEmail($email) {
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
+        return ( $email.length > 0 && emailReg.test($email))
+    }
+
+    // Check if a value is in an array
+    inArray(needle, haystack) {
+        var length = haystack.length;
+        for(var i = 0; i < length; i++) {
+        if(haystack[i] == needle) return true;
+        }
+        return false;
+    }
+
+    // Format a number of bytes into a human readable string
+    formatBytes(bytes, decimals = 2) {
+        if (!+bytes) return '0 Bytes'
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+        const i = Math.floor(Math.log(bytes) / Math.log(k))
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+    }
+
+    // Copy a string or object content to the clipboard
+    copyToClipboard(object){
+        if(typeof object !== 'undefined' && typeof object !== null && typeof object !== 'function'){
+            let string = ''
+            let input = $(document.createElement('textarea')).appendTo('body')
+            if(typeof object === 'object'){ string = object.text(); }
+            if(typeof object === 'number'){ string = object.toString(); }
+            if(typeof object === 'boolean'){ string = object.toString(); }
+            if(typeof object === 'string'){ string = object; }
+            input.val(string).select();
+            document.execCommand("copy");
+            navigator.clipboard.writeText(input.val());
+            input.remove();
+        }
+    }
+
+    // Format a phone number
+    formatPhoneNumber(phoneNumberString) {
+        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+        if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+        }
+        return null
+    }
+
+    // Convert to MD5
+    md5 = (function() {
+        var MD5 = function (d) {
+            return M(V(Y(X(d), 8 * d.length)))
+        }
+        function M (d) {
+            for (var _, m = '0123456789abcdef', f = '', r = 0; r < d.length; r++) {
+                _ = d.charCodeAt(r)
+                f += m.charAt(_ >>> 4 & 15) + m.charAt(15 & _)
+            }
+            return f
+        }
+        function X (d) {
+            for (var _ = Array(d.length >> 2), m = 0; m < _.length; m++) {
+                _[m] = 0
+            }
+            for (m = 0; m < 8 * d.length; m += 8) {
+                _[m >> 5] |= (255 & d.charCodeAt(m / 8)) << m % 32
+            }
+            return _
+        }
+        function V (d) {
+            for (var _ = '', m = 0; m < 32 * d.length; m += 8) _ += String.fromCharCode(d[m >> 5] >>> m % 32 & 255)
+            return _
+        }
+        function Y (d, _) {
+            d[_ >> 5] |= 128 << _ % 32
+            d[14 + (_ + 64 >>> 9 << 4)] = _
+            for (var m = 1732584193, f = -271733879, r = -1732584194, i = 271733878, n = 0; n < d.length; n += 16) {
+                var h = m
+                var t = f
+                var g = r
+                var e = i
+                f = md5ii(f = md5ii(f = md5ii(f = md5ii(f = md5hh(f = md5hh(f = md5hh(f = md5hh(f = md5gg(f = md5gg(f = md5gg(f = md5gg(f = md5ff(f = md5ff(f = md5ff(f = md5ff(f, r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 0], 7, -680876936), f, r, d[n + 1], 12, -389564586), m, f, d[n + 2], 17, 606105819), i, m, d[n + 3], 22, -1044525330), r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 4], 7, -176418897), f, r, d[n + 5], 12, 1200080426), m, f, d[n + 6], 17, -1473231341), i, m, d[n + 7], 22, -45705983), r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 8], 7, 1770035416), f, r, d[n + 9], 12, -1958414417), m, f, d[n + 10], 17, -42063), i, m, d[n + 11], 22, -1990404162), r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 12], 7, 1804603682), f, r, d[n + 13], 12, -40341101), m, f, d[n + 14], 17, -1502002290), i, m, d[n + 15], 22, 1236535329), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 1], 5, -165796510), f, r, d[n + 6], 9, -1069501632), m, f, d[n + 11], 14, 643717713), i, m, d[n + 0], 20, -373897302), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 5], 5, -701558691), f, r, d[n + 10], 9, 38016083), m, f, d[n + 15], 14, -660478335), i, m, d[n + 4], 20, -405537848), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 9], 5, 568446438), f, r, d[n + 14], 9, -1019803690), m, f, d[n + 3], 14, -187363961), i, m, d[n + 8], 20, 1163531501), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 13], 5, -1444681467), f, r, d[n + 2], 9, -51403784), m, f, d[n + 7], 14, 1735328473), i, m, d[n + 12], 20, -1926607734), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 5], 4, -378558), f, r, d[n + 8], 11, -2022574463), m, f, d[n + 11], 16, 1839030562), i, m, d[n + 14], 23, -35309556), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 1], 4, -1530992060), f, r, d[n + 4], 11, 1272893353), m, f, d[n + 7], 16, -155497632), i, m, d[n + 10], 23, -1094730640), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 13], 4, 681279174), f, r, d[n + 0], 11, -358537222), m, f, d[n + 3], 16, -722521979), i, m, d[n + 6], 23, 76029189), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 9], 4, -640364487), f, r, d[n + 12], 11, -421815835), m, f, d[n + 15], 16, 530742520), i, m, d[n + 2], 23, -995338651), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 0], 6, -198630844), f, r, d[n + 7], 10, 1126891415), m, f, d[n + 14], 15, -1416354905), i, m, d[n + 5], 21, -57434055), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 12], 6, 1700485571), f, r, d[n + 3], 10, -1894986606), m, f, d[n + 10], 15, -1051523), i, m, d[n + 1], 21, -2054922799), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 8], 6, 1873313359), f, r, d[n + 15], 10, -30611744), m, f, d[n + 6], 15, -1560198380), i, m, d[n + 13], 21, 1309151649), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 4], 6, -145523070), f, r, d[n + 11], 10, -1120210379), m, f, d[n + 2], 15, 718787259), i, m, d[n + 9], 21, -343485551)
+                m = safeadd(m, h)
+                f = safeadd(f, t)
+                r = safeadd(r, g)
+                i = safeadd(i, e)
+            }
+            return [m, f, r, i]
+        }
+        function md5cmn (d, _, m, f, r, i) {
+            return safeadd(bitrol(safeadd(safeadd(_, d), safeadd(f, i)), r), m)
+        }
+        function md5ff (d, _, m, f, r, i, n) {
+            return md5cmn(_ & m | ~_ & f, d, _, r, i, n)
+        }
+        function md5gg (d, _, m, f, r, i, n) {
+            return md5cmn(_ & f | m & ~f, d, _, r, i, n)
+        }
+        function md5hh (d, _, m, f, r, i, n) {
+            return md5cmn(_ ^ m ^ f, d, _, r, i, n)
+        }
+        function md5ii (d, _, m, f, r, i, n) {
+            return md5cmn(m ^ (_ | ~f), d, _, r, i, n)
+        }
+        function safeadd (d, _) {
+            var m = (65535 & d) + (65535 & _)
+            return (d >> 16) + (_ >> 16) + (m >> 16) << 16 | 65535 & m
+        }
+        function bitrol (d, _) {
+            return d << _ | d >>> 32 - _
+        }
+        function MD5Unicode(buffer){
+            if (!(buffer instanceof Uint8Array)) {
+                buffer = new TextEncoder().encode(typeof buffer==='string' ? buffer : JSON.stringify(buffer));
+            }
+            var binary = [];
+            var bytes = new Uint8Array(buffer);
+            for (var i = 0, il = bytes.byteLength; i < il; i++) {
+                binary.push(String.fromCharCode(bytes[i]));
+            }
+            return MD5(binary.join(''));
+        }
+      
+        return MD5Unicode;
+    })()
+}
+const Helper = new UtilityHelper();
+
 // Gravatar
 class Gravatar {
 
@@ -42,14 +257,14 @@ class Gravatar {
         this.config(options);
 
         // Set URL
-		this.#url = this.#api + md5(email);
+		this.#url = this.#api + Helper.md5(email);
 
         // Configure URL
 		for(const [key, value] of Object.entries(this.#options)){
 			if(value){
 				switch(key){
 					case"extension":
-						if(inArray(value,this.#extensions)){
+						if(Helper.inArray(value,this.#extensions)){
 							this.#url += '.' + value
 						}
 						break;
@@ -61,7 +276,7 @@ class Gravatar {
 						}
 						break;
 					case"default":
-						if(inArray(value,this.#defaults)){
+						if(Helper.inArray(value,this.#defaults)){
 							if(this.#url.toLowerCase().indexOf("?") >= 0){
 								this.#url +=  '&d=' + value
 							} else {
@@ -77,7 +292,7 @@ class Gravatar {
 						}
 						break;
 					case"rating":
-						if(inArray(value,this.#ratings)){
+						if(Helper.inArray(value,this.#ratings)){
 							if(this.#url.toLowerCase().indexOf("?") >= 0){
 								this.#url +=  '&r=' + value
 							} else {
@@ -122,57 +337,6 @@ class Gravatar {
 		return this.#url
 	}
 }
-// Search
-class UtilitySearch {
-
-	#field = null
-
-	constructor(){
-
-        // Set Search Field
-		this.#field = $('#search');
-	}
-
-	get(){
-
-        // Return Search Field
-		return this.#field;
-	}
-
-	set(object){
-
-        // Set object as Object
-		if(typeof object === 'string'){
-			object = $(object);
-		}
-
-        // Set Search Attribute
-		if(typeof object === 'object' && object != null){
-			object.attr('data-search',object.text().toString().toUpperCase());
-		}
-	}
-
-	add(object){
-
-        // Set object as Object
-		if(typeof object === 'string'){
-			object = $(object);
-		}
-
-        // Add Search Event
-		if(typeof object === 'object' && object != null){
-			this.#field.keyup(function(){
-				if($(this).val() !== ''){
-                    object.find('[data-search]').hide();
-                    object.find('[data-search*="'+$(this).val().toString().toUpperCase()+'"]').show();
-				} else {
-					object.find('[data-search]').show();
-				}
-			});
-		}
-	}
-}
-const Search = new UtilitySearch();
 
 // Components
 // Dropdown
@@ -463,6 +627,18 @@ class Dropdown {
         // Return Object
         return this;
     }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
 }
 
 // Progress Bar
@@ -632,6 +808,18 @@ class Progress {
 
         // Return Object
         return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#progress.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#progress.text();
     }
 
     set(value){
@@ -985,6 +1173,18 @@ class Modal {
     toggle(){
         this.#bootstrap.toggle();
     }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
 }
 
 // Card
@@ -1068,9 +1268,9 @@ class Card {
         }
 
         // Create Card Header Title
-        this.#card.header.heading = $(document.createElement('h5')).addClass('card-title d-flex align-items-center').appendTo(this.#card.header);
+        this.#card.header.heading = $(document.createElement('h5')).addClass('card-title d-flex justify-content-start align-items-center').appendTo(this.#card.header);
 		this.#card.header.icon = $(document.createElement('i')).appendTo(this.#card.header.heading);
-		this.#card.header.title = $(document.createElement('span')).appendTo(this.#card.header.heading);
+		this.#card.header.title = $(document.createElement('div')).appendTo(this.#card.header.heading);
 
         // Configure Card Header
         if(self.#options.icon){
@@ -1226,7 +1426,7 @@ class Card {
 
         // Execute Callback
         if(typeof callback === 'function'){
-            callback(this.#card);
+            callback(this.#card,this);
         }
 
         // Check if Selector is Set
@@ -1298,6 +1498,504 @@ class Card {
         // Return Object
         return this;
     }
+
+    html(){
+
+        // Return Object
+        return this.#card.collapse.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#card.collapse.text();
+    }
+}
+
+// Tabs
+class Tabs {
+
+    #navbar = null;
+    #content = null;
+    #tabs = {};
+    #card = null;
+    #options = {
+        class: {
+            container: null,
+            card: null,
+            header: null,
+            body: null,
+            footer: null,
+            navbar: null,
+            content: null,
+        },
+        icon: null,
+        title: null,
+        footer: null,
+        stretch: false,
+        hideHeader: false,
+        hideFooter: true,
+        close:true,
+        fullscreen: true,
+        collapse: true,
+        collapsed: false,
+        defaults: {
+            class: {
+                nav: null,
+                tab: null,
+            },
+            icon: null,
+            label: null,
+            callback: null,
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string' || param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Create Card
+        this.#card = new Card(this.#options,function(card){
+
+            // Set Card Class
+            card.header.title.addClass('d-flex justify-content-start align-items-center');
+
+            // Create Tabs Nav
+            self.#navbar = $(document.createElement('div')).addClass('nav').attr('role','tablist').appendTo(card.header.title);
+
+            // If a card title is set, add margin to the left of the tabs
+            if(self.#options.title){
+                self.#navbar.addClass('ms-2');
+            }
+
+            // Set Tabs Nav Class
+            if(self.#options.class.navbar){
+                self.#navbar.addClass(self.#options.class.navbar);
+            }
+
+            // Create Tabs Content
+            self.#content = $(document.createElement('div')).addClass('tab-content').appendTo(card.body);
+
+            // Set Tabs Content Class
+            if(self.#options.class.content){
+                self.#content.addClass(self.#options.class.content);
+            }
+        });
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#card);
+        }
+
+        // Check if Selector is Set
+        if(selector != null){
+
+            // Append to Selector
+            this.appendTo(selector);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    add(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let name = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string') {
+                    name = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Set Defaults
+        var defaults = {};
+
+        // Configure Defaults
+        for(const [key, value] of Object.entries(this.#options.defaults)){
+            if(typeof defaults[key] === 'undefined'){
+                defaults[key] = value;
+            }
+        }
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof defaults[key] !== 'undefined'){
+                switch(key){
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(defaults[key][section] != null){
+                                defaults[key][section] += ' ' + classes;
+                            } else {
+                                defaults[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        defaults[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Check if Name is Set
+        if(typeof this.#tabs[name] === 'undefined'){
+
+            // Increment Count
+            builderCount++;
+
+            // Create Tab
+            this.#tabs[name] = {};
+
+            // Create Tab Nav
+            this.#tabs[name].nav = $(document.createElement('button')).addClass('nav-link').attr('type','button').attr('role','tab').attr('data-bs-toggle','tab').attr('aria-selected','false').appendTo(this.#navbar);
+            this.#tabs[name].nav.attr('id','nav' + builderCount).attr('data-bs-target','#' + 'tab' + builderCount).attr('aria-controls','tab' + builderCount);
+            this.#tabs[name].nav.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(this.#tabs[name].nav);
+            this.#tabs[name].nav.label = $(document.createElement('span')).addClass('text-capitalize').appendTo(this.#tabs[name].nav);
+
+            // Create Tab Content
+            this.#tabs[name].tab = $(document.createElement('div')).addClass('tab-pane fade').attr('role','tabpanel').appendTo(this.#content);
+            this.#tabs[name].tab.attr('aria-labelledby','nav' + builderCount).attr('id','tab' + builderCount);
+
+            // Set Tab Nav Class
+            if(defaults.class.nav){
+                this.#tabs[name].nav.addClass(defaults.class.nav);
+            }
+
+            // Set Tab Content Class
+            if(defaults.class.tab){
+                this.#tabs[name].tab.addClass(defaults.class.tab);
+            }
+
+            // Set Tab Nav Icon
+            if(defaults.icon){
+                this.#tabs[name].nav.icon.addClass('bi-' + defaults.icon);
+            } else {
+                this.#tabs[name].nav.icon.addClass('d-none');
+            }
+
+            // Set Tab Nav Label
+            if(defaults.label){
+                this.#tabs[name].nav.label.text(defaults.label);
+            } else {
+                this.#tabs[name].nav.label.text(name);
+            }
+
+            // Execute Callback
+            if(typeof defaults.callback === 'function'){
+                defaults.callback(this.#tabs[name].tab,this.#tabs[name].nav,this);
+            }
+
+            // Execute Callback
+            if(typeof callback === 'function'){
+                callback(this.#tabs[name].tab,this.#tabs[name].nav,this);
+            }
+        }
+
+        // Set Active Tab
+        this.#active();
+
+        // Return Object
+        return this;
+    }
+
+    #active(){
+
+        // Set Self
+        const self = this;
+
+        // Count Active Tabs
+        const count = this.#content.find('.tab-pane.show.active').length;
+
+        // Check if Count is 0
+        if(count === 0){
+
+            // Select First Tab
+            var tab = this.#content.find('.tab-pane').first();
+
+            // Select Nav
+            var nav = this.#navbar.find('#' + tab.attr('aria-labelledby'));
+
+            // Set First Tab as Active
+            tab.addClass('show active');
+
+            // Set First Nav as Active
+            nav.addClass('active');
+        }
+
+        // Return Object
+        return this;
+    }
+
+    appendTo(object){
+        
+        // Append Object To
+        this.#card.appendTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    prependTo(object){
+        
+        // Prepend Object To
+        this.#card.prependTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    append(object){
+        
+        // Append Object
+        this.#card.append(object);
+
+        // Return Object
+        return this;
+    }
+
+    prepend(object){
+        
+        // Prepend Object
+        this.#card.prepend(object);
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#card.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#card.text();
+    }
+}
+
+// Avatar
+class Avatar {
+
+    #object = null;
+    #options = {
+        class: {
+            object: null,
+        },
+        extension: false, //in request
+        size: false, //s
+        default: 'mp', //d
+        force: false, //f
+        rating: false, //r
+    };
+
+	constructor(param1, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let email = null;
+        let options = {};
+        let callback = null;
+
+        // Set email, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string') {
+                    email = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Create Object
+		this.#object = $(document.createElement('img')).attr('id','avatar' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Create Gravatar
+        this.#object.gravatar = new Gravatar(email, this.#options);
+
+        // Set Source
+        this.#object.attr('src',this.#object.gravatar.url());
+
+        // Set Alt
+        this.#object.attr('alt',email);
+
+        // Set Size
+        if(this.#options.size){
+            this.#object.css({
+                width: this.#options.size,
+                height: this.#options.size,
+            });
+        }
+
+        // Set Object Class
+        if(this.#options.class.object){
+            this.#object.addClass(this.#options.class.object);
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"extend":
+                        for(const [k, v] of Object.entries(value)){
+                            if(typeof this.#options[key][k] !== 'undefined'){
+                                this.#options[key][k] = v;
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    appendTo(object){
+        
+        // Append Object To
+        this.#object.appendTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    prependTo(object){
+        
+        // Prepend Object To
+        this.#object.prependTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    append(object){
+        
+        // Append Object
+        this.#object.append(object);
+
+        // Return Object
+        return this;
+    }
+
+    prepend(object){
+        
+        // Prepend Object
+        this.#object.prepend(object);
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
 }
 
 // List
@@ -1314,6 +2012,7 @@ class List {
             item: null,
             click: null,
             dblclick: null,
+            separator: null,
         },
         icon: null,
         tools:{},
@@ -1373,7 +2072,7 @@ class List {
 
         // Execute Callback
         if(typeof callback === 'function'){
-            callback(this);
+            callback(this,this.#list);
         }
 
         // Add List to Search
@@ -1789,6 +2488,18 @@ class List {
         // Return Object
         return this;
     }
+
+    html(){
+
+        // Return Object
+        return this.#list.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#list.text();
+    }
 }
 
 // Box
@@ -2016,6 +2727,18 @@ class Box {
         // Return Object
         return this;
     }
+
+    html(){
+
+        // Return Object
+        return this.#box.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#box.text();
+    }
 }
 
 // Timeline
@@ -2215,6 +2938,18 @@ class Timeline {
         return this;
     }
 
+    html(){
+
+        // Return Container HTML
+        return this.#container.html();
+    }
+
+    text(){
+
+        // Return Container Text
+        return this.#container.text();
+    }
+
 	clear(){
 
         // Remove Children
@@ -2308,7 +3043,7 @@ class Timeline {
 
                 // Get Current Filters
                 var current = self.#filters.attr('data-filters').split(',')
-                if(inArray(type,current)){
+                if(Helper.inArray(type,current)){
                     current = current.filter(function(value){
                         return value != type;
                     });
@@ -2605,7 +3340,7 @@ class Code {
         // Set Clipboard
         if(this.#options.clipboard){
             this.#object.controls.clipboard.click(function(){
-                copyToClipboard(self.#object.code);
+                Helper.copyToClipboard(self.#object.code);
             })
         } else {
             this.#object.controls.clipboard.addClass('d-none');
@@ -2720,6 +3455,18 @@ class Code {
 
         // Return Object
         return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
     }
 }
 
@@ -3028,7 +3775,7 @@ class Invoice {
                 this.#object.info.from.address.location.zipcode.text(this.#options.from.zipcode);
             }
             if(this.#options.from.phone){
-                this.#object.info.from.address.phone.text(this.#options.from.phone);
+                this.#object.info.from.address.phone.text(Helper.formatPhoneNumber(this.#options.from.phone));
             }
             if(this.#options.from.email){
                 this.#object.info.from.address.email.text(this.#options.from.email);
@@ -3056,7 +3803,7 @@ class Invoice {
                 this.#object.info.billto.address.location.zipcode.text(this.#options.billTo.zipcode);
             }
             if(this.#options.billTo.phone){
-                this.#object.info.billto.address.phone.text(this.#options.billTo.phone);
+                this.#object.info.billto.address.phone.text(Helper.formatPhoneNumber(this.#options.billTo.phone));
             }
             if(this.#options.billTo.email){
                 this.#object.info.billto.address.email.text(this.#options.billTo.email);
@@ -3084,7 +3831,7 @@ class Invoice {
                 this.#object.info.shipto.address.location.zipcode.text(this.#options.shipTo.zipcode);
             }
             if(this.#options.shipTo.phone){
-                this.#object.info.shipto.address.phone.text(this.#options.shipTo.phone);
+                this.#object.info.shipto.address.phone.text(Helper.formatPhoneNumber(this.#options.shipTo.phone));
             }
             if(this.#options.shipTo.email){
                 this.#object.info.shipto.address.email.text(this.#options.shipTo.email);
@@ -3107,7 +3854,7 @@ class Invoice {
 
         // Set Columns
         for(const [key, column] of Object.entries(this.#options.columns)){
-            if(inArray(column, this.#columns)){
+            if(Helper.inArray(column, this.#columns)){
                 this.#object.table.responsive.table.thead.tr[column].removeClass('d-none');
             }
         }
@@ -3121,7 +3868,7 @@ class Invoice {
 
         // Set Payment Methods
         for(const [key, method] of Object.entries(this.#options.methods)){
-            if(inArray(method, this.#methods)){
+            if(Helper.inArray(method, this.#methods)){
                 this.#object.info.footer.payment[method].removeClass('d-none');
             }
         }
@@ -3312,49 +4059,49 @@ class Invoice {
 
         // // Create Invoice Line Columns
         // SKU
-        if(inArray('sku', this.#options.columns)){
+        if(Helper.inArray('sku', this.#options.columns)){
             object.sku = $(document.createElement('td')).appendTo(object);
             if(typeof object.options.sku !== 'undefined'){
                 object.sku.text(object.options.sku);
             }
         }
         // Name
-        if(inArray('name', this.#options.columns)){
+        if(Helper.inArray('name', this.#options.columns)){
             object.name = $(document.createElement('td')).appendTo(object);
             if(typeof object.options.name !== 'undefined'){
                 object.name.text(object.options.name);
             }
         }
         // Description
-        if(inArray('description', this.#options.columns)){
+        if(Helper.inArray('description', this.#options.columns)){
             object.description = $(document.createElement('td')).appendTo(object);
             if(typeof object.options.description !== 'undefined'){
                 object.description.text(object.options.description);
             }
         }
         // Serial
-        if(inArray('serial', this.#options.columns)){
+        if(Helper.inArray('serial', this.#options.columns)){
             object.serial = $(document.createElement('td')).appendTo(object);
             if(typeof object.options.serial !== 'undefined'){
                 object.serial.text(object.options.serial);
             }
         }
         // Qty
-        if(inArray('qty', this.#options.columns)){
+        if(Helper.inArray('qty', this.#options.columns)){
             object.qty = $(document.createElement('td')).appendTo(object);
             if(typeof object.options.qty !== 'undefined'){
                 object.qty.text(object.options.qty);
             }
         }
         // Price
-        if(inArray('price', this.#options.columns)){
+        if(Helper.inArray('price', this.#options.columns)){
             object.price = $(document.createElement('td')).appendTo(object);
             if(typeof object.options.price !== 'undefined'){
                 object.price.text(this.#options.currency + object.options.price.toFixed(2));
             }
         }
         // Subtotal
-        if(inArray('subtotal', this.#options.columns)){
+        if(Helper.inArray('subtotal', this.#options.columns)){
             object.subtotal = $(document.createElement('td')).appendTo(object);
             if(typeof object.options.subtotal === 'undefined'){
                 object.options.subtotal = object.options.qty * object.options.price;
@@ -3411,6 +4158,18 @@ class Invoice {
 
         // Return Object
         return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
     }
 }
 
@@ -3567,6 +4326,18 @@ class Feed {
 
         // Return Object
         return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#feed.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#feed.text();
     }
     
     clear(){
@@ -3801,7 +4572,7 @@ class Table {
 			// deferLoading: null, //integer|array //Delay the loading of server-side data until second draw
 			// destroy: true, //boolean //Destroy any existing table matching the selector and replace with the new options.
 			// displayStart: 0, //integer //Initial paging start point
-			dom: 'B<"#SearchBuilder.collapse py-2 pt-3"<"card card-body"Q>>rtlip', //string //Define the table control elements to appear on the page and in what order
+			dom: '<"d-flex flex-column justify-content-start align-items-start mb-2"B<"#SearchBuilder.collapse py-2 pt-3"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><t><"d-flex justify-content-between align-items-center"lip>', //string //Define the table control elements to appear on the page and in what order
 			lengthMenu: [ 10, 25, 50, 100 ], //array //Change the options in the page length select list.
 			order: [[0, 'asc']], //array //Initial order (sort) to apply to the table
 			// orderCellsTop: false, //boolean //Control which cell the order event handler will be applied to in a column
@@ -4126,7 +4897,7 @@ class Table {
         }
 
         // Add Table
-        this.#object.table = $(document.createElement('table')).addClass('table table-striped m-0 w-100 user-select-none');
+        this.#object.table = $(document.createElement('table')).addClass('table table-striped m-0 w-100 user-select-none').appendTo(this.#object);
 
         // Add Dropdown
         if(typeof this.#options.actions === 'object'){
@@ -4141,7 +4912,12 @@ class Table {
                 function(dropdown){
                     if(self.#options.actions){
                         for(const [name, action] of Object.entries(self.#options.actions)){
-                            dropdown.item(action);
+                            dropdown.item(
+                                action,
+                                function(item){
+                                    item.btn.attr('data-action',name);
+                                }
+                            );
                         }
                     }
                 },
@@ -4154,7 +4930,7 @@ class Table {
                     title: "Action",
                     data: null,
                     width: '80px',
-                    defaultContent: this.#object.actions[0],
+                    defaultContent: this.#object.actions.html(),
                 }
             );
         }
@@ -4212,7 +4988,7 @@ class Table {
                 }
 
                 // Action Button Events
-                self.#object.table.find('button').each(function(){
+                self.#object.table.find('button.dropdown-item[data-action]').each(function(){
                     let node = $(this);
                     let li = node.parents('li');
                     let action = node.attr('data-action');
@@ -4220,11 +4996,11 @@ class Table {
                     let data = self.#datatable.row(row).data();
                     node.off().click(function(event){
                         if(typeof self.#options.actions[action].action === 'function'){
-                            self.#options.actions[action].action(event, table, node, row, data);
+                            self.#options.actions[action].action(event, self, node, row, data);
                         }
                     })
                     if(typeof self.#options.actions[action].visible === 'function'){
-                        if(!self.#options.actions[action].visible(li, table, node, row, data)){
+                        if(!self.#options.actions[action].visible(li, self, node, row, data)){
                             li.hide();
                         } else {
                             li.show();
@@ -4242,46 +5018,12 @@ class Table {
         }
 
         // Initialize Datatable
-        this.#datatable = this.#object.DataTable(this.#options.datatable);
-        
-        // 'B<"#SearchBuilder.collapse py-2 pt-3"<"card card-body"Q>>rtlip'
-        // '<"card shadow user-select-none"<"card-header"B<"#SearchBuilder.collapse py-2 pt-3"<"card card-body"Q>><"#searchPanes.collapse py-2 pt-3"<"card card-body"P>>><"card-body p-0"t><"card-footer d-flex justify-content-between align-items-center"lip>>'
+        this.#datatable = this.#object.table.DataTable(this.#options.datatable);
 
-        // 	create(options = {}, callback = null){
-        // 		table.init = function(){
-        // 			if(this.#options.datatable.columnDefs.length > 0){
-        // 				if(typeof this.#datatable === 'undefined'){
-        // 					this.#options.datatable.drawCallback = function(){
-        // 						if(typeof this.#datatable !== 'undefined'){
-        // 							table.init()
-        // 						}
-        // 					}
-        // 					this.#datatable = this.#object.datatable(this.#options.datatable)
-        // 					if(typeof table.cardOptions !== 'undefined'){
-        // 						table.card = table.closest('.card')
-        // 						table.card.header = table.card.find('.card-header')
-        // 						table.card.body = table.card.find('.card-body')
-        // 						table.card.footer = table.card.find('.card-footer')
-        // 						table.card.header.find('.dropdown-toggle').removeClass('dropdown-toggle')
-        // 						table.card.header.find('.btn-group').first().addClass('border')
-        // 						table.card.header.find('.btn-group').first().find('.btn.btn-secondary').removeClass('btn-secondary').addClass('btn-light')
-        // 						table.card.header.title = $(document.createElement('h5')).addClass('card-title my-2 fw-light')
-        // 						table.card.header.icon = $(document.createElement('i')).addClass('me-2')
-        // 						if(typeof table.cardOptions.title === 'string'){
-        // 							table.card.header.title.html(table.cardOptions.title).prependTo(table.card.header)
-        // 							if(typeof table.cardOptions.icon === 'string'){
-        // 								table.card.header.icon.addClass('bi-'+table.cardOptions.icon).prependTo(table.card.header.title)
-        // 							}
-        // 						}
-        // 					}
-        // 					Search.get().keyup(function(){
-        // 						this.#datatable.search($(this).val()).draw()
-        // 					})
-        // 				}
-        // 				return table
-        // 			}
-        // 		}
-// 	}
+        // Add Search
+        Search.get().keyup(function(){
+            self.#datatable.search($(this).val()).draw();
+        });
 
         // Execute Callback
         if(typeof callback === 'function'){
@@ -4376,6 +5118,18 @@ class Table {
         // Return Object
         return this;
     }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
 }
 
 // Template
@@ -4445,9 +5199,11 @@ class Template {
             if(typeof this.#options[key] !== 'undefined'){
                 switch(key){
                     case"extend":
-                        for(const [k, v] of Object.entries(value)){
-                            if(typeof this.#options[key][k] !== 'undefined'){
-                                this.#options[key][k] = v;
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
                             }
                         }
                         break;
@@ -4505,5 +5261,17 @@ class Template {
 
         // Return Object
         return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
     }
 }

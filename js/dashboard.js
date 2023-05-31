@@ -84,9 +84,9 @@ $(document).ready(function() {
         }
     });
 
-    // Badges
+    // Boxes
     // Bonus
-    const badgeBonus = new Badge(
+    const badgeBonus = new Box(
         '#badgeBonus',
         {
             icon:'plus-slash-minus',
@@ -100,7 +100,7 @@ $(document).ready(function() {
         }
     );
     // Tasks
-    const badgeTasks = new Badge(
+    const badgeTasks = new Box(
         '#badgeTasks',
         {
             icon:'list-task',
@@ -114,7 +114,7 @@ $(document).ready(function() {
         }
     );
     // Transactions
-    const badgeTransactions = new Badge(
+    const badgeTransactions = new Box(
         '#badgeTransactions',
         {
             icon:'file-earmark-post',
@@ -128,7 +128,7 @@ $(document).ready(function() {
         }
     );
     // Tickets
-    const badgeTickets = new Badge(
+    const badgeTickets = new Box(
         '#badgeTickets',
         {
             icon:'ticket-detailed',

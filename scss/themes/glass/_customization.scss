@@ -152,6 +152,7 @@ $navbar-light-disabled-color:       rgba($gray-800, .3) !default;
 $dropdown-border-color:             $border-color !default;
 $dropdown-link-hover-color:         $white !default;
 $dropdown-link-hover-bg:            rgba($white, .4) !default;
+$dropdown-header-color:             $text-muted !default;
 
 // Pagination
 
@@ -218,7 +219,7 @@ $progress-bg:                       rgba($black, .2) !default;
 $list-group-color:                  $white !default;
 $list-group-bg:                     transparent !default;
 $list-group-border-color:           $border-color !default;
-$list-group-border-width:           0 !default;
+$list-group-border-width:           1px !default;
 
 $list-group-hover-bg:               $dropdown-link-hover-bg !default;
 

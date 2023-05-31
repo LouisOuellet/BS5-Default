@@ -39,22 +39,33 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/wpd/prism-wpd.min.css">
 
         <!-- ======= DataTables.JS ======= -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/autofill/2.5.3/css/autoFill.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.6.2/css/colReorder.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.6.2/css/colReorder.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.6.2/css/colReorder.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.9.0/css/keyTable.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.9.0/css/keyTable.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.3.3/css/rowReorder.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.3.3/css/rowReorder.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.1.1/css/scroller.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.1.1/css/scroller.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.4.2/css/searchBuilder.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.4.2/css/searchBuilder.bootstrap5.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.4.1/css/dataTables.dateTime.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.9.0/css/keyTable.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.3.3/css/rowReorder.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.1.1/css/scroller.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.4.2/css/searchBuilder.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.1.2/css/searchPanes.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.2.2/css/stateRestore.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.2.2/css/stateRestore.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.2.2/css/stateRestore.bootstrap5.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.dataTables.min.css" disabled>
+        <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.bootstrap5.min.css">
 
         <!-- ======= Themes ======= -->
         <link rel="stylesheet" href="css/themes/default/styles.css">
@@ -185,8 +196,12 @@
 
         <!-- ======= DataTables.JS ======= -->
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/autofill/2.5.3/js/dataTables.autoFill.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.colVis.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
@@ -195,19 +210,16 @@
         <script src="https://cdn.datatables.net/fixedheader/3.3.2/js/dataTables.fixedHeader.min.js"></script>
         <script src="https://cdn.datatables.net/keytable/2.9.0/js/dataTables.keyTable.min.js"></script>
         <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+        <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
         <script src="https://cdn.datatables.net/rowreorder/1.3.3/js/dataTables.rowReorder.min.js"></script>
         <script src="https://cdn.datatables.net/scroller/2.1.1/js/dataTables.scroller.min.js"></script>
         <script src="https://cdn.datatables.net/searchbuilder/1.4.2/js/dataTables.searchBuilder.min.js"></script>
-        <script src="https://cdn.datatables.net/searchpanes/2.1.2/js/dataTables.searchPanes.min.js"></script>
-        <script src="https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
+        <script src="https://cdn.datatables.net/searchbuilder/1.4.2/js/searchBuilder.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/datetime/1.4.1/js/dataTables.dateTime.min.js"></script>
         <script src="https://cdn.datatables.net/staterestore/1.2.2/js/dataTables.stateRestore.min.js"></script>
-
-        <!-- ======= Panel.JS ======= -->
-        <script src="/js/panel.js"></script>
-
-        <!-- ======= Builder.JS ======= -->
-        <script src="/js/builder.js"></script>
+        <script src="https://cdn.datatables.net/staterestore/1.2.2/js/stateRestore.bootstrap5.min.js"></script>
+        <script src="https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
     </head>
     <body data-bs-spy="scroll" data-bs-target="#main-nav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0" class="h-100 w-100">
 
@@ -476,6 +488,12 @@
                                     <div class="collapse" id="components">
                                         <ul class="nav flex-column">
                                             <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=avatar">
+                                                    <i class="bi bi-person-bounding-box me-1"></i>
+                                                    <span class="">Avatar</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
                                                 <a class="nav-link" href="?p=code">
                                                     <i class="bi bi-code-square me-1"></i>
                                                     <span class="">Code</span>
@@ -497,6 +515,12 @@
                                                 <a class="nav-link" href="?p=card">
                                                     <i class="bi bi-card-heading me-1"></i>
                                                     <span class="">Card</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=tabs">
+                                                    <i class="bi bi-segmented-nav me-1"></i>
+                                                    <span class="">Tabs</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
@@ -666,12 +690,12 @@
                                 <!-- ======= End Nav ======= -->
 
                                 <!-- ======= Widgets ======= -->
-                                <ul class="nav nav-pills ms-3 d-flex align-items-center ms-auto">
+                                <ul class="nav nav-pills ms-3 d-flex align-items-center ms-auto z-1050">
 
                                     <!-- ======= Search Field ======= -->
                                     <li id="searchField" class="nav-item collapse collapse-horizontal">
                                         <form class="d-flex">
-                                        <input id="search" type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="searchBtn">
+                                            <input type="text" class="form-control search" placeholder="Search..." aria-label="Search" aria-describedby="searchBtn">
                                         </form>
                                     </li>
                                     <!-- ======= End Search Field ======= -->
@@ -770,7 +794,7 @@
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center py-2" href="#">
                                             <div class="me-3">
-                                                <img src="https://github.com/mdo.png" alt="mdo" width="48" height="48" class="rounded-circle">
+                                                <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&d=mp" alt="mdo" width="48" height="48" class="rounded-circle">
                                             </div>
                                             <div class="d-flex flex-column align-items-justify">
                                                 <span class="text-wrap">A new monthly report is ready to download!</span>
@@ -794,8 +818,8 @@
                                     <!-- ======= Notifications ======= -->
                                     <li class="nav-item dropdown">
                                         <a id="notificationMenu" href="#" class="nav-link text-decoration-none py-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-bell fs-4"></i>
-                                        <span class="position-absolute top-25 start-75 translate-middle text-bg-danger border border-light rounded-circle" style="padding: 8px; display:block;"></span>
+                                            <i class="bi bi-bell fs-4"></i>
+                                            <span class="position-absolute top-25 start-75 translate-middle text-bg-danger border border-light rounded-circle" style="padding: 8px; display:block;"></span>
                                         </a>
                                         <ul class="dropdown-menu dropdown-list dropdown-menu-end pb-0" aria-labelledby="notificationMenu" style="min-width:350px;max-width:500px;">
                                         <li>
@@ -840,9 +864,54 @@
                                     <!-- ======= Profile ======= -->
                                     <li class="nav-item dropdown">
                                         <a id="profileMenu" href="#" class="nav-link text-decoration-none py-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="https://github.com/mdo.png" alt="mdo" width="48" height="48" class="rounded-circle">
+                                            <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&d=mp" alt="mdo" width="48" height="48" class="rounded-circle">
+                                            <span class="position-absolute top-80 start-80 translate-middle text-bg-success border border-light rounded-circle" style="padding: 8px; display:block;"></span>
                                         </a>
-                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu" style="min-width:350px;max-width:500px;">
+                                            <li class="my-2">
+                                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                                    <div class="">
+                                                        <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&d=mp" alt="mdo" width="72" height="72" class="rounded-circle my-2">
+                                                        <span class="position-absolute translate-middle text-bg-success border border-light rounded-circle" style="padding: 8px; display:block;top: 96px;right:38%;"></span>
+                                                    </div>
+                                                    <div>
+                                                        <h5>John Doe</h5>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li class="dropdown-submenu dropstart">
+                                                <button type="button" class="dropdown-item" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-circle-fill text-success me-1"></i>
+                                                    <span>Online</span>
+                                                </button>
+                                                <ul class="dropdown-menu" style="min-width:350px;max-width:500px;">
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="bi bi-circle-fill text-success me-1"></i>
+                                                            <span>Online</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="bi bi-circle-fill text-warning me-1"></i>
+                                                            <span>Away</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="bi bi-circle-fill text-danger me-1"></i>
+                                                            <span>Busy</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="bi bi-circle-fill text-secondary me-1"></i>
+                                                            <span>Offline</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
                                             <li>
                                                 <a class="dropdown-item" href="?p=profile">
                                                     <i class="bi bi-person me-1"></i>
@@ -853,6 +922,12 @@
                                                 <a class="dropdown-item" href="?p=settings">
                                                     <i class="bi bi-gear me-1"></i>
                                                     <span>Settings</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="?p=help">
+                                                    <i class="bi bi-question-circle me-1"></i>
+                                                    <span>Help</span>
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
@@ -905,6 +980,12 @@
 
         </main>
         <!-- ======= End Main ======= -->
+
+        <!-- ======= Builder.JS ======= -->
+        <script src="/js/builder.js"></script>
+
+        <!-- ======= Panel.JS ======= -->
+        <script src="/js/panel.js"></script>
         
     </body>
 </html>

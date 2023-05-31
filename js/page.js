@@ -94,6 +94,16 @@ function copyToClipboard(object){
 	}
 }
 
+// Format a phone number
+function formatPhoneNumber(phoneNumberString) {
+	var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+	var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+	if (match) {
+	  return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+	}
+	return null
+}
+
 const md5 = (function() {
     var MD5 = function (d) {
       return M(V(Y(X(d), 8 * d.length)))
@@ -221,13 +231,34 @@ $(document).ready(function() {
         }
     };
 
-	// Set active link
-	$('a').removeClass('active');
-	$('a').each(function () {
+    // Nested Dropdowns
+    $('.dropdown-menu a[data-bs-toggle="dropdown"], .dropdown-menu button[data-bs-toggle="dropdown"]').on('click', function(e) {
+		e.stopPropagation(); // prevent event from bubbling up
+	
+		var $el = $(this);
+		var $parent = $(this).offsetParent(".dropdown-menu");
+		if (!$(this).next().hasClass('show')) {
+			$(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+		}
+		$(this).parent("li").toggleClass('show');
+	
+		return false;
+    });
+  
+    $('body').on('hide.bs.dropdown', '.dropdown', function (e) {
+		if ($(this).hasClass('show') && $(e.target).hasClass('dropdown-submenu')) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+    });
+
+    // Set active link
+    $('a').removeClass('active');
+    $('a').each(function () {
 		if (this.href === window.location.href) {
 		$(this).addClass('active');
 		$(this).parents('.collapse').addClass('show');
 		$(this).parents('[data-bs-toggle="collapse"]').attr('aria-expanded',true);
 		}
-	});
+    });
 });
