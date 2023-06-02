@@ -1,3 +1,4 @@
+// Autor: Louis Ouellet
 // Builder
 // Extend Date Object
 Date.prototype.today = function () {
@@ -32,10 +33,10 @@ class UtilitySearch {
 
 	#field = null
 
-	constructor(){
+	constructor(selector = 'input.search'){
 
         // Set Search Field
-		this.#field = $('input.search');
+		this.#field = $(selector);
 	}
 
 	get(){
@@ -136,6 +137,50 @@ class UtilityHelper {
         return '(' + match[1] + ') ' + match[2] + '-' + match[3]
         }
         return null
+    }
+
+    // Check if a variable is constant
+    isConstant(variable) {
+        const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(variable), Object.keys(variable)[0]);
+        return descriptor && descriptor.writable === false;
+    }
+
+    // Format a string to a slug
+    formatSlug (value) {
+        return value
+            .toLowerCase()
+            .replace(/-+/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '');
+    };
+
+    // Check if the current device is a mobile device
+    isMobileDevice() {
+        const userAgent = navigator.userAgent;
+        var mobileDeviceUserAgents = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+        return mobileDeviceUserAgents.test(userAgent);
+    }
+
+    // Check the OS Type
+    detectOperatingSystem() {
+        const userAgent = navigator.userAgent;
+    
+        if (/iPad|iPhone|iPod/.test(userAgent)) {
+            return 'iOS';
+        }
+        if (/Android/.test(userAgent)) {
+            return 'Android';
+        }
+        if (/Mac OS X/.test(userAgent)) {
+            return 'macOS';
+        }
+        if (/Windows NT/.test(userAgent)) {
+            return 'Windows';
+        }
+        if (/Linux/.test(userAgent)) {
+            return 'Linux';
+        }
+        return 'Unknown OS';
     }
 
     // Convert to MD5
@@ -339,6 +384,369 @@ class Gravatar {
 }
 
 // Components
+// Notification
+class Notification {
+
+    #object = null;
+    #options = {
+        class: {
+            object: null,
+        },
+        callbacks: {
+            click: null,
+            readAll: null,
+        },
+        icon: "bell",
+        color: "danger",
+        onReadDelay: 500,
+        defaults: {
+            class: {
+                item: null,
+            },
+            click: null,
+            onRead: null,
+            icon: "bell",
+            color: "primary",
+            datetime: null,
+            label: null,
+            isRead: false,
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string') {
+                    selector = $(param);
+                } else if (param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Save Selector as Object
+        this.#object = selector;
+
+        // Set ID
+        this.#object.attr('id','notification' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Configure as Dropdown
+        this.#object.addClass('dropdown');
+
+        // Create Button
+        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+        this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').appendTo(this.#object.btn);
+        this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
+
+        // Create Menu
+        this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
+
+        // Create Header
+        this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
+        this.#object.menu.header.title.label = $(document.createElement('span')).text('Notifications').appendTo(this.#object.menu.header.title);
+        this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
+
+        // Create Seperators
+        this.#object.menu.seperator = {};
+        this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
+
+        // Create Items List
+        this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
+
+        // Create Footer
+        this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
+        this.#object.menu.footer.btn.label = $(document.createElement('small')).text('Mark All as Read').appendTo(this.#object.menu.footer.btn);
+
+        // Set Object Class
+        if(this.#options.class.object){
+            this.#object.addClass(this.#options.class.object);
+        }
+
+        // Set Icon
+        if(this.#options.icon){
+            this.#object.btn.icon.addClass('bi-' + this.#options.icon);
+        }
+
+        // Set Color
+        if(this.#options.color){
+            this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
+            this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
+        }
+
+        // Add Callback
+        this.#object.menu.footer.btn.on('click',function(){
+            self.readAll();
+        });
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"callback":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    count(){
+
+        // Count the number of new notifications
+        let count = this.#object.find('[data-isRead="false"]').length;
+
+        // Set Count
+        this.#object.menu.header.title.count.text(count);
+
+        // Show Badge
+        if(count > 0){
+            this.#object.menu.header.title.count.removeClass('d-none');
+            this.#object.btn.badge.removeClass('d-none');
+        } else {
+            this.#object.menu.header.title.count.addClass('d-none');
+            this.#object.btn.badge.addClass('d-none');
+        }
+
+        // Return Count
+        return count;
+    }
+
+    readAll(){
+
+        // Get all unread notifications
+        let items = this.#object.find('[data-isRead="false"]');
+
+        // Set all notifications as read
+        items.attr('data-isRead', 'true').removeClass('blink-primary');
+        items.find('span.text-wrap').removeClass('fw-bold');
+
+        // Count the number of new notifications
+        this.count();
+
+        // Execute Callback
+        if(typeof this.#options.callbacks.readAll === 'function'){
+            this.#options.callbacks.readAll(self,self.#object);
+        }
+
+        // Return Object
+        return this;
+    }
+
+    add(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+        
+        let options = {};
+        let callback = null;
+
+        let properties = {};
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        for(const [key, value] of Object.entries(this.#options.defaults)){
+            if(typeof properties[key] === 'undefined'){
+                properties[key] = value;
+            }
+        }
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(properties[key][section] != null){
+                                properties[key][section] += ' ' + classes;
+                            } else {
+                                properties[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Create Item
+        let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
+
+        // Create Button
+        item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex align-items-center py-2').attr('type','button').appendTo(item);
+
+        // Add Icon
+        item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
+        item.btn.icon.frame = $(document.createElement('div')).addClass('d-flex align-items-center justify-content-center rounded-circle').css({"width":"48px","height":"48px"}).appendTo(item.btn.icon);
+        item.btn.icon.frame.icon = $(document.createElement('i')).addClass('bi').appendTo(item.btn.icon.frame);
+
+        // Add Label
+        item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
+        item.btn.label.time = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
+        item.btn.label.time.timeago = $(document.createElement('timeago')).addClass('timeago').appendTo(item.btn.label.time);
+        item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
+
+        // Add Seperator
+        item.seperator = $(document.createElement('li')).insertAfter(item);
+        item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
+
+        // Configure Color
+        if(properties.color !== null){
+            item.btn.icon.frame.addClass('text-bg-' + properties.color);
+        } else {
+            item.btn.icon.frame.addClass('text-bg-primary');
+        }
+
+        // Configure Icon
+        if(properties.icon !== null){
+            item.btn.icon.frame.icon.addClass('bi-' + properties.icon);
+        } else {
+            item.btn.icon.frame.icon.addClass('bi-bell');
+        }
+
+        // Configure Date Time
+        let datetime = null;
+        if(properties.datetime !== null){
+            datetime = new Date(defaults.datetime);
+        } else {
+            datetime = new Date();
+        }
+        item.btn.label.time.timeago.attr('title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
+
+        // Configure Label
+        if(properties.label !== null){
+            item.btn.label.text.text(properties.label);
+        }
+
+        // Configure isRead
+        item.attr('data-isRead',properties.isRead);
+        if(!properties.isRead){
+            item.addClass('blink-primary');
+            item.btn.label.text.addClass('fw-bold');
+        }
+
+        // Set Item Class
+        if(properties.class.item){
+            item.addClass(properties.class.item);
+        }
+
+        // Add onRead Callback
+        if(!properties.isRead){
+            item.timer;
+            item.hover(function() {
+                item.timer = setTimeout(function() {
+                    item.attr('data-isRead', 'true').removeClass('blink-primary');
+                    item.btn.label.text.removeClass('fw-bold');
+                    self.count();
+                    if(typeof properties.onRead === 'function'){
+                        properties.onRead(item,self,self.#object);
+                    }
+                }, self.#options.onReadDelay);
+            }, function() {
+                clearTimeout(item.timer);
+            });
+        }
+
+        // Add Callback
+        if(typeof this.#options.callbacks.click === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                self.#options.callbacks.click(item,self,self.#object);
+            });
+        }
+
+        // Add Callback
+        if(typeof properties.click === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                properties.click(item,self,self.#object);
+            });
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(item,this);
+        }
+
+        // Set Count
+        this.count();
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
+}
+
 // Dropdown
 class Dropdown {
 
@@ -941,10 +1349,10 @@ class Modal {
         this.#object.dialog.content.footer = $(document.createElement('div')).addClass('modal-footer p-0').appendTo(this.#object.dialog.content);
 
         // Create Submit Button
-        this.#object.dialog.content.footer.submit = $(document.createElement('button')).attr('type','button').addClass('btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end').text('Save changes').appendTo(this.#object.dialog.content.footer);
+        this.#object.dialog.content.footer.submit = $(document.createElement('button')).attr('type','button').css({'border-top-left-radius': 'none','border-top-right-radius': 'none'}).addClass('btn btn-lg btn-link fs-6 text-decoration-none col py-3 m-0 rounded-0 border-end').text('Save changes').appendTo(this.#object.dialog.content.footer);
 
         // Create Cancel Button
-        this.#object.dialog.content.footer.cancel = $(document.createElement('button')).attr('type','button').addClass('btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0').attr('data-bs-dismiss','modal').text('Cancel').appendTo(this.#object.dialog.content.footer);
+        this.#object.dialog.content.footer.cancel = $(document.createElement('button')).attr('type','button').css({'border-top-left-radius': 'none','border-top-right-radius': 'none'}).addClass('btn btn-lg btn-link fs-6 text-decoration-none col py-3 m-0 rounded-0').attr('data-bs-dismiss','modal').text('Cancel').appendTo(this.#object.dialog.content.footer);
 
         // Set Size
         if(this.#options.size != null && typeof this.#options.size === 'string'){
@@ -1067,6 +1475,16 @@ class Modal {
             this.#object.dialog.content.header.tools.close.addClass('d-none');
         }
 
+        // Cancel
+        if(!this.#options.cancel){
+            this.#object.dialog.content.footer.cancel.remove();
+        }
+
+        // Submit
+        if(!this.#options.submit){
+            this.#object.dialog.content.footer.submit.remove();
+        }
+
         // Callback Function on Show
         if(typeof this.#options.callback.onShow === 'function'){
             this.#object.on('show.bs.modal',function(){
@@ -1160,6 +1578,86 @@ class Modal {
 
         // Return Object
         return this;
+    }
+
+    add(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+
+        let options = {};
+        let callback = null;
+
+        let properties = {
+            icon: null,
+            label: null,
+            color: null,
+        };
+
+        // Set options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(properties[key][section] != null){
+                                properties[key][section] += ' ' + classes;
+                            } else {
+                                properties[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Create Action Button
+        let action = $(document.createElement('button')).attr('type','button').addClass('btn btn-lg btn-link fs-6 text-decoration-none col py-3 m-0 rounded-0 border-end').attr('style', 'border-top-left-radius: 0px !important; border-top-right-radius: 0px !important').prependTo(this.#object.dialog.content.footer);
+        action.icon = $(document.createElement('i')).addClass('bi me-1').prependTo(action);
+        action.label = $(document.createElement('span')).appendTo(action);
+
+        // Set icon
+        if(properties.icon != null){
+            action.icon.addClass('bi-' + properties.icon);
+        } else {
+            action.icon.remove();
+        }
+
+        // Set label
+        if(properties.label != null){
+            action.label.text(properties.label);
+        }
+
+        // Set color
+        if(properties.color != null){
+            action.removeClass('btn-link').addClass('btn-' + properties.color);
+        }
+
+        // Set Border Radius
+        this.#object.dialog.content.footer.find('button').removeClass('rounded-start rounded-end');
+        this.#object.dialog.content.footer.find('button').first().addClass('rounded-start');
+        this.#object.dialog.content.footer.find('button').last().addClass('rounded-end').removeClass('border-end');
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            action.click(function(){
+                callback(action,self.#object,self);
+            });
+        }
     }
 
     show(){
@@ -4572,7 +5070,7 @@ class Table {
 			// deferLoading: null, //integer|array //Delay the loading of server-side data until second draw
 			// destroy: true, //boolean //Destroy any existing table matching the selector and replace with the new options.
 			// displayStart: 0, //integer //Initial paging start point
-			dom: '<"d-flex flex-column justify-content-start align-items-start mb-2"B<"#SearchBuilder.collapse py-2 pt-3"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><t><"d-flex justify-content-between align-items-center"lip>', //string //Define the table control elements to appear on the page and in what order
+			dom: '<"d-flex flex-column justify-content-start align-items-start mb-2"B<"#SearchBuilder.collapse w-100 py-2 pt-3"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><t><"d-flex justify-content-between align-items-center"lip>', //string //Define the table control elements to appear on the page and in what order
 			lengthMenu: [ 10, 25, 50, 100 ], //array //Change the options in the page length select list.
 			order: [[0, 'asc']], //array //Initial order (sort) to apply to the table
 			// orderCellsTop: false, //boolean //Control which cell the order event handler will be applied to in a column

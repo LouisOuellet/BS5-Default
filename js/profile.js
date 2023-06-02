@@ -112,48 +112,125 @@ $(document).ready(function(){
 
             // Add status icon
             card.footer.removeClass('d-none').addClass('p-0');
-            card.footer.button = $(document.createElement('button')).addClass('btn w-100 rounded-0 rounded-bottom').appendTo(card.footer);
-            card.footer.button.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(card.footer.button);
-            card.footer.button.label = $(document.createElement('span')).appendTo(card.footer.button);
+            card.footer.group = $(document.createElement('div')).addClass('btn-group-vertical rounded-0 rounded-bottom w-100').appendTo(card.footer);
+            card.footer.group.status = $(document.createElement('button')).addClass('btn rounded-0 rounded-bottom').appendTo(card.footer.group);
+            card.footer.group.status.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(card.footer.group.status);
+            card.footer.group.status.label = $(document.createElement('span')).appendTo(card.footer.group.status);
 
             // Configure Status
             switch(Profile.status){
                 case 1:
-                    card.footer.button.addClass('btn-danger');
-                    card.footer.button.icon.addClass('bi-trash');
-                    card.footer.button.label.text('Deleted');
+                    card.footer.group.status.addClass('btn-danger');
+                    card.footer.group.status.icon.addClass('bi-trash');
+                    card.footer.group.status.label.text('Deleted');
                     break;
                 case 2:
-                    card.footer.button.addClass('btn-danger');
-                    card.footer.button.icon.addClass('bi-exclamation-triangle');
-                    card.footer.button.label.text('Banned');
+                    card.footer.group.status.addClass('btn-danger');
+                    card.footer.group.status.icon.addClass('bi-exclamation-triangle');
+                    card.footer.group.status.label.text('Banned');
                     break;
                 case 3:
-                    card.footer.button.addClass('btn-danger');
-                    card.footer.button.icon.addClass('bi-lock');
-                    card.footer.button.label.text('Locked Out');
+                    card.footer.group.status.addClass('btn-danger');
+                    card.footer.group.status.icon.addClass('bi-lock');
+                    card.footer.group.status.label.text('Locked Out');
                     break;
                 case 4:
-                    card.footer.button.addClass('btn-warning');
-                    card.footer.button.icon.addClass('bi-clock');
-                    card.footer.button.label.text('Rate Limited');
+                    card.footer.group.status.addClass('btn-warning');
+                    card.footer.group.status.icon.addClass('bi-clock');
+                    card.footer.group.status.label.text('Rate Limited');
                     break;
                 case 5:
-                    card.footer.button.addClass('btn-secondary');
-                    card.footer.button.icon.addClass('bi-pause');
-                    card.footer.button.label.text('Inactive');
+                    card.footer.group.status.addClass('btn-secondary');
+                    card.footer.group.status.icon.addClass('bi-pause');
+                    card.footer.group.status.label.text('Inactive');
                     break;
                 case 6:
-                    card.footer.button.addClass('btn-success');
-                    card.footer.button.icon.addClass('bi-check');
-                    card.footer.button.label.text('Verified');
+                    card.footer.group.status.addClass('btn-success');
+                    card.footer.group.status.icon.addClass('bi-check');
+                    card.footer.group.status.label.text('Verified');
                     break;
                 default:
-                    card.footer.button.addClass('btn-success');
-                    card.footer.button.icon.addClass('bi-check');
-                    card.footer.button.label.text('Active');
+                    card.footer.group.status.addClass('btn-success');
+                    card.footer.group.status.icon.addClass('bi-check');
+                    card.footer.group.status.label.text('Active');
                     break;
             }
+
+            // Add Status Button Events
+            card.footer.group.status.click(function(){
+                let body = $(document.createElement('div'));
+                body.p1 = $(document.createElement('p')).text('This modal allows you to manage various settings for the user\'s profile. By toggling the buttons below, you can control the following aspects:').appendTo(body);
+                body.list = $(document.createElement('ul')).appendTo(body);
+                body.list.item1 = $(document.createElement('li')).text('Delete/Restore: Toggling this button will either delete or restore the user\'s account. Deleting the account will result in permanent removal of their profile and associated data. Restoring the account will reverse this action.').appendTo(body.list);
+                body.list.item2 = $(document.createElement('li')).text('Ban/Unban: Toggling this button will either ban or unban the user. Banning a user will restrict their access and participation on the platform. Unbanning the user will lift the restrictions.').appendTo(body.list);
+                body.list.item3 = $(document.createElement('li')).text('Activate/Deactivate: Toggling this button will either activate or deactivate the user\'s account. Activating the account will enable the user to access and use the platform. Deactivating the account will temporarily disable their access.').appendTo(body.list);
+                body.p2 = $(document.createElement('p')).text('Please note that these actions can have significant consequences, so exercise caution when making changes to a user\'s profile. Always review the situation and ensure the appropriate action is taken.').appendTo(body);
+                let modal = new Modal(
+                    {
+                        onEnter: false,
+                        destroy:true,
+                        icon: "gear",
+                        title: "User Profile Controls",
+                        body: body,
+                        submit: false,
+                        size: "lg",
+                    },
+                    function(element,modal){
+                        modal.show();
+                        if(Profile.isActive){
+                            modal.add(
+                                {
+                                    label: "Deactivate",
+                                    color: "danger",
+                                },
+                                function(action){},
+                            );
+                        } else {
+                            modal.add(
+                                {
+                                    label: "Activate",
+                                    color: "info",
+                                },
+                                function(action){},
+                            );
+                        }
+                        if(Profile.isBanned){
+                            modal.add(
+                                {
+                                    label: "Unban",
+                                    color: "info",
+                                },
+                                function(action){},
+                            );
+                        } else {
+                            modal.add(
+                                {
+                                    label: "Ban",
+                                    color: "danger",
+                                },
+                                function(action){},
+                            );
+                        }
+                        if(Profile.isDeleted){
+                            modal.add(
+                                {
+                                    label: "Restore",
+                                    color: "info",
+                                },
+                                function(action){},
+                            );
+                        } else {
+                            modal.add(
+                                {
+                                    label: "Delete",
+                                    color: "danger",
+                                },
+                                function(action){},
+                            );
+                        }
+                    },
+                );
+            });
         },
     );
 
@@ -203,7 +280,7 @@ $(document).ready(function(){
                                 item.field.addClass('d-flex justify-content-between align-items-center');
                                 item.field.header = $(document.createElement('div')).addClass('fw-bold text-capitalize text-nowrap me-2').text('Phone:').appendTo(item.field);
                                 item.field.value = $(document.createElement('div')).addClass('text-end').appendTo(item.field);
-                                item.field.value.link = $(document.createElement('a')).attr('href','tel:' + Profile.phone).text(formatPhoneNumber(Profile.phone)).appendTo(item.field.value);
+                                item.field.value.link = $(document.createElement('a')).attr('href','tel:' + Profile.phone).text(Helper.formatPhoneNumber(Profile.phone)).appendTo(item.field.value);
                             },
                         );
                     }
@@ -216,7 +293,7 @@ $(document).ready(function(){
                                 item.field.addClass('d-flex justify-content-between align-items-center');
                                 item.field.header = $(document.createElement('div')).addClass('fw-bold text-capitalize text-nowrap me-2').text('Mobile:').appendTo(item.field);
                                 item.field.value = $(document.createElement('div')).addClass('text-end').appendTo(item.field);
-                                item.field.value.link = $(document.createElement('a')).attr('href','tel:' + Profile.mobile).text(formatPhoneNumber(Profile.mobile)).appendTo(item.field.value);
+                                item.field.value.link = $(document.createElement('a')).attr('href','tel:' + Profile.mobile).text(Helper.formatPhoneNumber(Profile.mobile)).appendTo(item.field.value);
                             },
                         );
                     }
@@ -275,7 +352,18 @@ $(document).ready(function(){
     L.marker([Profile.latitude, Profile.longitude]).addTo(ProfileLocation.leaflet);
 
     // Tabs
-    let ProfileTabs = new Tabs('#col2',{class: {navbar: 'nav-pills'}},
+    let ProfileTabs = new Tabs(
+        '#col2',
+        {
+            class: {
+                navbar: 'nav-pills'
+            },
+            defaults: {
+                class: {
+                    tab: 'fade',
+                },
+            },
+        },
         function(tabs){
             tabs.add('activity',{icon: 'activity'},
                 function(tab,nav){
@@ -324,6 +412,23 @@ $(document).ready(function(){
                             );
                         },
                     );
+                },
+            );
+            tabs.add('settings',{icon: 'gear'},
+                function(tab,nav){
+                    tab.form = $(document.createElement("form")).addClass("").appendTo(tab);
+                    tab.form.row = $(document.createElement("div")).addClass("row").appendTo(tab.form);
+                    Search.add(tab.form.row);
+                    for(const [key, value] of Object.entries(["name","address","city","state","country","zipcode","phone","mobile"])){
+                        tab.form.row[value] = $(document.createElement("div")).addClass("col-12 col-md-6 mb-2").appendTo(tab.form.row);
+                        tab.form.row[value].formGroup = $(document.createElement("div")).addClass("input-group").appendTo(tab.form.row[value]);
+                        tab.form.row[value].formGroup.label = $(document.createElement("label")).addClass("input-group-text text-capitalize").attr("for","settings" + value).text(value).appendTo(tab.form.row[value].formGroup);
+                        tab.form.row[value].formGroup.input = $(document.createElement("input")).addClass("form-control").attr({type: "text", id: "settings" + value, name: value, placeholder: value, value: Profile[value]}).appendTo(tab.form.row[value].formGroup);
+                        Search.set(tab.form.row[value]);
+                    }
+                    tab.form.row2 = $(document.createElement("div")).addClass("row").appendTo(tab.form);
+                    tab.form.row2.submit = $(document.createElement("div")).addClass("col-12").appendTo(tab.form.row);
+                    tab.form.row2.submit.button = $(document.createElement("button")).addClass("btn btn-success w-100").attr({type: "submit"}).text("Save Changes").appendTo(tab.form.row2.submit);
                 },
             );
         },

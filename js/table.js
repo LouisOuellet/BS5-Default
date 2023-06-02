@@ -42,7 +42,7 @@ $(document).ready(function(){
                         text: '<i class="bi-plus-lg"></i>',
                         action:function(e, dt, node, config){
                             console.log(e, dt, node, config);
-                            dt.row.add(records[randomNumber(0,9)]).draw();
+                            dt.row.add(records[Helper.randomNumber(0,9)]).draw();
                         },
                     }
                 ],

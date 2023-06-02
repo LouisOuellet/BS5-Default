@@ -1,0 +1,29 @@
+// Blink
+
+@use "sass:math";
+
+@function color-contrast($background) {
+    // Calculate the perceptive luminance of the background color
+    // This gives a weight to each of the RGB components
+    $luminance: math.div((0.299 * red($background) + 0.587 * green($background) + 0.114 * blue($background)), 255);
+
+    // Return $dark for bright colors and $light for dark colors
+    @if ($luminance > 0.5) {
+        @return $dark;
+    } @else {
+        @return $light;
+    }
+}
+
+@each $color, $value in $theme-colors {
+    @keyframes blink-#{$color} {
+        50% {
+            background-color: $value;
+            color: color-contrast($value);  // choose text color based on contrast
+        }
+    }
+  
+    .blink-#{$color}, .blink-#{$color} button {
+        animation: blink-#{$color} 2s infinite;
+    }
+}

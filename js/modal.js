@@ -46,7 +46,16 @@ $(document).ready(function(){
             center: false, //Enable/Disable Centered Modal
             size: "none", //Set Size
         },
-        function(modal){},
+        function(element,modal){ // callback
+            modal.add( //Add an action to the modal //Note: This function can be called multiple times to add multiple action. It can also called outside of the callback function.
+                {
+                    icon: null, //Set Icon
+                    label: "action", //Set Label
+                    color: null, //Set Color
+                },
+                function(action,element,modal){}, //Executed when this action is clicked
+            );
+        },
     );
 
     // Code
@@ -96,7 +105,16 @@ $(document).ready(function(){
     scriptCode += '        center: false, //Enable/Disable Centered Modal' + "\n";
     scriptCode += '        size: "none", //Set Size' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(modal){},' + "\n";
+    scriptCode += '    function(element,modal){ // callback' + "\n";
+    scriptCode += '        modal.add( //Add an action to the modal //Note: This function can be called multiple times to add multiple action. It can also called outside of the callback function.' + "\n";
+    scriptCode += '            {' + "\n";
+    scriptCode += '                icon: null, //Set Icon' + "\n";
+    scriptCode += '                label: "action", //Set Label' + "\n";
+    scriptCode += '                color: null, //Set Color' + "\n";
+    scriptCode += '            },' + "\n";
+    scriptCode += '            function(action,element,modal){}, //Executed when this action is clicked' + "\n";
+    scriptCode += '        );' + "\n";
+    scriptCode += '    },' + "\n";
     scriptCode += ');';
     
     const code = new Code(

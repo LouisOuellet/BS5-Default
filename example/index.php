@@ -816,41 +816,7 @@
                                     <!-- ======= End Messages ======= -->
 
                                     <!-- ======= Notifications ======= -->
-                                    <li class="nav-item dropdown">
-                                        <a id="notificationMenu" href="#" class="nav-link text-decoration-none py-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-bell fs-4"></i>
-                                            <span class="position-absolute top-25 start-75 translate-middle text-bg-danger border border-light rounded-circle" style="padding: 8px; display:block;"></span>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-list dropdown-menu-end pb-0" aria-labelledby="notificationMenu" style="min-width:350px;max-width:500px;">
-                                        <li>
-                                            <h5 class="py-2 px-3 m-0 text-center cursor-default">
-                                                Notifications
-                                            </h5>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center py-2" href="#">
-                                            <div class="me-3">
-                                                <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary" style="width:48px;height:48px;">
-                                                <i class="bi bi-bell text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex flex-column align-items-justify">
-                                                <small class="text-muted">
-                                                <timeago>December 12, 2019</timeago>
-                                                </small>
-                                                <span class="text-wrap">A new monthly report is ready to download!</span>
-                                            </div>
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item text-center py-2 rounded-bottom" href="#">
-                                            <small>Mark All as Read</small>
-                                            </a>
-                                        </li>
-                                        </ul>
-                                    </li>
+                                    <li class="nav-item" id="notificationArea"></li>
                                     <!-- ======= End Notifications ======= -->
 
                                     <!-- ======= FullScreen ======= -->
@@ -960,6 +926,12 @@
                             </div>
                         </div>
                         <!-- ======= End Page Title and Breadcrumbs ======= -->
+
+                        <!-- ======= Builder.JS ======= -->
+                        <script src="/js/builder.js"></script>
+
+                        <!-- ======= Panel.JS ======= -->
+                        <script src="/js/panel.js"></script>
             
                         <!-- ======= Page Content ======= -->
                         <div class="row mt-4 px-3 mx-0 pb-3">
@@ -980,12 +952,5 @@
 
         </main>
         <!-- ======= End Main ======= -->
-
-        <!-- ======= Builder.JS ======= -->
-        <script src="/js/builder.js"></script>
-
-        <!-- ======= Panel.JS ======= -->
-        <script src="/js/panel.js"></script>
-        
     </body>
 </html>
