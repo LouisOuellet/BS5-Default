@@ -384,6 +384,967 @@ class Gravatar {
 }
 
 // Components
+// Toast
+class Toast {
+
+    #object = null;
+    #options = {
+        class: {
+            object: null,
+        },
+        callback: {
+            click: null,
+        },
+        position: 'top-center',
+        defaults: {
+            class: {
+                item: null,
+            },
+            callback: {
+                click: null,
+            },
+            color: null,
+            icon: null,
+            title: null,
+            body: null,
+            datetime: null,
+            delay: 5000,
+            autohide: true,
+            animation: true,
+            dismissible: true,
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string') {
+                    selector = $(param);
+                } else if (param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Save Selector as Object
+        this.#object = selector;
+
+        // Set ID
+        this.#object.attr('id','toast' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Configure as Toast Container
+        this.#object.addClass('toast-container position-fixed p-3');
+
+        // Set Position
+        if(this.#options.position){
+            switch(this.#options.position){
+                case"top-left":
+                    this.#object.addClass('top-0 start-0');
+                    break;
+                case"top-center":
+                    this.#object.addClass('top-0 start-50 translate-middle-x');
+                    break;
+                case"top-right":
+                    this.#object.addClass('top-0 end-0');
+                    break;
+                case"bottom-left":
+                    this.#object.addClass('bottom-0 start-0');
+                    break;
+                case"bottom-center":
+                    this.#object.addClass('bottom-0 start-50 translate-middle-x');
+                    break;
+                case"bottom-right":
+                    this.#object.addClass('bottom-0 end-0');
+                    break;
+            }
+        }
+
+        // Set Object Class
+        if(this.#options.class.object){
+            this.#object.addClass(this.#options.class.object);
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                    case"callback":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    add(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+        
+        let options = {};
+        let callback = null;
+
+        let properties = {};
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        for(const [key, value] of Object.entries(this.#options.defaults)){
+            if(typeof properties[key] === 'undefined'){
+                properties[key] = value;
+            }
+        }
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"callback":
+                        if(typeof properties[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof properties[key][k] !== 'undefined'){
+                                    properties[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(properties[key][section] != null){
+                                properties[key][section] += ' ' + classes;
+                            } else {
+                                properties[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Create Toast
+        let toast = $(document.createElement('div')).addClass('toast show').attr({"role":"alert","aria-live":"assertive","aria-atomic":"true"}).prependTo(this.#object);
+
+        // Create Toast Header
+        toast.header = $(document.createElement('div')).addClass('toast-header').appendTo(toast);
+        toast.header.icon = $(document.createElement('i')).addClass('bi bi-bell me-1').appendTo(toast.header);
+        toast.header.title = $(document.createElement('strong')).addClass('me-auto').appendTo(toast.header);
+        toast.header.time = $(document.createElement('small')).addClass('text-muted').appendTo(toast.header);
+        toast.header.time.ago = $(document.createElement('timeago')).addClass('timeago ').appendTo(toast.header.time);
+        toast.header.close = $(document.createElement('button')).addClass('btn-close d-none').attr({"type":"button","data-bs-dismiss":"toast","aria-label":"Close"}).appendTo(toast.header);
+
+        // Create Toast Body
+        toast.body = $(document.createElement('div')).addClass('toast-body').appendTo(toast);
+
+        // Configure Color
+        if(properties.color){
+            toast.addClass('text-bg-' + properties.color);
+        }
+
+        // Configure Icon
+        if(properties.icon){
+            toast.header.icon.addClass('bi-' + properties.icon);
+        } else {
+            toast.header.icon.addClass('d-none');
+        }
+
+        // Configure Title
+        if(properties.title){
+            toast.header.title.html(properties.title);
+        } else {
+            toast.header.addClass('d-none');
+        }
+
+        // Configure Body
+        if(properties.body){
+            toast.body.html(properties.body);
+        } else {
+            toast.body.addClass('d-none');
+            toast.header.addClass('border-0');
+        }
+
+        // Configure Date Time
+        let datetime = null;
+        if(properties.datetime !== null){
+            datetime = new Date(defaults.datetime);
+        } else {
+            datetime = new Date();
+        }
+        toast.header.time.ago.attr('title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
+
+        // Configure Animation
+        if(properties.animation){
+            toast.addClass('fade');
+        }
+
+        // Configure Autohide
+        if(properties.autohide){
+            toast.timer = setTimeout(function(){
+                toast.addClass('opacity-0').delay(500).queue(function(){
+                    toast.removeClass('show opacity-0').addClass('hide').dequeue();
+                });
+            }, properties.delay);
+        }
+
+        // Configure Dismissible
+        if(properties.dismissible){
+            toast.header.close.removeClass('d-none');
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(toast,this);
+        }
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
+}
+// Task
+class Task {
+
+    #object = null;
+    #options = {
+        class: {
+            object: null,
+        },
+        callback: {
+            click: null,
+            viewAll: null,
+        },
+        icon: "list-task",
+        color: "primary",
+        defaults: {
+            class: {
+                item: null,
+            },
+            label: null,
+            progress: {
+                size: null,
+                color: "primary",
+                striped: true,
+                animated: true,
+                scale: 100,
+                label: "",
+            },
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string') {
+                    selector = $(param);
+                } else if (param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Save Selector as Object
+        this.#object = selector;
+
+        // Set ID
+        this.#object.attr('id','task' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Configure as Dropdown
+        this.#object.addClass('dropdown');
+
+        // Create Button
+        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+        this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').appendTo(this.#object.btn);
+        this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
+
+        // Create Menu
+        this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
+
+        // Create Header
+        this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
+        this.#object.menu.header.title.label = $(document.createElement('span')).text('Tasks').appendTo(this.#object.menu.header.title);
+        this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
+
+        // Create Seperators
+        this.#object.menu.seperator = {};
+        this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
+
+        // Create Items List
+        this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
+
+        // Create Footer
+        this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
+        this.#object.menu.footer.btn.label = $(document.createElement('small')).text('View All').appendTo(this.#object.menu.footer.btn);
+
+        // Set Object Class
+        if(this.#options.class.object){
+            this.#object.addClass(this.#options.class.object);
+        }
+
+        // Set Icon
+        if(this.#options.icon){
+            this.#object.btn.icon.addClass('bi-' + this.#options.icon);
+        }
+
+        // Set Color
+        if(this.#options.color){
+            this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
+            this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
+        }
+
+        // Add Callback
+        if(typeof this.#options.callback.viewAll === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                this.#options.callback.viewAll();
+            });
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                    case"callback":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    count(){
+
+        // Count the number of new notifications
+        let count = this.#object.find('.dropdown-item.task').length;
+
+        // Set Count
+        this.#object.menu.header.title.count.text(count);
+
+        // Show Badge
+        if(count > 0){
+            this.#object.menu.header.title.count.removeClass('d-none');
+            this.#object.btn.badge.removeClass('d-none');
+        } else {
+            this.#object.menu.header.title.count.addClass('d-none');
+            this.#object.btn.badge.addClass('d-none');
+        }
+
+        // Return Count
+        return count;
+    }
+
+    add(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+        
+        let options = {};
+        let callback = null;
+
+        let properties = {};
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        for(const [key, value] of Object.entries(this.#options.defaults)){
+            if(typeof properties[key] === 'undefined'){
+                properties[key] = value;
+            }
+        }
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"progress":
+                        if(typeof properties[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof properties[key][k] !== 'undefined'){
+                                    properties[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(properties[key][section] != null){
+                                properties[key][section] += ' ' + classes;
+                            } else {
+                                properties[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Create Item
+        let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
+
+        // Create Button
+        item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex flex-column py-2 task').attr('type','button').appendTo(item);
+
+        // Add Label
+        item.btn.label = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
+        item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
+        item.btn.label.scale = $(document.createElement('small')).addClass('text-muted float-end').appendTo(item.btn.label);
+
+        // Add Progress Bar
+        item.btn.progress = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
+
+        // Add Seperator
+        item.seperator = $(document.createElement('li')).insertAfter(item);
+        item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
+
+        // Add Change Callback to Progress Properties
+        properties.progress.callback = {};
+        properties.progress.callback.change = function(progress){
+
+            // Set Scale
+            item.btn.label.scale.text(progress.get() + '%');
+        };
+
+        // Configure Progress Bar
+        item.btn.progress.bar = new Progress(
+            item.btn.progress,
+            properties.progress,
+            function(progress){},
+        );
+
+        // Add Set Function
+        item.set = function(value){
+            item.btn.progress.bar.set(value);
+        };
+
+        // Configure Label
+        if(properties.label !== null){
+            item.btn.label.text.text(properties.label);
+        }
+
+        // Set Item Class
+        if(properties.class.item){
+            item.addClass(properties.class.item);
+        }
+
+        // Add Callback
+        if(typeof this.#options.callback.click === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                self.#options.callback.click(item,self,self.#object);
+            });
+        }
+
+        // Add Callback
+        if(typeof properties.click === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                properties.click(item,self,self.#object);
+            });
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(item,this);
+        }
+
+        // Set Count
+        this.count();
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
+}
+
+// Message
+class Message {
+
+    #object = null;
+    #options = {
+        class: {
+            object: null,
+        },
+        callback: {
+            click: null,
+            viewAll: null,
+            onRead: null,
+        },
+        icon: "envelope",
+        color: "info",
+        onReadDelay: 500,
+        defaults: {
+            class: {
+                item: null,
+            },
+            click: null,
+            onRead: null,
+            datetime: null,
+            label: null,
+            email: null,
+            name: null,
+            isRead: false,
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string') {
+                    selector = $(param);
+                } else if (param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Save Selector as Object
+        this.#object = selector;
+
+        // Set ID
+        this.#object.attr('id','message' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Configure as Dropdown
+        this.#object.addClass('dropdown');
+
+        // Create Button
+        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+        this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').appendTo(this.#object.btn);
+        this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
+
+        // Create Menu
+        this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
+
+        // Create Header
+        this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
+        this.#object.menu.header.title.label = $(document.createElement('span')).text('Messages').appendTo(this.#object.menu.header.title);
+        this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
+
+        // Create Seperators
+        this.#object.menu.seperator = {};
+        this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
+
+        // Create Items List
+        this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
+
+        // Create Footer
+        this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
+        this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
+        this.#object.menu.footer.btn.label = $(document.createElement('small')).text('View All').appendTo(this.#object.menu.footer.btn);
+
+        // Set Object Class
+        if(this.#options.class.object){
+            this.#object.addClass(this.#options.class.object);
+        }
+
+        // Set Icon
+        if(this.#options.icon){
+            this.#object.btn.icon.addClass('bi-' + this.#options.icon);
+        }
+
+        // Set Color
+        if(this.#options.color){
+            this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
+            this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
+        }
+
+        // Add Callback
+        if(typeof this.#options.callback.viewAll === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                this.#options.callback.viewAll();
+            });
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                    case"callback":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    count(){
+
+        // Count the number of new notifications
+        let count = this.#object.find('[data-isRead="false"]').length;
+
+        // Set Count
+        this.#object.menu.header.title.count.text(count);
+
+        // Show Badge
+        if(count > 0){
+            this.#object.menu.header.title.count.removeClass('d-none');
+            this.#object.btn.badge.removeClass('d-none');
+        } else {
+            this.#object.menu.header.title.count.addClass('d-none');
+            this.#object.btn.badge.addClass('d-none');
+        }
+
+        // Return Count
+        return count;
+    }
+
+    add(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+        
+        let options = {};
+        let callback = null;
+
+        let properties = {};
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        for(const [key, value] of Object.entries(this.#options.defaults)){
+            if(typeof properties[key] === 'undefined'){
+                properties[key] = value;
+            }
+        }
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(properties[key][section] != null){
+                                properties[key][section] += ' ' + classes;
+                            } else {
+                                properties[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Create Item
+        let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
+
+        // Create Button
+        item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex align-items-center py-2').attr('type','button').appendTo(item);
+
+        // Add Icon
+        item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
+        item.btn.icon.frame = $(document.createElement('div')).addClass('d-flex align-items-center justify-content-center rounded-circle text-bg-primary').css({"width":"48px","height":"48px"}).appendTo(item.btn.icon);
+
+        // Add Label
+        item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
+        item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
+        item.btn.label.meta = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
+        item.btn.label.name = $(document.createElement('span')).appendTo(item.btn.label.meta);
+        item.btn.label.timeago = $(document.createElement('timeago')).addClass('timeago ms-2').appendTo(item.btn.label.meta);
+
+        // Add Seperator
+        item.seperator = $(document.createElement('li')).insertAfter(item);
+        item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
+
+        // Configure Avatar
+        item.btn.icon.frame.avatar = new Avatar(
+            properties.email, //Email
+            {
+                class: { //Add Classes
+                    object: "rounded-circle", //Object Element
+                },
+                size: "48px", //Set Size
+            },
+            function(avatar){}, //Callback
+        ).appendTo(item.btn.icon.frame);
+
+        // Configure Label
+        if(properties.label !== null){
+            item.btn.label.text.text(properties.label);
+        }
+
+        // Configure Name
+        if(properties.name !== null){
+            item.btn.label.name.text(properties.name);
+        }
+
+        // Configure Date Time
+        let datetime = null;
+        if(properties.datetime !== null){
+            datetime = new Date(defaults.datetime);
+        } else {
+            datetime = new Date();
+        }
+        item.btn.label.timeago.attr('title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
+
+        // Configure isRead
+        item.attr('data-isRead',properties.isRead);
+        if(!properties.isRead){
+            item.addClass('blink-primary');
+            item.btn.label.text.addClass('fw-bold');
+        }
+
+        // Set Item Class
+        if(properties.class.item){
+            item.addClass(properties.class.item);
+        }
+
+        // Add onRead Callback
+        if(!properties.isRead){
+            item.timer;
+            item.hover(function() {
+                item.timer = setTimeout(function() {
+                    item.attr('data-isRead', 'true').removeClass('blink-primary');
+                    item.btn.label.text.removeClass('fw-bold');
+                    self.count();
+                    if(typeof properties.onRead === 'function'){
+                        properties.onRead(item,self,self.#object);
+                    }
+                }, self.#options.onReadDelay);
+            }, function() {
+                clearTimeout(item.timer);
+            });
+        }
+
+        // Add Callback
+        if(typeof this.#options.callback.click === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                self.#options.callback.click(item,self,self.#object);
+            });
+        }
+
+        // Add Callback
+        if(typeof properties.click === 'function'){
+            this.#object.menu.footer.btn.on('click',function(){
+                properties.click(item,self,self.#object);
+            });
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(item,this);
+        }
+
+        // Set Count
+        this.count();
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
+}
+
 // Notification
 class Notification {
 
@@ -392,7 +1353,7 @@ class Notification {
         class: {
             object: null,
         },
-        callbacks: {
+        callback: {
             click: null,
             readAll: null,
         },
@@ -513,6 +1474,7 @@ class Notification {
         for(const [key, value] of Object.entries(options)){
             if(typeof this.#options[key] !== 'undefined'){
                 switch(key){
+                    case"defaults":
                     case"callback":
                         if(typeof this.#options[key] !== 'undefined'){
                             for(const [k, v] of Object.entries(value)){
@@ -576,8 +1538,8 @@ class Notification {
         this.count();
 
         // Execute Callback
-        if(typeof this.#options.callbacks.readAll === 'function'){
-            this.#options.callbacks.readAll(self,self.#object);
+        if(typeof this.#options.callback.readAll === 'function'){
+            this.#options.callback.readAll(self,self.#object);
         }
 
         // Return Object
@@ -709,9 +1671,9 @@ class Notification {
         }
 
         // Add Callback
-        if(typeof this.#options.callbacks.click === 'function'){
+        if(typeof this.#options.callback.click === 'function'){
             this.#object.menu.footer.btn.on('click',function(){
-                self.#options.callbacks.click(item,self,self.#object);
+                self.#options.callback.click(item,self,self.#object);
             });
         }
 
@@ -1054,11 +2016,15 @@ class Progress {
 
     #progress = null;
     #bar = null;
+    #value = null;
     #options = {
         class: {
             progress: null,
             bar: null,
             label: null,
+        },
+        callback: {
+            change: null,
         },
         size: null,
         color: null,
@@ -1162,6 +2128,15 @@ class Progress {
         for(const [key, value] of Object.entries(options)){
             if(typeof this.#options[key] !== 'undefined'){
                 switch(key){
+                    case"callback":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
                     case"class":
                         for(const [section, classes] of Object.entries(value)){
                             if(this.#options[key][section] != null){
@@ -1238,6 +2213,9 @@ class Progress {
         // Calculate Value
         value = Math.round((value / this.#options.scale) * 100);
 
+        // Save Value
+        this.#value = value;
+
         // Set Value
         this.#bar.css({width:value + '%'}).attr('aria-valuenow',value);
 
@@ -1246,8 +2224,19 @@ class Progress {
             this.#bar.label.html(this.#options.label.replace('{progress}', value).replace('{percent}', value + '%').replace('{scale}', this.#options.scale));
         }
 
+        // Execute Callback
+        if(typeof this.#options.callback.change === 'function'){
+            this.#options.callback.change(this);
+        }
+
         // Return Object
         return this;
+    }
+
+    get(){
+
+        // Return Value
+        return this.#value;
     }
 }
 

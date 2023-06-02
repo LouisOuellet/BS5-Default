@@ -37,6 +37,15 @@ $('[data-theme-value="' + defaultTheme + '"]').addClass('active');
 $('link[data-theme]').prop("disabled", true);
 $('link[data-theme="'+defaultTheme+'"]').prop("disabled", false);
 
+// Control Collapse
+$('[data-bs-toggle="collapse"][data-bs-target="#controlsCollapsible"]').click(function () {
+	if($(this).attr('aria-expanded') === 'true'){
+		$(this).find('i').removeClass('bi-chevron-left').addClass('bi-chevron-right');
+	} else {
+		$(this).find('i').removeClass('bi-chevron-right').addClass('bi-chevron-left');
+	}
+});
+
 // Back to Top
 $('.back-to-top').hide();
 window.onscroll = function() {
@@ -185,4 +194,25 @@ const Notifications = new Notification(
 	"#notificationArea",
 	{},
 	function(notification){},
+);
+
+// Create Message Area
+const Messages = new Message(
+	"#messageArea",
+	{},
+	function(message){},
+);
+
+// Create Task Area
+const Tasks = new Task(
+	"#taskArea",
+	{},
+	function(task){},
+);
+
+// Create Toast Area
+const Toasts = new Toast(
+	"#toastArea",
+	{},
+	function(toast){},
 );

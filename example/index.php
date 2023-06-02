@@ -224,193 +224,215 @@
     <body data-bs-spy="scroll" data-bs-target="#main-nav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0" class="h-100 w-100">
 
         <!-- ======= Controls ======= -->
-        <div class="d-flex position-fixed bottom-0 end-0 mb-3 me-3 z-1035">
+        <div id="controls" class="d-flex position-fixed bottom-0 end-0 mb-3 me-3 z-1035">
 
-            <!-- ======= Back to Top ======= -->
-            <div class="mx-1 back-to-top" style="display:none;">
-                <a href="#" class="d-flex align-items-center justify-content-center btn btn-primary py-2">
-                <i class="bi bi-arrow-up my-1" style="font-size:1em;"></i>
-                </a>
+            <!-- ======= Collapsible ======= -->
+            <div id="controlsCollapsible" class="collapse collapse-horizontal show">
+
+                <div class="d-flex">
+
+                    <!-- ======= Back to Top ======= -->
+                    <div class="mx-1 back-to-top" style="display:none;">
+                        <a href="#" class="d-flex align-items-center justify-content-center btn btn-primary py-2">
+                            <i class="bi bi-arrow-up my-1" style="font-size:1em;"></i>
+                        </a>
+                    </div>
+                    <!-- ======= End Back to Top ======= -->
+
+                    <!-- ======= Light Mode Selector ======= -->
+                    <div class="mx-1 dropdown dropup">
+                        <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+                        <i class="bi bi-circle-half my-1 theme-icon-active" style="font-size:1em;"></i>
+                        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
+                        <li>
+                            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                            <i class="bi bi-sun-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
+                            Light
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                            <i class="bi bi-moon-stars-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
+                            Dark
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+                            <i class="bi bi-circle-half me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
+                            Auto
+                            </button>
+                        </li>
+                        </ul>
+                    </div>
+                    <!-- ======= End Light Mode Selector ======= -->
+
+                    <!-- ======= Theme Selector ======= -->
+                    <div class="mx-1 dropdown dropup">
+                        <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+                            <i class="bi bi-palette my-1 theme-icon-active" style="font-size:1em;"></i>
+                            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center active" data-theme-value="default" aria-pressed="true">
+                                Default
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cerulean" aria-pressed="false">
+                                Cerulean
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cosmos" aria-pressed="false">
+                                Cosmos
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cyborg" aria-pressed="false">
+                                Cyborg
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="darkly" aria-pressed="false">
+                                Darkly
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="flathy" aria-pressed="false">
+                                Flathy
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="glass" aria-pressed="false">
+                                Glass
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="journal" aria-pressed="false">
+                                Journal
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="litera" aria-pressed="false">
+                                Litera
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="lumen" aria-pressed="false">
+                                Lumen
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="lux" aria-pressed="false">
+                                Lux
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="materia" aria-pressed="false">
+                                Materia
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="minty" aria-pressed="false">
+                                Minty
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="morph" aria-pressed="false">
+                                Morph
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="pulse" aria-pressed="false">
+                                Pulse
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="quartz" aria-pressed="false">
+                                Quartz
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="sandstone" aria-pressed="false">
+                                Sandstone
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="simplex" aria-pressed="false">
+                                Simplex
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="sketchy" aria-pressed="false">
+                                Sketchy
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="slate" aria-pressed="false">
+                                Slate
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="solar" aria-pressed="false">
+                                Solar
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="spacelab" aria-pressed="false">
+                                Spacelab
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="superhero" aria-pressed="false">
+                                Superhero
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="united" aria-pressed="false">
+                                United
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="vapor" aria-pressed="false">
+                                Vapor
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="yeti" aria-pressed="false">
+                                Yeti
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="zephyr" aria-pressed="false">
+                                Zephyr
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- ======= End Theme Selector ======= -->
+
+                </div>
+
             </div>
-            <!-- ======= End Back to Top ======= -->
+            <!-- ======= End Collapsible ======= -->
 
-            <!-- ======= Light Mode Selector ======= -->
-            <div class="mx-1 dropdown dropup">
-                <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-                <i class="bi bi-circle-half my-1 theme-icon-active" style="font-size:1em;"></i>
-                <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+            <!-- ======= Collapse ======= -->
+            <div class="mx-1">
+                <button type="button" class="d-flex align-items-center justify-content-center btn btn-primary py-2" data-bs-toggle="collapse" data-bs-target="#controlsCollapsible" aria-expanded="true" aria-controls="controlsCollapsible">
+                    <i class="bi bi-chevron-right my-1" style="font-size:1em;"></i>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-                <li>
-                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                    <i class="bi bi-sun-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                    Light
-                    </button>
-                </li>
-                <li>
-                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                    <i class="bi bi-moon-stars-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                    Dark
-                    </button>
-                </li>
-                <li>
-                    <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-                    <i class="bi bi-circle-half me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                    Auto
-                    </button>
-                </li>
-                </ul>
             </div>
-            <!-- ======= End Light Mode Selector ======= -->
-
-            <!-- ======= Theme Selector ======= -->
-            <div class="mx-1 dropdown dropup">
-                <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-                    <i class="bi bi-palette my-1 theme-icon-active" style="font-size:1em;"></i>
-                    <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center active" data-theme-value="default" aria-pressed="true">
-                        Default
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cerulean" aria-pressed="false">
-                        Cerulean
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cosmos" aria-pressed="false">
-                        Cosmos
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cyborg" aria-pressed="false">
-                        Cyborg
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="darkly" aria-pressed="false">
-                        Darkly
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="flathy" aria-pressed="false">
-                        Flathy
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="glass" aria-pressed="false">
-                        Glass
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="journal" aria-pressed="false">
-                        Journal
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="litera" aria-pressed="false">
-                        Litera
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="lumen" aria-pressed="false">
-                        Lumen
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="lux" aria-pressed="false">
-                        Lux
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="materia" aria-pressed="false">
-                        Materia
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="minty" aria-pressed="false">
-                        Minty
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="morph" aria-pressed="false">
-                        Morph
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="pulse" aria-pressed="false">
-                        Pulse
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="quartz" aria-pressed="false">
-                        Quartz
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="sandstone" aria-pressed="false">
-                        Sandstone
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="simplex" aria-pressed="false">
-                        Simplex
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="sketchy" aria-pressed="false">
-                        Sketchy
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="slate" aria-pressed="false">
-                        Slate
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="solar" aria-pressed="false">
-                        Solar
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="spacelab" aria-pressed="false">
-                        Spacelab
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="superhero" aria-pressed="false">
-                        Superhero
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="united" aria-pressed="false">
-                        United
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="vapor" aria-pressed="false">
-                        Vapor
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="yeti" aria-pressed="false">
-                        Yeti
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="zephyr" aria-pressed="false">
-                        Zephyr
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            <!-- ======= End Theme Selector ======= -->
+            <!-- ======= End Collapse ======= -->
 
         </div>
         <!-- ======= End Controls ======= -->
+
+        <!-- ======= Toasts ======= -->
+        <div id="toastArea"></div>
+        <!-- ======= End Toasts ======= -->
         
         <!-- ======= Main ======= -->
         <main>
@@ -442,27 +464,9 @@
                                     <div class="collapse" id="utilities">
                                         <ul class="nav flex-column">
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=search">
-                                                    <i class="bi bi-search me-1"></i>
-                                                    <span class="">Search</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=notification">
-                                                    <i class="bi bi-bell me-1"></i>
-                                                    <span class="">Notification</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=toast">
-                                                    <i class="bi bi-exclamation-square me-1"></i>
-                                                    <span class="">Toast</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=task">
-                                                    <i class="bi bi-list-task me-1"></i>
-                                                    <span class="">Task</span>
+                                                <a class="nav-link" href="?p=file">
+                                                    <i class="bi bi-file me-1"></i>
+                                                    <span class="">File</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
@@ -472,9 +476,27 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=file">
-                                                    <i class="bi bi-file me-1"></i>
-                                                    <span class="">File</span>
+                                                <a class="nav-link" href="?p=notification">
+                                                    <i class="bi bi-bell me-1"></i>
+                                                    <span class="">Notification</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=search">
+                                                    <i class="bi bi-search me-1"></i>
+                                                    <span class="">Search</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=task">
+                                                    <i class="bi bi-list-task me-1"></i>
+                                                    <span class="">Task</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=toast">
+                                                    <i class="bi bi-exclamation-square me-1"></i>
+                                                    <span class="">Toast</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -494,18 +516,6 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=code">
-                                                    <i class="bi bi-code-square me-1"></i>
-                                                    <span class="">Code</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=progress">
-                                                    <i class="bi bi-dash-lg me-1"></i>
-                                                    <span class="">Progress</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
                                                 <a class="nav-link" href="?p=box">
                                                     <i class="bi bi-postcard me-1"></i>
                                                     <span class="">Box</span>
@@ -518,33 +528,15 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=tabs">
-                                                    <i class="bi bi-segmented-nav me-1"></i>
-                                                    <span class="">Tabs</span>
+                                                <a class="nav-link" href="?p=code">
+                                                    <i class="bi bi-code-square me-1"></i>
+                                                    <span class="">Code</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=list">
-                                                    <i class="bi bi-list-ul me-1"></i>
-                                                    <span class="">List</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=modal">
-                                                    <i class="bi bi-card-checklist me-1"></i>
-                                                    <span class="">Modal</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=timeline">
-                                                    <i class="bi bi-clock-history me-1"></i>
-                                                    <span class="">Timeline</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=invoice">
-                                                    <i class="bi bi-file-spreadsheet me-1"></i>
-                                                    <span class="">Invoice</span>
+                                                <a class="nav-link" href="?p=comment">
+                                                    <i class="bi bi-chat-text me-1"></i>
+                                                    <span class="">Comment</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
@@ -560,15 +552,45 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=comment">
-                                                    <i class="bi bi-chat-text me-1"></i>
-                                                    <span class="">Comment</span>
+                                                <a class="nav-link" href="?p=invoice">
+                                                    <i class="bi bi-file-spreadsheet me-1"></i>
+                                                    <span class="">Invoice</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=list">
+                                                    <i class="bi bi-list-ul me-1"></i>
+                                                    <span class="">List</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=modal">
+                                                    <i class="bi bi-card-checklist me-1"></i>
+                                                    <span class="">Modal</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=progress">
+                                                    <i class="bi bi-dash-lg me-1"></i>
+                                                    <span class="">Progress</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
                                                 <a class="nav-link" href="?p=table">
                                                     <i class="bi bi-table me-1"></i>
                                                     <span class="">Table</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=tabs">
+                                                    <i class="bi bi-segmented-nav me-1"></i>
+                                                    <span class="">Tabs</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=timeline">
+                                                    <i class="bi bi-clock-history me-1"></i>
+                                                    <span class="">Timeline</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -581,6 +603,48 @@
                                     </button>
                                     <div class="collapse" id="pages">
                                         <ul class="nav flex-column">
+                                            <?php if(file_exists('DesCartes.html')){ ?>
+                                                <li class="nav-item ps-3">
+                                                    <a class="nav-link" href="DesCartes.html">
+                                                        <i class="bi bi-circle me-1"></i>
+                                                        <span class="">DesCartes</span>
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
+                                            <li class="nav-item ps-3">
+                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#error" role="button" aria-expanded="false" aria-controls="error">
+                                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                                    <span class="">Error</span>
+                                                </button>
+                                                <div class="collapse" id="error">
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=403">
+                                                                <i class="bi bi-exclamation-octagon me-1"></i>
+                                                                <span class="">403</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=404">
+                                                                <i class="bi bi-exclamation-diamond me-1"></i>
+                                                                <span class="">404</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=500">
+                                                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                                                <span class="">500</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=file_details">
+                                                    <i class="bi bi-file me-1"></i>
+                                                    <span class="">File</span>
+                                                </a>
+                                            </li>
                                             <li class="nav-item ps-3">
                                                 <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#login" role="button" aria-expanded="false" aria-controls="login">
                                                     <i class="bi bi-door-open me-1"></i>
@@ -610,58 +674,16 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="website.html">
-                                                    <i class="bi bi-globe-americas me-1"></i>
-                                                    <span class="">Website</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=file_details">
-                                                    <i class="bi bi-file me-1"></i>
-                                                    <span class="">File</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
                                                 <a class="nav-link" href="?p=searchResults">
                                                     <i class="bi bi-search me-1"></i>
                                                     <span class="">Search Results</span>
                                                 </a>
                                             </li>
-                                            <?php if(file_exists('DesCartes.html')){ ?>
-                                                <li class="nav-item ps-3">
-                                                    <a class="nav-link" href="DesCartes.html">
-                                                        <i class="bi bi-circle me-1"></i>
-                                                        <span class="">DesCartes</span>
-                                                    </a>
-                                                </li>
-                                            <?php } ?>
                                             <li class="nav-item ps-3">
-                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#error" role="button" aria-expanded="false" aria-controls="error">
-                                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                                    <span class="">Error</span>
-                                                </button>
-                                                <div class="collapse" id="error">
-                                                    <ul class="nav flex-column">
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=404">
-                                                                <i class="bi bi-exclamation-diamond me-1"></i>
-                                                                <span class="">404</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=403">
-                                                                <i class="bi bi-exclamation-octagon me-1"></i>
-                                                                <span class="">403</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=500">
-                                                                <i class="bi bi-exclamation-triangle me-1"></i>
-                                                                <span class="">500</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                <a class="nav-link" href="website.html">
+                                                    <i class="bi bi-globe-americas me-1"></i>
+                                                    <span class="">Website</span>
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -709,110 +731,11 @@
                                     <!-- ======= End Search Button ======= -->
 
                                     <!-- ======= Tasks ======= -->
-                                    <li class="nav-item dropdown">
-                                        <a id="taskMenu" href="#" class="nav-link text-decoration-none py-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-list-task fs-4"></i>
-                                        <span class="position-absolute top-25 start-75 translate-middle text-bg-primary border border-light rounded-circle" style="padding: 8px; display:block;"></span>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-list dropdown-menu-end pb-0" aria-labelledby="notificationMenu" style="min-width:350px;max-width:500px;">
-                                        <li>
-                                            <h5 class="py-2 px-3 m-0 text-center cursor-default">
-                                            Tasks
-                                            </h5>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item d-flex flex-column py-2" href="#">
-                                            <div>
-                                                <span class="text-wrap">Lorem Ipsum</span>
-                                                <small class="text-muted float-end">
-                                                20%
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <div class="progress">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"></div>
-                                                </div>
-                                            </div>
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item d-flex flex-column py-2" href="#">
-                                            <div>
-                                                <span class="text-wrap">Lorem Ipsum</span>
-                                                <small class="text-muted float-end">
-                                                75%
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <div class="progress">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
-                                                </div>
-                                            </div>
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item d-flex flex-column py-2" href="#">
-                                            <div>
-                                                <span class="text-wrap">Lorem Ipsum</span>
-                                                <small class="text-muted float-end">
-                                                50%
-                                                </small>
-                                            </div>
-                                            <div>
-                                                <div class="progress">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
-                                                </div>
-                                            </div>
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item text-center py-2 rounded-bottom" href="#">
-                                            <small>View All Tasks</small>
-                                            </a>
-                                        </li>
-                                        </ul>
-                                    </li>
+                                    <li class="nav-item" id="taskArea"></li>
                                     <!-- ======= End Tasks ======= -->
 
                                     <!-- ======= Messages ======= -->
-                                    <li class="nav-item dropdown">
-                                        <a id="messageMenu" href="#" class="nav-link text-decoration-none py-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-envelope fs-4"></i>
-                                        <span class="position-absolute top-25 start-75 translate-middle text-bg-info border border-light rounded-circle" style="padding: 8px; display:block;"></span>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-list dropdown-menu-end pb-0" aria-labelledby="notificationMenu" style="min-width:350px;max-width:500px;">
-                                        <li>
-                                            <h5 class="py-2 px-3 m-0 text-center cursor-default">
-                                            Messages
-                                            </h5>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item d-flex align-items-center py-2" href="#">
-                                            <div class="me-3">
-                                                <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&d=mp" alt="mdo" width="48" height="48" class="rounded-circle">
-                                            </div>
-                                            <div class="d-flex flex-column align-items-justify">
-                                                <span class="text-wrap">A new monthly report is ready to download!</span>
-                                                <small class="text-muted">
-                                                <span>John Doe</span>
-                                                <timeago class="ms-2">December 12, 2019</timeago>
-                                                </small>
-                                            </div>
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider m-0"></li>
-                                        <li>
-                                            <a class="dropdown-item text-center py-2 rounded-bottom" href="#">
-                                            <small>Read More</small>
-                                            </a>
-                                        </li>
-                                        </ul>
-                                    </li>
+                                    <li class="nav-item" id="messageArea"></li>
                                     <!-- ======= End Messages ======= -->
 
                                     <!-- ======= Notifications ======= -->

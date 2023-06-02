@@ -9,6 +9,9 @@ $(document).ready(function(){
                 bar: null, //Bar Element
                 label: null, //Label Element
             },
+            callback: { //Callbacks
+                change: function(progress){}, //On Change
+            },
             size: null, //Set Size
             color: null, //Set Color
             striped: true, //Set Striped
@@ -31,6 +34,9 @@ $(document).ready(function(){
     scriptCode += '            progress: "w-100", //Progress Element' + "\n";
     scriptCode += '            bar: null, //Bar Element' + "\n";
     scriptCode += '            label: null, //Label Element' + "\n";
+    scriptCode += '        },' + "\n";
+    scriptCode += '        callback: { //Callbacks' + "\n";
+    scriptCode += '            change: function(progress){}, //On Change' + "\n";
     scriptCode += '        },' + "\n";
     scriptCode += '        size: null, //Set Size' + "\n";
     scriptCode += '        color: null, //Set Color' + "\n";

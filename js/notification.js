@@ -20,7 +20,7 @@ $(document).ready(function(){
     scriptCode += '        class: { // class(es) to add to the notification area' + "\n";
     scriptCode += '            object: null, // class(es) to add to the notification area object' + "\n";
     scriptCode += '        },' + "\n";
-    scriptCode += '        callbacks: {' + "\n";
+    scriptCode += '        callback: {' + "\n";
     scriptCode += '            click: null, // callback function to run when a notification is clicked' + "\n";
     scriptCode += '            markAll: null, // callback function to run when the mark all as read button is clicked' + "\n";
     scriptCode += '        },' + "\n";
