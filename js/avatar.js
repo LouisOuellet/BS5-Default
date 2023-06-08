@@ -22,7 +22,6 @@ $(document).ready(function(){
     // Code
 
     let scriptCode = '';
-    scriptCode += '' + "\n";
     scriptCode += 'const sampleObject = new Avatar(' + "\n";
     scriptCode += '    "louis@laswitchtech.com", //Email' + "\n";
     scriptCode += '    {' + "\n";
@@ -49,6 +48,21 @@ $(document).ready(function(){
             fullscreen:true,
             collapsed:true,
             code:scriptCode,
+        },
+        function(element,code){}
+    );
+
+    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    
+    const html = new Code(
+        '#htmlcode',
+        {
+            language: 'markup',
+            title: 'Code',
+            clipboard:true,
+            fullscreen:true,
+            collapsed:true,
+            code:pretty,
         },
         function(element,code){}
     );

@@ -97,7 +97,8 @@
         <link rel="stylesheet" href="css/themes/zephyr/styles.css" data-theme="zephyr" disabled>
 
         <!-- ======= JQuery ======= -->
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
         <!-- ======= Bootstrap ======= -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
@@ -194,6 +195,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/show-language/prism-show-language.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/wpd/prism-wpd.min.js"></script>
 
+        <!-- ======= Prettier.JS ======= -->
+        <script src="https://unpkg.com/prettier/standalone.js"></script>
+        <script src="https://unpkg.com/prettier/parser-html.js"></script>
+
         <!-- ======= DataTables.JS ======= -->
         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
@@ -224,7 +229,7 @@
     <body data-bs-spy="scroll" data-bs-target="#main-nav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0" class="h-100 w-100">
 
         <!-- ======= Controls ======= -->
-        <div id="controls" class="d-flex position-fixed bottom-0 end-0 mb-3 me-3 z-1035">
+        <div id="controls" class="d-flex position-fixed bottom-0 end-0 mb-3 me-3" style="z-index:1041;">
 
             <!-- ======= Collapsible ======= -->
             <div id="controlsCollapsible" class="collapse collapse-horizontal show">
@@ -449,7 +454,6 @@
                                 <h4 class="brand m-0">Panel</h4>
                             </a>
                             <ul class="nav nav-pills flex-column">
-                            <ul class="nav nav-pills flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/">
                                         <i class="bi bi-speedometer2 me-1"></i>
@@ -510,9 +514,27 @@
                                     <div class="collapse" id="components">
                                         <ul class="nav flex-column">
                                             <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=accordion">
+                                                    <i class="bi bi-distribute-vertical me-1"></i>
+                                                    <span class="">Accordion</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=alert">
+                                                    <i class="bi bi-exclamation-triangle me-1"></i>
+                                                    <span class="">Alert</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
                                                 <a class="nav-link" href="?p=avatar">
                                                     <i class="bi bi-person-bounding-box me-1"></i>
                                                     <span class="">Avatar</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=blockquote">
+                                                    <i class="bi bi-quote me-1"></i>
+                                                    <span class="">Blockquote</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
@@ -537,6 +559,12 @@
                                                 <a class="nav-link" href="?p=comment">
                                                     <i class="bi bi-chat-text me-1"></i>
                                                     <span class="">Comment</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=carousel">
+                                                    <i class="bi bi-collection-play me-1"></i>
+                                                    <span class="">Carousel</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
@@ -570,9 +598,27 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=offcanvas">
+                                                    <i class="bi bi-layout-sidebar-inset-reverse me-1"></i>
+                                                    <span class="">Offcanvas</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
                                                 <a class="nav-link" href="?p=progress">
                                                     <i class="bi bi-dash-lg me-1"></i>
                                                     <span class="">Progress</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=ribbon">
+                                                    <i class="bi bi-bookmark me-1"></i>
+                                                    <span class="">Ribbon</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=stepper">
+                                                    <i class="bi bi-diagram-3 me-1"></i>
+                                                    <span class="">Stepper</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
@@ -603,14 +649,188 @@
                                     </button>
                                     <div class="collapse" id="pages">
                                         <ul class="nav flex-column">
-                                            <?php if(file_exists('DesCartes.html')){ ?>
-                                                <li class="nav-item ps-3">
-                                                    <a class="nav-link" href="DesCartes.html">
-                                                        <i class="bi bi-circle me-1"></i>
-                                                        <span class="">DesCartes</span>
-                                                    </a>
-                                                </li>
-                                            <?php } ?>
+                                            <li class="nav-item ps-3">
+                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#authentication" role="button" aria-expanded="false" aria-controls="2fa">
+                                                    <i class="bi bi-shield me-1"></i>
+                                                    <span class="">Authentication</span>
+                                                </button>
+                                                <div class="collapse" id="authentication">
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item ps-3">
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#2fa" role="button" aria-expanded="false" aria-controls="2fa">
+                                                                <i class="bi bi-shield-lock me-1"></i>
+                                                                <span class="">2-Factor Authentication</span>
+                                                            </button>
+                                                            <div class="collapse" id="2fa">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="2fa1.php">
+                                                                            <i class="bi bi-shield-lock me-1"></i>
+                                                                            <span class="">2-Factor Authentication 1</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="2fa2.php">
+                                                                            <i class="bi bi-shield-lock me-1"></i>
+                                                                            <span class="">2-Factor Authentication 2</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#forgot" role="button" aria-expanded="false" aria-controls="forgot">
+                                                                <i class="bi bi-question-diamond me-1"></i>
+                                                                <span class="">Forgot Password</span>
+                                                            </button>
+                                                            <div class="collapse" id="forgot">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="forgot1.php">
+                                                                            <i class="bi bi-question-diamond me-1"></i>
+                                                                            <span class="">Forgot Password 1</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="forgot2.php">
+                                                                            <i class="bi bi-question-diamond me-1"></i>
+                                                                            <span class="">Forgot Password 2</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#login" role="button" aria-expanded="false" aria-controls="login">
+                                                                <i class="bi bi-box-arrow-in-right me-1"></i>
+                                                                <span class="">Login</span>
+                                                            </button>
+                                                            <div class="collapse" id="login">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="login1.php">
+                                                                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                                                                            <span class="">Login 1</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="login2.php">
+                                                                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                                                                            <span class="">Login 2</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#recover" role="button" aria-expanded="false" aria-controls="recover">
+                                                                <i class="bi bi-arrow-repeat me-1"></i>
+                                                                <span class="">Recover</span>
+                                                            </button>
+                                                            <div class="collapse" id="recover">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="recover1.php">
+                                                                            <i class="bi bi-arrow-repeat me-1"></i>
+                                                                            <span class="">Recover 1</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="recover2.php">
+                                                                            <i class="bi bi-arrow-repeat me-1"></i>
+                                                                            <span class="">Recover 2</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#register" role="button" aria-expanded="false" aria-controls="register">
+                                                                <i class="bi bi-person-plus me-1"></i>
+                                                                <span class="">Register</span>
+                                                            </button>
+                                                            <div class="collapse" id="register">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="register1.php">
+                                                                            <i class="bi bi-person-plus me-1"></i>
+                                                                            <span class="">Register 1</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="register2.php">
+                                                                            <i class="bi bi-person-plus me-1"></i>
+                                                                            <span class="">Register 2</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#verify" role="button" aria-expanded="false" aria-controls="verify">
+                                                                <i class="bi bi-check-circle me-1"></i>
+                                                                <span class="">Verify Email</span>
+                                                            </button>
+                                                            <div class="collapse" id="verify">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="verify1.php">
+                                                                            <i class="bi bi-check-circle me-1"></i>
+                                                                            <span class="">Verify Email 1</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="verify2.php">
+                                                                            <i class="bi bi-check-circle me-1"></i>
+                                                                            <span class="">Verify Email 2</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#dispatch" role="button" aria-expanded="false" aria-controls="login">
+                                                    <i class="bi bi-arrow-up-right-circle me-1"></i>
+                                                    <span class="">Dispatch</span>
+                                                </button>
+                                                <div class="collapse" id="dispatch">
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=dispatchList">
+                                                                <i class="bi bi-box-seam me-1"></i>
+                                                                <span class="">List</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=dispatchArchive">
+                                                                <i class="bi bi-archive me-1"></i>
+                                                                <span class="">Archive</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=dispatchDetails">
+                                                                <i class="bi bi-chat-dots me-1"></i>
+                                                                <span class="">Details</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=shipments">
+                                                                <i class="bi bi-box-seam me-1"></i>
+                                                                <span class="">My Shipments</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=shipment">
+                                                                <i class="bi bi-box-seam me-1"></i>
+                                                                <span class="">Shipment</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
                                             <li class="nav-item ps-3">
                                                 <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#error" role="button" aria-expanded="false" aria-controls="error">
                                                     <i class="bi bi-exclamation-circle me-1"></i>
@@ -640,32 +860,82 @@
                                                 </div>
                                             </li>
                                             <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=file_details">
-                                                    <i class="bi bi-file me-1"></i>
-                                                    <span class="">File</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#login" role="button" aria-expanded="false" aria-controls="login">
-                                                    <i class="bi bi-door-open me-1"></i>
-                                                    <span class="">Logins</span>
+                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#rh" role="button" aria-expanded="false" aria-controls="login">
+                                                    <i class="bi bi-person-badge me-1"></i>
+                                                    <span class="">Human Ressources</span>
                                                 </button>
-                                                <div class="collapse" id="login">
+                                                <div class="collapse" id="rh">
                                                     <ul class="nav flex-column">
                                                         <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="login1.php">
-                                                                <i class="bi bi-box-arrow-in-right me-1"></i>
-                                                                <span class="">Login 1</span>
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#evaluations" role="button" aria-expanded="false" aria-controls="login">
+                                                                <i class="bi bi-graph-up me-1"></i>
+                                                                <span class="">Evaluations</span>
+                                                            </button>
+                                                            <div class="collapse" id="evaluations">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=evaluationList">
+                                                                            <i class="bi bi-list-check me-1"></i>
+                                                                            <span class="">List</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=evaluationDetails">
+                                                                            <i class="bi bi-list-columns me-1"></i>
+                                                                            <span class="">Details</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=evaluation">
+                                                                <i class="bi bi-graph-up me-1"></i>
+                                                                <span class="">Evaluation</span>
                                                             </a>
                                                         </li>
                                                         <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="login2.php">
-                                                                <i class="bi bi-box-arrow-in-right me-1"></i>
-                                                                <span class="">Login 2</span>
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#requests" role="button" aria-expanded="false" aria-controls="login">
+                                                                <i class="bi bi-chat-square-dots me-1"></i>
+                                                                <span class="">Requests</span>
+                                                            </button>
+                                                            <div class="collapse" id="requests">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=requestsList">
+                                                                            <i class="bi bi-list-check me-1"></i>
+                                                                            <span class="">List</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=requestsArchives">
+                                                                            <i class="bi bi-archive me-1"></i>
+                                                                            <span class="">Archives</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=requestsDetails">
+                                                                            <i class="bi bi-list-columns me-1"></i>
+                                                                            <span class="">Details</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=vacation">
+                                                                <i class="bi bi-calendar-x me-1"></i>
+                                                                <span class="">Vacation</span>
                                                             </a>
                                                         </li>
                                                     </ul>
                                                 </div>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=messages">
+                                                    <i class="bi bi-envelope me-1"></i>
+                                                    <span class="">Messages</span>
+                                                </a>
                                             </li>
                                             <li class="nav-item ps-3">
                                                 <a class="nav-link" href="?p=profile">
@@ -677,6 +947,62 @@
                                                 <a class="nav-link" href="?p=searchResults">
                                                     <i class="bi bi-search me-1"></i>
                                                     <span class="">Search Results</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=settings">
+                                                    <i class="bi bi-gear me-1"></i>
+                                                    <span class="">Settings</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#support" role="button" aria-expanded="false" aria-controls="login">
+                                                    <i class="bi bi-life-preserver me-1"></i>
+                                                    <span class="">Support</span>
+                                                </button>
+                                                <div class="collapse" id="support">
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item ps-3">
+                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#tickets" role="button" aria-expanded="false" aria-controls="login">
+                                                                <i class="bi bi-chat-square-dots me-1"></i>
+                                                                <span class="">Tickets</span>
+                                                            </button>
+                                                            <div class="collapse" id="tickets">
+                                                                <ul class="nav flex-column">
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=ticketList">
+                                                                            <i class="bi bi-list-check me-1"></i>
+                                                                            <span class="">List</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=ticketArchive">
+                                                                            <i class="bi bi-archive me-1"></i>
+                                                                            <span class="">Archive</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item ps-3">
+                                                                        <a class="nav-link" href="?p=ticketDetails">
+                                                                            <i class="bi bi-ticket-detailed me-1"></i>
+                                                                            <span class="">Details</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </li>
+                                                        <li class="nav-item ps-3">
+                                                            <a class="nav-link" href="?p=help">
+                                                                <i class="bi bi-question-circle me-1"></i>
+                                                                <span class="">Help</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li class="nav-item ps-3">
+                                                <a class="nav-link" href="?p=tasks">
+                                                    <i class="bi bi-list-task me-1"></i>
+                                                    <span class="">Tasks</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item ps-3">
@@ -712,20 +1038,20 @@
                                 <!-- ======= End Nav ======= -->
 
                                 <!-- ======= Widgets ======= -->
-                                <ul class="nav nav-pills ms-3 d-flex align-items-center ms-auto z-1050">
+                                <ul class="nav nav-pills ms-3 d-flex align-items-center ms-auto z-1040">
 
                                     <!-- ======= Search Field ======= -->
                                     <li id="searchField" class="nav-item collapse collapse-horizontal">
-                                        <form class="d-flex">
-                                            <input type="text" class="form-control search" placeholder="Search..." aria-label="Search" aria-describedby="searchBtn">
+                                        <form class="d-flex" action="?p=searchResults" method="post" autocomplete="on" novalidate>
+                                            <input type="text" class="form-control search" placeholder="Search..." aria-label="Search" aria-describedby="searchBtn" value="<?php if(isset($_POST['search'])){ echo $_POST['search']; } ?>">
                                         </form>
                                     </li>
                                     <!-- ======= End Search Field ======= -->
 
                                     <!-- ======= Search Button ======= -->
                                     <li class="nav-item">
-                                        <a id="searchBtn" href="#searchField" class="nav-link text-decoration-none py-2" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="Toggle Search Field">
-                                        <i class="bi bi-search fs-4"></i>
+                                        <a id="searchBtn" href="#searchField" class="nav-link text-decoration-none py-2 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="Toggle Search Field">
+                                            <i class="bi bi-search fs-4" style="height: 2.25rem !important;width: 1.5rem !important"></i>
                                         </a>
                                     </li>
                                     <!-- ======= End Search Button ======= -->
@@ -744,8 +1070,8 @@
 
                                     <!-- ======= FullScreen ======= -->
                                     <li class="nav-item">
-                                        <a id="fullscreenToggle" href="#" class="nav-link text-decoration-none py-2">
-                                        <i class="bi bi-fullscreen fs-4"></i>
+                                        <a id="fullscreenToggle" href="#" class="nav-link text-decoration-none py-2 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                                            <i class="bi bi-fullscreen fs-4" style="height: 2.25rem !important;width: 1.5rem !important"></i>
                                         </a>
                                     </li>
                                     <!-- ======= End FullScreen ======= -->

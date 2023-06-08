@@ -18,6 +18,11 @@ $(document).ready(function(){
     const sampleObject = new Table(
         '#example', //Selector or JQuery Object to appendTo
         {
+            class: { //Classes
+                buttons: "px-4 pt-4", //Buttons
+                table: "border-top", //Table
+                footer: "px-4 pt-2 pb-4", //Footer
+            },
             showButtonsLabel: false, //Show Buttons Label
             selectTools:true, //Select Tools
             actions:{ //Actions, These are the buttons that appear in the table's action column
@@ -74,6 +79,11 @@ $(document).ready(function(){
     scriptCode += "const sampleObject = new Table(" + "\n";
     scriptCode += "    '#example', //Selector or JQuery Object to appendTo" + "\n";
     scriptCode += "    {" + "\n";
+    scriptCode += "        class: { //Classes" + "\n";
+    scriptCode += "            buttons: 'px-4 pt-4', //Buttons" + "\n";
+    scriptCode += "            table: 'border-top', //Table" + "\n";
+    scriptCode += "            footer: 'px-4 pt-2 pb-4', //Footer" + "\n";
+    scriptCode += "        }," + "\n";
     scriptCode += "        showButtonsLabel: false, //Show Buttons Label" + "\n";
     scriptCode += "        selectTools:true, //Select Tools" + "\n";
     scriptCode += "        actions:{ //Actions, These are the buttons that appear in the table's action column" + "\n";
@@ -119,6 +129,21 @@ $(document).ready(function(){
             fullscreen:true,
             collapsed:true,
             code:scriptCode,
+        },
+        function(element,code){}
+    );
+
+    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    
+    const html = new Code(
+        '#htmlcode',
+        {
+            language: 'markup',
+            title: 'Code',
+            clipboard:true,
+            fullscreen:true,
+            collapsed:true,
+            code:pretty,
         },
         function(element,code){}
     );

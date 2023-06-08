@@ -9,9 +9,9 @@
                     We will work on fixing that right away.
                     Meanwhile, you may <a href="/">return to dashboard</a> or try using the search form.
                 </p>
-                <form>
+                <form action="?p=searchResults" method="post" autocomplete="on" novalidate>
                     <div class="input-group">
-                        <input type="text" name="search" class="form-control search" placeholder="Search...">
+                        <input type="text" name="search" class="form-control search" placeholder="Search..." value="<?php if(isset($_POST['search'])){ echo $_POST['search']; } ?>">
                         <button type="submit" name="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
                     </div>
                 </form>

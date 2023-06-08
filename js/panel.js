@@ -119,8 +119,11 @@ if(currentActive.length > 0) { // if the active link exists (length > 0
 	currentActive.parents('.collapse').each(function(){ // iterate over each parent .collapse of the active link
 		var parentButton = $(this).siblings('button.nav-link'); // find the associated button.nav-link
 		if(parentButton.length > 0) { // if the button exists
+			let parentClasses = parentButton.find('i').attr('class').split(' ');
+			let parentIconClass = parentClasses.find(cls => cls.startsWith('bi-'));
+			let parentIcon = parentIconClass ? parentIconClass.slice(3) : '';
 			breadcrumbArray.push({
-				icon: parentButton.find('i').attr('class').split(' ')[1].split('-')[1], // get the icon class
+				icon: parentIcon, // get the icon class
 				text: parentButton.text().trim(), // get the text
 				link: '#' // since these are buttons, they don't have href attributes. Substitute with your desired value
 			});
@@ -140,8 +143,11 @@ if(currentActive.length > 0) { // if the active link exists (length > 0
 if($('#navbarNavs a[href="/"]').length <= 0) {
 	var indexPage = sidebar.find('.nav-link[href="/"]'); // get the index link
 	if(indexPage.length > 0) {
+		let indexClasses = indexPage.find('i').attr('class').split(' ');
+		let indexIconClass = indexClasses.find(cls => cls.startsWith('bi-'));
+		let indexIcon = indexIconClass ? indexIconClass.slice(3) : '';
 		var indexLink = {
-			icon: indexPage.find('i').attr('class').split(' ')[1].split('-')[1], // get the icon class
+			icon: indexIcon, // get the icon class
 			text: indexPage.text().trim(), // get the text
 			link: indexPage.attr('href') // get the link
 		};

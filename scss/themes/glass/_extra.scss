@@ -342,6 +342,12 @@ body {
   background-color: transparent !important;
 }
 
+.text-bg-glass {
+  @include glass();
+  background-color: transparent !important;
+  color: $white;
+}
+
 // Card Title
 .card-title {
   margin: 0px;

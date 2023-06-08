@@ -46,8 +46,6 @@ $(document).ready(function(){
         "longitude": -73.876433,
     };
 
-    console.log(Profile);
-
     let profileDetails = new Card(
         '#col1',
         {
@@ -69,7 +67,6 @@ $(document).ready(function(){
                     },
                 },
                 function(list,object){
-                    console.log(list,object);
                     object.start.remove();
                     object.tools.remove();
                     list.appendTo(card.body);
@@ -319,37 +316,6 @@ $(document).ready(function(){
             );
         },
     );
-    
-    // Profile Location
-    let ProfileLocation = new Card(
-        '#col2',
-        {
-            title: 'Location',
-            icon: 'geo-alt',
-            class: {
-                card: 'mb-3',
-            },
-        },
-        function(card){
-
-            // Add Class to Body
-            card.body.addClass('p-0');
-
-            // Create Map
-            card.map = $(document.createElement('div')).attr('id','mapLeaflet').addClass('leaflet-map rounded-bottom').css({height: '300px',wigth: '100%'}).appendTo(card.body);
-        },
-    );
-
-    // Leaflet
-    ProfileLocation.leaflet = L.map('mapLeaflet').setView([Profile.latitude, Profile.longitude], 17);
-    L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        },
-    ).addTo(ProfileLocation.leaflet);
-    L.marker([Profile.latitude, Profile.longitude]).addTo(ProfileLocation.leaflet);
 
     // Tabs
     let ProfileTabs = new Tabs(

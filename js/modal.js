@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
     // Sample
+
+    let modalCode = null;
     
     const sampleObject = new Modal(
         "#example", //Selector or JQuery Object to add click event to
@@ -47,6 +49,7 @@ $(document).ready(function(){
             size: "none", //Set Size
         },
         function(element,modal){ // callback
+            modalCode = element;
             modal.add( //Add an action to the modal //Note: This function can be called multiple times to add multiple action. It can also called outside of the callback function.
                 {
                     icon: null, //Set Icon
@@ -126,6 +129,21 @@ $(document).ready(function(){
             fullscreen:true,
             collapsed:true,
             code:scriptCode,
+        },
+        function(element,code){}
+    );
+
+    let pretty = prettier.format(modalCode.prop('outerHTML'), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    
+    const html = new Code(
+        '#htmlcode',
+        {
+            language: 'markup',
+            title: 'Code',
+            clipboard:true,
+            fullscreen:true,
+            collapsed:true,
+            code:pretty,
         },
         function(element,code){}
     );
