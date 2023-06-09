@@ -5,8 +5,8 @@
 @import 'customization';
 
 // Variables
-@import 'variables';
-@import 'variables-dark';
+@import "../../extra/variables";
+@import "../../extra/variables-dark";
 
 // Bootstrap
 @import "bootstrap/scss/maps";
