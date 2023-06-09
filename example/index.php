@@ -8,6 +8,487 @@
     }
     $file = $page . '.php';
     $title = ucwords(str_replace('_',' ',$page));
+    function generateMenu($items, $depth=0, $reorder=false) {
+
+        // Start the menu list
+        $html = '<ul class="nav nav-pills flex-column">';
+
+        // Sort the array by key in ascending order
+        if($reorder) ksort($items);
+    
+        foreach($items as $key => $item) {
+
+            // Generate unique id for the collapse component
+            $id = 'menu-' . $key . '-' . $depth;
+    
+            if(isset($item['sub'])) {
+                // Menu with submenu
+                $html .= '<li class="nav-item ps-3">';
+                $html .= '<button class="nav-link" data-bs-toggle="collapse" data-bs-target="#' . $id . '" role="button" aria-expanded="false" aria-controls="' . $id . '">';
+                $html .= '<i class="bi bi-' . $item['icon'] . ' me-1"></i>';
+                $html .= '<span class="">' . $item['label'] . '</span>';
+                $html .= '</button>';
+                $html .= '<div class="collapse" id="' . $id . '">';
+                $html .= generateMenu($item['sub'], $depth+1, true); // Recursive call for submenu
+                $html .= '</div>';
+                $html .= '</li>';
+            } else {
+                // Simple menu item
+                $html .= '<li class="nav-item ps-3">';
+                $html .= '<a class="nav-link" href="' . $item['link'] . '">';
+                $html .= '<i class="bi bi-' . $item['icon'] . ' me-1"></i>';
+                $html .= '<span class="">' . $item['label'] . '</span>';
+                $html .= '</a>';
+                $html .= '</li>';
+            }
+        }
+    
+        // Close the menu list
+        $html .= '</ul>';
+    
+        return $html;
+    }
+    $sidebar = [
+        "dashboard" => [
+            "label" => "Dashboard",
+            "icon" => "speedometer2",
+            "link" => "/",
+        ],
+        "utilities" => [
+            "label" => "Utilities",
+            "icon" => "tools",
+            "link" => "#",
+            "sub" => [
+                "file" => [
+                    "label" => "File",
+                    "icon" => "file",
+                    "link" => "?p=file",
+                ],
+                "message" => [
+                    "label" => "Message",
+                    "icon" => "envelope",
+                    "link" => "?p=message",
+                ],
+                "notification" => [
+                    "label" => "Notification",
+                    "icon" => "bell",
+                    "link" => "?p=notification",
+                ],
+                "search" => [
+                    "label" => "Search",
+                    "icon" => "search",
+                    "link" => "?p=search",
+                ],
+                "task" => [
+                    "label" => "Task",
+                    "icon" => "list-task",
+                    "link" => "?p=task",
+                ],
+                "toast" => [
+                    "label" => "Toast",
+                    "icon" => "exclamation-square",
+                    "link" => "?p=toast",
+                ],
+            ],
+        ],
+        "components" => [
+            "label" => "Components",
+            "icon" => "layers",
+            "link" => "#",
+            "sub" => [
+                "accordion" => [
+                    "label" => "Accordion",
+                    "icon" => "arrow-down-up",
+                    "link" => "?p=accordion",
+                ],
+                "alert" => [
+                    "label" => "Alert",
+                    "icon" => "exclamation-square",
+                    "link" => "?p=alert",
+                ],
+                "avatar" => [
+                    "label" => "Avatar",
+                    "icon" => "person-bounding-box",
+                    "link" => "?p=avatar",
+                ],
+                "blockquote" => [
+                    "label" => "Blockquote",
+                    "icon" => "quote",
+                    "link" => "?p=blockquote",
+                ],
+                "box" => [
+                    "label" => "Box",
+                    "icon" => "postcard",
+                    "link" => "?p=box",
+                ],
+                "card" => [
+                    "label" => "Card",
+                    "icon" => "card-heading",
+                    "link" => "?p=card",
+                ],
+                "code" => [
+                    "label" => "Code",
+                    "icon" => "code-square",
+                    "link" => "?p=code",
+                ],
+                "carousel" => [
+                    "label" => "Carousel",
+                    "icon" => "collection-play",
+                    "link" => "?p=carousel",
+                ],
+                "dropdown" => [
+                    "label" => "Dropdown",
+                    "icon" => "caret-down-square",
+                    "link" => "?p=dropdown",
+                ],
+                "feed" => [
+                    "label" => "Feed",
+                    "icon" => "chat-left-text",
+                    "link" => "?p=feed",
+                ],
+                "invoice" => [
+                    "label" => "Invoice",
+                    "icon" => "file-spreadsheet",
+                    "link" => "?p=invoice",
+                ],
+                "list" => [
+                    "label" => "List",
+                    "icon" => "list-ul",
+                    "link" => "?p=list",
+                ],
+                "modal" => [
+                    "label" => "Modal",
+                    "icon" => "window",
+                    "link" => "?p=modal",
+                ],
+                "offcanvas" => [
+                    "label" => "Offcanvas",
+                    "icon" => "window-sidebar",
+                    "link" => "?p=offcanvas",
+                ],
+                "progress" => [
+                    "label" => "Progress",
+                    "icon" => "hourglass",
+                    "link" => "?p=progress",
+                ],
+                "ribbon" => [
+                    "label" => "Ribbon",
+                    "icon" => "bookmark",
+                    "link" => "?p=ribbon",
+                ],
+                "stepper" => [
+                    "label" => "Stepper",
+                    "icon" => "diagram-3",
+                    "link" => "?p=stepper",
+                ],
+                "table" => [
+                    "label" => "Table",
+                    "icon" => "table",
+                    "link" => "?p=table",
+                ],
+                "tabs" => [
+                    "label" => "Tabs",
+                    "icon" => "segmented-nav",
+                    "link" => "?p=tabs",
+                ],
+                "timeline" => [
+                    "label" => "Timeline",
+                    "icon" => "clock-history",
+                    "link" => "?p=timeline",
+                ],
+            ],
+        ],
+        "pages" => [
+            "label" => "Pages",
+            "icon" => "file-earmark",
+            "link" => "#",
+            "sub" => [
+                "authentication" => [
+                    "label" => "Authentication",
+                    "icon" => "shield-lock",
+                    "link" => "#",
+                    "sub" => [
+                        "2fa" => [
+                            "label" => "2-Factor Authentication",
+                            "icon" => "shield-lock",
+                            "link" => "#",
+                            "sub" => [
+                                "2fa1" => [
+                                    "label" => "2-Factor Authentication 1",
+                                    "icon" => "shield-lock",
+                                    "link" => "2fa1.php",
+                                ],
+                                "2fa2" => [
+                                    "label" => "2-Factor Authentication 2",
+                                    "icon" => "shield-lock",
+                                    "link" => "2fa2.php",
+                                ],
+                            ],
+                        ],
+                        "forgot" => [
+                            "label" => "Forgot",
+                            "icon" => "question-diamond",
+                            "link" => "#",
+                            "sub" => [
+                                "forgot1" => [
+                                    "label" => "Forgot 1",
+                                    "icon" => "question-diamond",
+                                    "link" => "forgot1.php",
+                                ],
+                                "forgot2" => [
+                                    "label" => "Forgot 2",
+                                    "icon" => "question-diamond",
+                                    "link" => "forgot2.php",
+                                ],
+                            ],
+                        ],
+                        "login" => [
+                            "label" => "Login",
+                            "icon" => "box-arrow-in-right",
+                            "link" => "#",
+                            "sub" => [
+                                "login1" => [
+                                    "label" => "Login 1",
+                                    "icon" => "box-arrow-in-right",
+                                    "link" => "login1.php",
+                                ],
+                                "login2" => [
+                                    "label" => "Login 2",
+                                    "icon" => "box-arrow-in-right",
+                                    "link" => "login2.php",
+                                ],
+                            ],
+                        ],
+                        "recover" => [
+                            "label" => "Recover",
+                            "icon" => "arrow-repeat",
+                            "link" => "#",
+                            "sub" => [
+                                "recover1" => [
+                                    "label" => "Recover 1",
+                                    "icon" => "arrow-repeat",
+                                    "link" => "?p=recover1",
+                                ],
+                                "recover2" => [
+                                    "label" => "Recover 2",
+                                    "icon" => "arrow-repeat",
+                                    "link" => "?p=recover2",
+                                ],
+                            ],
+                        ],
+                        "register" => [
+                            "label" => "Register",
+                            "icon" => "person-plus",
+                            "link" => "#",
+                            "sub" => [
+                                "register1" => [
+                                    "label" => "Register 1",
+                                    "icon" => "person-plus",
+                                    "link" => "?p=register1",
+                                ],
+                                "register2" => [
+                                    "label" => "Register 2",
+                                    "icon" => "person-plus",
+                                    "link" => "?p=register2",
+                                ],
+                            ],
+                        ],
+                        "verify" => [
+                            "label" => "Verify",
+                            "icon" => "check-circle",
+                            "link" => "#",
+                            "sub" => [
+                                "verify1" => [
+                                    "label" => "Verify 1",
+                                    "icon" => "check-circle",
+                                    "link" => "?p=verify1",
+                                ],
+                                "verify2" => [
+                                    "label" => "Verify 2",
+                                    "icon" => "check-circle",
+                                    "link" => "?p=verify2",
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                "dispatch" => [
+                    "label" => "Dispatch",
+                    "icon" => "arrow-up-right-circle",
+                    "link" => "#",
+                    "sub" => [
+                        "dispatchList" => [
+                            "label" => "List",
+                            "icon" => "list-ul",
+                            "link" => "?p=dispatchList",
+                        ],
+                        "dispatchArchive" => [
+                            "label" => "Archive",
+                            "icon" => "archive",
+                            "link" => "?p=dispatchArchive",
+                        ],
+                        "dispatchDetails" => [
+                            "label" => "Details",
+                            "icon" => "chat-dots",
+                            "link" => "?p=dispatchDetails",
+                        ],
+                        "dispatchMyshipments" => [
+                            "label" => "My Shipments",
+                            "icon" => "list-stars",
+                            "link" => "?p=dispatchMyshipments",
+                        ],
+                        "dispatchShipment" => [
+                            "label" => "Shipment",
+                            "icon" => "box-seam",
+                            "link" => "?p=dispatchShipment",
+                        ],
+                    ],
+                ],
+                "error" => [
+                    "label" => "Error",
+                    "icon" => "exclamation-circle",
+                    "link" => "#",
+                    "sub" => [
+                        "403" => [
+                            "label" => "Access Denied",
+                            "icon" => "exclamation-octagon",
+                            "link" => "?p=403",
+                        ],
+                        "404" => [
+                            "label" => "Page Not Found",
+                            "icon" => "exclamation-diamond",
+                            "link" => "?p=404",
+                        ],
+                        "500" => [
+                            "label" => "Internal Server Error",
+                            "icon" => "exclamation-triangle",
+                            "link" => "?p=500",
+                        ],
+                    ],
+                ],
+                "humanResources" => [
+                    "label" => "Human Resources",
+                    "icon" => "person-badge",
+                    "link" => "#",
+                    "sub" => [
+                        "evaluations" => [
+                            "label" => "Evaluations",
+                            "icon" => "graph-up",
+                            "link" => "#",
+                            "sub" => [
+                                "evaluationList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=evaluationList",
+                                ],
+                                "evaluationDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=evaluationDetails",
+                                ],
+                            ],
+                        ],
+                        "evaluation" => [
+                            "label" => "Evaluation",
+                            "icon" => "graph-up",
+                            "link" => "?p=evaluation",
+                        ],
+                        "requests" => [
+                            "label" => "Requests",
+                            "icon" => "chat-square-dots",
+                            "link" => "#",
+                            "sub" => [
+                                "requestsList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=requestsList",
+                                ],
+                                "requestsArchives" => [
+                                    "label" => "Archives",
+                                    "icon" => "archive",
+                                    "link" => "?p=requestsArchives",
+                                ],
+                                "requestsDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=requestsDetails",
+                                ],
+                            ],
+                        ],
+                        "vacation" => [
+                            "label" => "Vacation",
+                            "icon" => "calendar-x",
+                            "link" => "?p=vacation",
+                        ],
+                    ],
+                ],
+                "messages" => [
+                    "label" => "Messages",
+                    "icon" => "envelope",
+                    "link" => "?p=messages",
+                ],
+                "profile" => [
+                    "label" => "Profile",
+                    "icon" => "person",
+                    "link" => "?p=profile",
+                ],
+                "searchResults" => [
+                    "label" => "Search Results",
+                    "icon" => "search",
+                    "link" => "?p=searchResults",
+                ],
+                "settings" => [
+                    "label" => "Settings",
+                    "icon" => "gear",
+                    "link" => "?p=settings",
+                ],
+                "support" => [
+                    "label" => "Support",
+                    "icon" => "life-preserver",
+                    "link" => "#",
+                    "sub" => [
+                        "tickets" => [
+                            "label" => "Tickets",
+                            "icon" => "chat-square-dots",
+                            "link" => "#",
+                            "sub" => [
+                                "ticketList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=ticketList",
+                                ],
+                                "ticketArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=ticketArchive",
+                                ],
+                                "ticketDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "ticket-detailed",
+                                    "link" => "?p=ticketDetails",
+                                ],
+                            ],
+                        ],
+                        "help" => [
+                            "label" => "Help",
+                            "icon" => "question-circle",
+                            "link" => "?p=help",
+                        ],
+                    ],
+                ],
+                "tasks" => [
+                    "label" => "Tasks",
+                    "icon" => "list-task",
+                    "link" => "?p=tasks",
+                ],
+                "website" => [
+                    "label" => "Website",
+                    "icon" => "globe-americas",
+                    "link" => "website.html",
+                ],
+            ],
+        ],
+    ];
 ?>
 <!doctype html>
 <html lang="en" data-bs-theme="light" data-theme="glass" class="h-100 w-100">
@@ -453,568 +934,7 @@
                                 <i class="bi bi-bootstrap-fill me-2 fs-1"></i>
                                 <h4 class="brand m-0">Panel</h4>
                             </a>
-                            <ul class="nav nav-pills flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/">
-                                        <i class="bi bi-speedometer2 me-1"></i>
-                                        <span class="">Dashboard</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#utilities" role="button" aria-expanded="false" aria-controls="utilities">
-                                        <i class="bi bi-tools me-1"></i>
-                                        <span class="">Utilities</span>
-                                    </button>
-                                    <div class="collapse" id="utilities">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=file">
-                                                    <i class="bi bi-file me-1"></i>
-                                                    <span class="">File</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=message">
-                                                    <i class="bi bi-envelope me-1"></i>
-                                                    <span class="">Message</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=notification">
-                                                    <i class="bi bi-bell me-1"></i>
-                                                    <span class="">Notification</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=search">
-                                                    <i class="bi bi-search me-1"></i>
-                                                    <span class="">Search</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=task">
-                                                    <i class="bi bi-list-task me-1"></i>
-                                                    <span class="">Task</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=toast">
-                                                    <i class="bi bi-exclamation-square me-1"></i>
-                                                    <span class="">Toast</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#components" role="button" aria-expanded="false" aria-controls="components">
-                                        <i class="bi bi-box me-1"></i>
-                                        <span class="">Components</span>
-                                    </button>
-                                    <div class="collapse" id="components">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=accordion">
-                                                    <i class="bi bi-distribute-vertical me-1"></i>
-                                                    <span class="">Accordion</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=alert">
-                                                    <i class="bi bi-exclamation-triangle me-1"></i>
-                                                    <span class="">Alert</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=avatar">
-                                                    <i class="bi bi-person-bounding-box me-1"></i>
-                                                    <span class="">Avatar</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=blockquote">
-                                                    <i class="bi bi-quote me-1"></i>
-                                                    <span class="">Blockquote</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=box">
-                                                    <i class="bi bi-postcard me-1"></i>
-                                                    <span class="">Box</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=card">
-                                                    <i class="bi bi-card-heading me-1"></i>
-                                                    <span class="">Card</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=code">
-                                                    <i class="bi bi-code-square me-1"></i>
-                                                    <span class="">Code</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=comment">
-                                                    <i class="bi bi-chat-text me-1"></i>
-                                                    <span class="">Comment</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=carousel">
-                                                    <i class="bi bi-collection-play me-1"></i>
-                                                    <span class="">Carousel</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=dropdown">
-                                                    <i class="bi bi-menu-app me-1"></i>
-                                                    <span class="">Dropdown</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=feed">
-                                                    <i class="bi bi-chat-square-text me-1"></i>
-                                                    <span class="">Feed</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=invoice">
-                                                    <i class="bi bi-file-spreadsheet me-1"></i>
-                                                    <span class="">Invoice</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=list">
-                                                    <i class="bi bi-list-ul me-1"></i>
-                                                    <span class="">List</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=modal">
-                                                    <i class="bi bi-card-checklist me-1"></i>
-                                                    <span class="">Modal</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=offcanvas">
-                                                    <i class="bi bi-layout-sidebar-inset-reverse me-1"></i>
-                                                    <span class="">Offcanvas</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=progress">
-                                                    <i class="bi bi-dash-lg me-1"></i>
-                                                    <span class="">Progress</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=ribbon">
-                                                    <i class="bi bi-bookmark me-1"></i>
-                                                    <span class="">Ribbon</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=stepper">
-                                                    <i class="bi bi-diagram-3 me-1"></i>
-                                                    <span class="">Stepper</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=table">
-                                                    <i class="bi bi-table me-1"></i>
-                                                    <span class="">Table</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=tabs">
-                                                    <i class="bi bi-segmented-nav me-1"></i>
-                                                    <span class="">Tabs</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=timeline">
-                                                    <i class="bi bi-clock-history me-1"></i>
-                                                    <span class="">Timeline</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#pages" role="button" aria-expanded="false" aria-controls="pages">
-                                        <i class="bi bi-file me-1"></i>
-                                        <span class="">Pages</span>
-                                    </button>
-                                    <div class="collapse" id="pages">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item ps-3">
-                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#authentication" role="button" aria-expanded="false" aria-controls="2fa">
-                                                    <i class="bi bi-shield me-1"></i>
-                                                    <span class="">Authentication</span>
-                                                </button>
-                                                <div class="collapse" id="authentication">
-                                                    <ul class="nav flex-column">
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#2fa" role="button" aria-expanded="false" aria-controls="2fa">
-                                                                <i class="bi bi-shield-lock me-1"></i>
-                                                                <span class="">2-Factor Authentication</span>
-                                                            </button>
-                                                            <div class="collapse" id="2fa">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="2fa1.php">
-                                                                            <i class="bi bi-shield-lock me-1"></i>
-                                                                            <span class="">2-Factor Authentication 1</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="2fa2.php">
-                                                                            <i class="bi bi-shield-lock me-1"></i>
-                                                                            <span class="">2-Factor Authentication 2</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#forgot" role="button" aria-expanded="false" aria-controls="forgot">
-                                                                <i class="bi bi-question-diamond me-1"></i>
-                                                                <span class="">Forgot Password</span>
-                                                            </button>
-                                                            <div class="collapse" id="forgot">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="forgot1.php">
-                                                                            <i class="bi bi-question-diamond me-1"></i>
-                                                                            <span class="">Forgot Password 1</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="forgot2.php">
-                                                                            <i class="bi bi-question-diamond me-1"></i>
-                                                                            <span class="">Forgot Password 2</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#login" role="button" aria-expanded="false" aria-controls="login">
-                                                                <i class="bi bi-box-arrow-in-right me-1"></i>
-                                                                <span class="">Login</span>
-                                                            </button>
-                                                            <div class="collapse" id="login">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="login1.php">
-                                                                            <i class="bi bi-box-arrow-in-right me-1"></i>
-                                                                            <span class="">Login 1</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="login2.php">
-                                                                            <i class="bi bi-box-arrow-in-right me-1"></i>
-                                                                            <span class="">Login 2</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#recover" role="button" aria-expanded="false" aria-controls="recover">
-                                                                <i class="bi bi-arrow-repeat me-1"></i>
-                                                                <span class="">Recover</span>
-                                                            </button>
-                                                            <div class="collapse" id="recover">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="recover1.php">
-                                                                            <i class="bi bi-arrow-repeat me-1"></i>
-                                                                            <span class="">Recover 1</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="recover2.php">
-                                                                            <i class="bi bi-arrow-repeat me-1"></i>
-                                                                            <span class="">Recover 2</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#register" role="button" aria-expanded="false" aria-controls="register">
-                                                                <i class="bi bi-person-plus me-1"></i>
-                                                                <span class="">Register</span>
-                                                            </button>
-                                                            <div class="collapse" id="register">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="register1.php">
-                                                                            <i class="bi bi-person-plus me-1"></i>
-                                                                            <span class="">Register 1</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="register2.php">
-                                                                            <i class="bi bi-person-plus me-1"></i>
-                                                                            <span class="">Register 2</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#verify" role="button" aria-expanded="false" aria-controls="verify">
-                                                                <i class="bi bi-check-circle me-1"></i>
-                                                                <span class="">Verify Email</span>
-                                                            </button>
-                                                            <div class="collapse" id="verify">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="verify1.php">
-                                                                            <i class="bi bi-check-circle me-1"></i>
-                                                                            <span class="">Verify Email 1</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="verify2.php">
-                                                                            <i class="bi bi-check-circle me-1"></i>
-                                                                            <span class="">Verify Email 2</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#dispatch" role="button" aria-expanded="false" aria-controls="login">
-                                                    <i class="bi bi-arrow-up-right-circle me-1"></i>
-                                                    <span class="">Dispatch</span>
-                                                </button>
-                                                <div class="collapse" id="dispatch">
-                                                    <ul class="nav flex-column">
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=dispatchList">
-                                                                <i class="bi bi-box-seam me-1"></i>
-                                                                <span class="">List</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=dispatchArchive">
-                                                                <i class="bi bi-archive me-1"></i>
-                                                                <span class="">Archive</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=dispatchDetails">
-                                                                <i class="bi bi-chat-dots me-1"></i>
-                                                                <span class="">Details</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=shipments">
-                                                                <i class="bi bi-box-seam me-1"></i>
-                                                                <span class="">My Shipments</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=shipment">
-                                                                <i class="bi bi-box-seam me-1"></i>
-                                                                <span class="">Shipment</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#error" role="button" aria-expanded="false" aria-controls="error">
-                                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                                    <span class="">Error</span>
-                                                </button>
-                                                <div class="collapse" id="error">
-                                                    <ul class="nav flex-column">
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=403">
-                                                                <i class="bi bi-exclamation-octagon me-1"></i>
-                                                                <span class="">403</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=404">
-                                                                <i class="bi bi-exclamation-diamond me-1"></i>
-                                                                <span class="">404</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=500">
-                                                                <i class="bi bi-exclamation-triangle me-1"></i>
-                                                                <span class="">500</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#rh" role="button" aria-expanded="false" aria-controls="login">
-                                                    <i class="bi bi-person-badge me-1"></i>
-                                                    <span class="">Human Ressources</span>
-                                                </button>
-                                                <div class="collapse" id="rh">
-                                                    <ul class="nav flex-column">
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#evaluations" role="button" aria-expanded="false" aria-controls="login">
-                                                                <i class="bi bi-graph-up me-1"></i>
-                                                                <span class="">Evaluations</span>
-                                                            </button>
-                                                            <div class="collapse" id="evaluations">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=evaluationList">
-                                                                            <i class="bi bi-list-check me-1"></i>
-                                                                            <span class="">List</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=evaluationDetails">
-                                                                            <i class="bi bi-list-columns me-1"></i>
-                                                                            <span class="">Details</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=evaluation">
-                                                                <i class="bi bi-graph-up me-1"></i>
-                                                                <span class="">Evaluation</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#requests" role="button" aria-expanded="false" aria-controls="login">
-                                                                <i class="bi bi-chat-square-dots me-1"></i>
-                                                                <span class="">Requests</span>
-                                                            </button>
-                                                            <div class="collapse" id="requests">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=requestsList">
-                                                                            <i class="bi bi-list-check me-1"></i>
-                                                                            <span class="">List</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=requestsArchives">
-                                                                            <i class="bi bi-archive me-1"></i>
-                                                                            <span class="">Archives</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=requestsDetails">
-                                                                            <i class="bi bi-list-columns me-1"></i>
-                                                                            <span class="">Details</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=vacation">
-                                                                <i class="bi bi-calendar-x me-1"></i>
-                                                                <span class="">Vacation</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=messages">
-                                                    <i class="bi bi-envelope me-1"></i>
-                                                    <span class="">Messages</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=profile">
-                                                    <i class="bi bi-person me-1"></i>
-                                                    <span class="">Profile</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=searchResults">
-                                                    <i class="bi bi-search me-1"></i>
-                                                    <span class="">Search Results</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=settings">
-                                                    <i class="bi bi-gear me-1"></i>
-                                                    <span class="">Settings</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#support" role="button" aria-expanded="false" aria-controls="login">
-                                                    <i class="bi bi-life-preserver me-1"></i>
-                                                    <span class="">Support</span>
-                                                </button>
-                                                <div class="collapse" id="support">
-                                                    <ul class="nav flex-column">
-                                                        <li class="nav-item ps-3">
-                                                            <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#tickets" role="button" aria-expanded="false" aria-controls="login">
-                                                                <i class="bi bi-chat-square-dots me-1"></i>
-                                                                <span class="">Tickets</span>
-                                                            </button>
-                                                            <div class="collapse" id="tickets">
-                                                                <ul class="nav flex-column">
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=ticketList">
-                                                                            <i class="bi bi-list-check me-1"></i>
-                                                                            <span class="">List</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=ticketArchive">
-                                                                            <i class="bi bi-archive me-1"></i>
-                                                                            <span class="">Archive</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="nav-item ps-3">
-                                                                        <a class="nav-link" href="?p=ticketDetails">
-                                                                            <i class="bi bi-ticket-detailed me-1"></i>
-                                                                            <span class="">Details</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
-                                                        <li class="nav-item ps-3">
-                                                            <a class="nav-link" href="?p=help">
-                                                                <i class="bi bi-question-circle me-1"></i>
-                                                                <span class="">Help</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="?p=tasks">
-                                                    <i class="bi bi-list-task me-1"></i>
-                                                    <span class="">Tasks</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item ps-3">
-                                                <a class="nav-link" href="website.html">
-                                                    <i class="bi bi-globe-americas me-1"></i>
-                                                    <span class="">Website</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
+                            <?= generateMenu($sidebar) ?>
                         </div>
                     </div>
                     <!-- ======= End Sidebar ======= -->

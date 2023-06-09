@@ -6739,6 +6739,15 @@ class Accordion {
         for(const [key, value] of Object.entries(options)){
             if(typeof this.#options[key] !== 'undefined'){
                 switch(key){
+                    case"defaults":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
                     case"class":
                         for(const [section, classes] of Object.entries(value)){
                             if(this.#options[key][section] != null){
@@ -6783,6 +6792,7 @@ class Accordion {
         // Configure Options
         for(const [key, value] of Object.entries(this.#options.defaults)){
             if(typeof properties[key] === 'undefined'){
+                console.log(key)
                 properties[key] = value;
             }
         }
