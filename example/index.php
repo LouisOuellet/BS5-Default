@@ -23,7 +23,7 @@
     
             if(isset($item['sub'])) {
                 // Menu with submenu
-                $html .= '<li class="nav-item ps-3">';
+                $html .= '<li class="nav-item ps-2">';
                 $html .= '<button class="nav-link" data-bs-toggle="collapse" data-bs-target="#' . $id . '" role="button" aria-expanded="false" aria-controls="' . $id . '">';
                 $html .= '<i class="bi bi-' . $item['icon'] . ' me-1"></i>';
                 $html .= '<span class="">' . $item['label'] . '</span>';
@@ -34,7 +34,7 @@
                 $html .= '</li>';
             } else {
                 // Simple menu item
-                $html .= '<li class="nav-item ps-3">';
+                $html .= '<li class="nav-item ps-2">';
                 $html .= '<a class="nav-link" href="' . $item['link'] . '">';
                 $html .= '<i class="bi bi-' . $item['icon'] . ' me-1"></i>';
                 $html .= '<span class="">' . $item['label'] . '</span>';
@@ -332,16 +332,6 @@
                             "icon" => "chat-dots",
                             "link" => "?p=dispatchDetails",
                         ],
-                        "dispatchMyshipments" => [
-                            "label" => "My Shipments",
-                            "icon" => "list-stars",
-                            "link" => "?p=dispatchMyshipments",
-                        ],
-                        "dispatchShipment" => [
-                            "label" => "Shipment",
-                            "icon" => "box-seam",
-                            "link" => "?p=dispatchShipment",
-                        ],
                     ],
                 ],
                 "error" => [
@@ -422,6 +412,101 @@
                         ],
                     ],
                 ],
+                "maintenance" => [
+                    "label" => "Maintenance",
+                    "icon" => "wrench",
+                    "link" => "#",
+                    "sub" => [
+                        "organization" => [
+                            "label" => "Organization",
+                            "icon" => "diagram-3",
+                            "link" => "#",
+                            "sub" => [
+                                "organizationList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=organizationList",
+                                ],
+                                "organizationArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=organizationArchive",
+                                ],
+                                "organizationDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=organizationDetails",
+                                ],
+                            ],
+                        ],
+                        "division" => [
+                            "label" => "Division",
+                            "icon" => "diagram-2",
+                            "link" => "#",
+                            "sub" => [
+                                "divisionList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=divisionList",
+                                ],
+                                "divisionArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=divisionArchive",
+                                ],
+                                "divisionDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=divisionDetails",
+                                ],
+                            ],
+                        ],
+                        "office" => [
+                            "label" => "Office",
+                            "icon" => "building",
+                            "link" => "#",
+                            "sub" => [
+                                "officeList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=officeList",
+                                ],
+                                "officeArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=officeArchive",
+                                ],
+                                "officeDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=officeDetails",
+                                ],
+                            ],
+                        ],
+                        "team" => [
+                            "label" => "Team",
+                            "icon" => "people",
+                            "link" => "#",
+                            "sub" => [
+                                "teamnList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=teamnList",
+                                ],
+                                "teamArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=teamArchive",
+                                ],
+                                "teamDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=teamDetails",
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 "messages" => [
                     "label" => "Messages",
                     "icon" => "envelope",
@@ -432,6 +517,101 @@
                     "icon" => "person",
                     "link" => "?p=profile",
                 ],
+                "sales" => [
+                    "label" => "Sales",
+                    "icon" => "cash-stack",
+                    "link" => "#",
+                    "sub" => [
+                        "leads" => [
+                            "label" => "Leads",
+                            "icon" => "person-check",
+                            "link" => "?p=leads",
+                            "sub" => [
+                                "leadsList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=leadsList",
+                                ],
+                                "leadsArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=leadsArchive",
+                                ],
+                                "leadsDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=leadsDetails",
+                                ],
+                            ],
+                        ],
+                        "callbacks" => [
+                            "label" => "Callbacks",
+                            "icon" => "telephone-outbound",
+                            "link" => "?p=callbacks",
+                            "sub" => [
+                                "callbacksList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=callbacksList",
+                                ],
+                                "callbacksArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=callbacksArchive",
+                                ],
+                                "callbacksDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=callbacksDetails",
+                                ],
+                            ],
+                        ],
+                        "calls" => [
+                            "label" => "Calls",
+                            "icon" => "telephone",
+                            "link" => "?p=calls",
+                            "sub" => [
+                                "callsList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=callsList",
+                                ],
+                                "callsArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=callsArchive",
+                                ],
+                                "callsDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=callsDetails",
+                                ],
+                            ],
+                        ],
+                        "clients" => [
+                            "label" => "Clients",
+                            "icon" => "file-person",
+                            "link" => "?p=clients",
+                            "sub" => [
+                                "clientsList" => [
+                                    "label" => "List",
+                                    "icon" => "list-check",
+                                    "link" => "?p=clientsList",
+                                ],
+                                "clientsArchive" => [
+                                    "label" => "Archive",
+                                    "icon" => "archive",
+                                    "link" => "?p=clientsArchive",
+                                ],
+                                "clientsDetails" => [
+                                    "label" => "Details",
+                                    "icon" => "list-columns",
+                                    "link" => "?p=clientsDetails",
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
                 "searchResults" => [
                     "label" => "Search Results",
                     "icon" => "search",
@@ -441,6 +621,28 @@
                     "label" => "Settings",
                     "icon" => "gear",
                     "link" => "?p=settings",
+                ],
+                "shipment" => [
+                    "label" => "Shipment",
+                    "icon" => "boxes",
+                    "link" => "#",
+                    "sub" => [
+                        "shipmentList" => [
+                            "label" => "List",
+                            "icon" => "list-ul",
+                            "link" => "?p=shipmentList",
+                        ],
+                        "shipmentArchive" => [
+                            "label" => "Archive",
+                            "icon" => "archive",
+                            "link" => "?p=shipmentArchive",
+                        ],
+                        "shipmentDetails" => [
+                            "label" => "Details",
+                            "icon" => "chat-dots",
+                            "link" => "?p=shipmentDetails",
+                        ],
+                    ],
                 ],
                 "support" => [
                     "label" => "Support",
@@ -497,6 +699,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Panel - <?= $title; ?></title>
 
+        <!-- ======= Bootstrap 5 ======= -->
+        <link rel="stylesheet" href="css/themes/default/styles.css">
+
         <!-- ======= Boostrap Icons ======= -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
 
@@ -548,8 +753,11 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.dataTables.min.css" disabled>
         <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.bootstrap5.min.css">
 
+        <!-- ======= Select2 ======= -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
         <!-- ======= Themes ======= -->
-        <link rel="stylesheet" href="css/themes/default/styles.css">
         <link rel="stylesheet" href="css/themes/cerulean/styles.css" data-theme="cerulean" disabled>
         <link rel="stylesheet" href="css/themes/cosmos/styles.css" data-theme="cosmos" disabled>
         <link rel="stylesheet" href="css/themes/cyborg/styles.css" data-theme="cyborg" disabled>
@@ -706,6 +914,9 @@
         <script src="https://cdn.datatables.net/staterestore/1.2.2/js/dataTables.stateRestore.min.js"></script>
         <script src="https://cdn.datatables.net/staterestore/1.2.2/js/stateRestore.bootstrap5.min.js"></script>
         <script src="https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
+
+        <!-- ======= DataTables.JS ======= -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     </head>
     <body data-bs-spy="scroll" data-bs-target="#main-nav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0" class="h-100 w-100">
 

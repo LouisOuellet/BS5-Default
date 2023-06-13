@@ -5164,10 +5164,10 @@ class Invoice {
         this.#object.info.id = $(document.createElement('div')).addClass('col-sm-3 invoice-col d-flex flex-column').appendTo(this.#object.info);
         this.#object.info.id.header = $(document.createElement('h5')).addClass('mb-3').text('Invoice #007612').appendTo(this.#object.info.id);
 
-        // Table
+        // Lines
         this.#object.table = $(document.createElement('div')).addClass('row').appendTo(this.#object);
         this.#object.table.responsive = $(document.createElement('div')).addClass('col-12 table-responsive').appendTo(this.#object.table);
-        this.#object.table.responsive.table = $(document.createElement('table')).addClass('table table-striped').appendTo(this.#object.table.responsive);
+        this.#object.table.responsive.table = $(document.createElement('table')).addClass('table table-striped table-hover').appendTo(this.#object.table.responsive);
         this.#object.table.responsive.table.thead = $(document.createElement('thead')).appendTo(this.#object.table.responsive.table);
         this.#object.table.responsive.table.thead.tr = $(document.createElement('tr')).appendTo(this.#object.table.responsive.table.thead);
         this.#object.table.responsive.table.thead.tr.sku = $(document.createElement('th')).addClass('d-none').text('SKU').appendTo(this.#object.table.responsive.table.thead.tr);
@@ -6030,7 +6030,6 @@ class Feed {
 class Table {
 
     #object = null;
-    // dom: '<"d-flex flex-column justify-content-start align-items-start mb-2"B<"#SearchBuilder.collapse w-100 py-2 pt-3"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><t><"d-flex justify-content-between align-items-center"lip>',
     #options = {
         class: {
             object: null,
@@ -6108,6 +6107,8 @@ class Table {
 			// tabIndex: 0, //integer //Tab index control for keyboard navigation
 			//Columns
 			columnDefs: [],
+            initComplete: function(settings, json) {},
+            createdRow: function (row, data, index) {},
 			//Internationalisation
 			language:{
                 "decimal":        "",
@@ -6401,7 +6402,7 @@ class Table {
         }
 
         // Add Table
-        this.#object.table = $(document.createElement('table')).addClass('table table-striped m-0 w-100 user-select-none').appendTo(this.#object);
+        this.#object.table = $(document.createElement('table')).addClass('table table-striped table-hover m-0 w-100 user-select-none').appendTo(this.#object);
 
         // Add Dropdown
         if(typeof this.#options.actions === 'object'){
@@ -6478,6 +6479,15 @@ class Table {
 
         // drawCallback
         this.#options.datatable.drawCallback = function(){
+
+            setTimeout(function() {
+                // Tooltips
+                $('[data-bs-toggle="tooltip"]').tooltip();
+
+                // Timeago
+                $('.timeago').timeago();
+            }, 100);
+            
             if(typeof self.#datatable !== 'undefined'){
 
                 // Double Click Event
@@ -6486,7 +6496,7 @@ class Table {
                         function(event){
                             let node = $(this)
                             let data = self.#datatable.row(node).data();
-                            self.#options.dblclick(event, table, node, data);
+                            self.#options.dblclick(event, self.#datatable, node, data);
                         },
                     );
                 }
@@ -6550,7 +6560,7 @@ class Table {
 
         // Execute Callback
         if(typeof callback === 'function'){
-            callback(this,this.#object);
+            callback(this,this.#datatable,this.#object);
         }
 
         // Check if Selector is Set
