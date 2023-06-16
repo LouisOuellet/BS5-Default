@@ -106,6 +106,11 @@
                     "icon" => "exclamation-square",
                     "link" => "?p=alert",
                 ],
+                "animations" => [
+                    "label" => "Animations",
+                    "icon" => "play-circle",
+                    "link" => "?p=animations",
+                ],
                 "avatar" => [
                     "label" => "Avatar",
                     "icon" => "person-bounding-box",
@@ -135,6 +140,11 @@
                     "label" => "Carousel",
                     "icon" => "collection-play",
                     "link" => "?p=carousel",
+                ],
+                "calendar" => [
+                    "label" => "Calendar",
+                    "icon" => "calendar",
+                    "link" => "?p=calendar",
                 ],
                 "dropdown" => [
                     "label" => "Dropdown",
@@ -688,6 +698,11 @@
                     "icon" => "globe-americas",
                     "link" => "website.html",
                 ],
+                "playground" => [
+                    "label" => "Playground",
+                    "icon" => "play-circle",
+                    "link" => "?p=playground",
+                ],
             ],
         ],
     ];
@@ -703,59 +718,39 @@
         <link rel="stylesheet" href="css/themes/default/styles.css">
 
         <!-- ======= Boostrap Icons ======= -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-icons.min.css">
 
         <!-- ======= Leaflet ======= -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+        <link rel="stylesheet" href="plugins/leaflet/css/leaflet.css">
 
         <!-- ======= Prism.JS ======= -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css" disabled>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-coy.min.css" disabled>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-dark.min.css" disabled>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-funky.min.css" disabled>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-okaidia.min.css" disabled>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-tomorrow.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-twilight.min.css" disabled>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/autolinker/prism-autolinker.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/ie8/prism-ie8.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/line-highlight/prism-line-highlight.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/line-numbers/prism-line-numbers.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/show-invisibles/prism-show-invisibles.min.css" disabled>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/show-language/prism-show-language.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/wpd/prism-wpd.min.css">
+        <link rel="stylesheet" href="plugins/prism/css/prism-tomorrow.min.css">
+        <link rel="stylesheet" href="plugins/prism/css/prism-autolinker.min.css">
+        <link rel="stylesheet" href="plugins/prism/css/prism-ie8.min.css">
+        <link rel="stylesheet" href="plugins/prism/css/prism-line-highlight.min.css">
+        <link rel="stylesheet" href="plugins/prism/css/prism-line-numbers.min.css">
+        <link rel="stylesheet" href="plugins/prism/css/prism-show-language.min.css">
+        <link rel="stylesheet" href="plugins/prism/css/prism-wpd.min.css">
 
         <!-- ======= DataTables.JS ======= -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.6.2/css/colReorder.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/colreorder/1.6.2/css/colReorder.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.9.0/css/keyTable.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.9.0/css/keyTable.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.3.3/css/rowReorder.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.3.3/css/rowReorder.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.1.1/css/scroller.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.1.1/css/scroller.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.4.2/css/searchBuilder.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.4.2/css/searchBuilder.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.4.1/css/dataTables.dateTime.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.2.2/css/stateRestore.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.2.2/css/stateRestore.bootstrap5.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.dataTables.min.css" disabled>
-        <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/dataTables.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/buttons.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/colReorder.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/fixedColumns.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/fixedHeader.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/keyTable.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/responsive.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/rowGroup.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/rowReorder.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/scroller.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/searchBuilder.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/dataTables.dateTime.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/stateRestore.bootstrap5.min.css">
+        <link rel="stylesheet" href="plugins/datatables/css/select.bootstrap5.min.css">
 
         <!-- ======= Select2 ======= -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+        <link rel="stylesheet" href="plugins/select2/css/select2.min.css" />
+        <link rel="stylesheet" href="plugins/select2/css/select2-bootstrap-5-theme.min.css" />
 
         <!-- ======= Themes ======= -->
         <link rel="stylesheet" href="css/themes/cerulean/styles.css" data-theme="cerulean" disabled>
@@ -787,136 +782,139 @@
 
         <!-- ======= JQuery ======= -->
         <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="plugins/jquery/js/jquery.min.js"></script>
 
         <!-- ======= Bootstrap ======= -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
         <!-- ======= JQuery Timeago ======= -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.7/jquery.timeago.min.js"></script>
+        <script src="plugins/timeago/js/jquery.timeago.min.js"></script>
 
         <!-- ======= Chart.JS ======= -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="plugins/chart/js/chart.js"></script>
 
         <!-- ======= Leaflet ======= -->
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="plugins/leaflet/js/leaflet.js"></script>
 
         <!-- ======= Prism.JS ======= -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-apacheconf.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-applescript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-aspnet.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-autohotkey.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-bash.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-c.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-clike.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-coffeescript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-cpp.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-csharp.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-css.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-dart.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-eiffel.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-erlang.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-actionscript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-fortran.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-fsharp.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-gherkin.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-git.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-go.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-groovy.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-haml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-handlebars.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-haskell.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-http.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-ini.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-jade.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-java.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-javascript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-jsx.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-julia.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-latex.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-less.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-lolcode.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-markdown.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-markup.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-matlab.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-nasm.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-nsis.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-objectivec.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-pascal.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-perl.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-php-extras.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-php.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-powershell.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-python.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-r.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-rest.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-rip.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-ruby.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-rust.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-sas.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-scala.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-scheme.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-scss.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-smalltalk.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-smarty.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-sql.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-stylus.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-swift.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-twig.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-typescript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-wiki.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-yaml.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/autolinker/prism-autolinker.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/file-highlight/prism-file-highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/highlight-keywords/prism-highlight-keywords.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/ie8/prism-ie8.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/line-highlight/prism-line-highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/show-language/prism-show-language.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/plugins/wpd/prism-wpd.min.js"></script>
+        <script src="plugins/prism/js/prism.min.js"></script>
+        <script src="plugins/prism/js/prism-actionscript.min.js"></script>
+        <script src="plugins/prism/js/prism-apacheconf.min.js"></script>
+        <script src="plugins/prism/js/prism-applescript.min.js"></script>
+        <script src="plugins/prism/js/prism-aspnet.min.js"></script>
+        <script src="plugins/prism/js/prism-autohotkey.min.js"></script>
+        <script src="plugins/prism/js/prism-bash.min.js"></script>
+        <script src="plugins/prism/js/prism-c.min.js"></script>
+        <script src="plugins/prism/js/prism-clike.min.js"></script>
+        <script src="plugins/prism/js/prism-coffeescript.min.js"></script>
+        <script src="plugins/prism/js/prism-cpp.min.js"></script>
+        <script src="plugins/prism/js/prism-csharp.min.js"></script>
+        <script src="plugins/prism/js/prism-css.min.js"></script>
+        <script src="plugins/prism/js/prism-dart.min.js"></script>
+        <script src="plugins/prism/js/prism-eiffel.min.js"></script>
+        <script src="plugins/prism/js/prism-erlang.min.js"></script>
+        <script src="plugins/prism/js/prism-fortran.min.js"></script>
+        <script src="plugins/prism/js/prism-fsharp.min.js"></script>
+        <script src="plugins/prism/js/prism-gherkin.min.js"></script>
+        <script src="plugins/prism/js/prism-git.min.js"></script>
+        <script src="plugins/prism/js/prism-go.min.js"></script>
+        <script src="plugins/prism/js/prism-groovy.min.js"></script>
+        <script src="plugins/prism/js/prism-haml.min.js"></script>
+        <script src="plugins/prism/js/prism-handlebars.min.js"></script>
+        <script src="plugins/prism/js/prism-haskell.min.js"></script>
+        <script src="plugins/prism/js/prism-http.min.js"></script>
+        <script src="plugins/prism/js/prism-ini.min.js"></script>
+        <script src="plugins/prism/js/prism-jade.min.js"></script>
+        <script src="plugins/prism/js/prism-java.min.js"></script>
+        <script src="plugins/prism/js/prism-javascript.min.js"></script>
+        <script src="plugins/prism/js/prism-jsx.min.js"></script>
+        <script src="plugins/prism/js/prism-julia.min.js"></script>
+        <script src="plugins/prism/js/prism-latex.min.js"></script>
+        <script src="plugins/prism/js/prism-less.min.js"></script>
+        <script src="plugins/prism/js/prism-lolcode.min.js"></script>
+        <script src="plugins/prism/js/prism-markdown.min.js"></script>
+        <script src="plugins/prism/js/prism-markup.min.js"></script>
+        <script src="plugins/prism/js/prism-matlab.min.js"></script>
+        <script src="plugins/prism/js/prism-nasm.min.js"></script>
+        <script src="plugins/prism/js/prism-nsis.min.js"></script>
+        <script src="plugins/prism/js/prism-objectivec.min.js"></script>
+        <script src="plugins/prism/js/prism-pascal.min.js"></script>
+        <script src="plugins/prism/js/prism-perl.min.js"></script>
+        <script src="plugins/prism/js/prism-php-extras.min.js"></script>
+        <script src="plugins/prism/js/prism-php.min.js"></script>
+        <script src="plugins/prism/js/prism-powershell.min.js"></script>
+        <script src="plugins/prism/js/prism-python.min.js"></script>
+        <script src="plugins/prism/js/prism-r.min.js"></script>
+        <script src="plugins/prism/js/prism-rest.min.js"></script>
+        <script src="plugins/prism/js/prism-rip.min.js"></script>
+        <script src="plugins/prism/js/prism-ruby.min.js"></script>
+        <script src="plugins/prism/js/prism-rust.min.js"></script>
+        <script src="plugins/prism/js/prism-sas.min.js"></script>
+        <script src="plugins/prism/js/prism-scala.min.js"></script>
+        <script src="plugins/prism/js/prism-scheme.min.js"></script>
+        <script src="plugins/prism/js/prism-scss.min.js"></script>
+        <script src="plugins/prism/js/prism-smalltalk.min.js"></script>
+        <script src="plugins/prism/js/prism-smarty.min.js"></script>
+        <script src="plugins/prism/js/prism-sql.min.js"></script>
+        <script src="plugins/prism/js/prism-stylus.min.js"></script>
+        <script src="plugins/prism/js/prism-swift.min.js"></script>
+        <script src="plugins/prism/js/prism-twig.min.js"></script>
+        <script src="plugins/prism/js/prism-typescript.min.js"></script>
+        <script src="plugins/prism/js/prism-wiki.min.js"></script>
+        <script src="plugins/prism/js/prism-yaml.min.js"></script>
+        <script src="plugins/prism/js/prism-autolinker.min.js"></script>
+        <script src="plugins/prism/js/prism-file-highlight.min.js"></script>
+        <script src="plugins/prism/js/prism-highlight-keywords.min.js"></script>
+        <script src="plugins/prism/js/prism-ie8.min.js"></script>
+        <script src="plugins/prism/js/prism-line-highlight.min.js"></script>
+        <script src="plugins/prism/js/prism-line-numbers.min.js"></script>
+        <script src="plugins/prism/js/prism-show-language.min.js"></script>
+        <script src="plugins/prism/js/prism-wpd.min.js"></script>
 
         <!-- ======= Prettier.JS ======= -->
-        <script src="https://unpkg.com/prettier/standalone.js"></script>
-        <script src="https://unpkg.com/prettier/parser-html.js"></script>
+        <script src="plugins/prettier/js/standalone.js"></script>
+        <script src="plugins/prettier/js/parser-html.js"></script>
+
+        <!-- ======= JSZip.JS ======= -->
+        <script src="plugins/jszip/js/jszip.min.js"></script>
+
+        <!-- ======= PDFMake.JS ======= -->
+        <script src="plugins/pdfmake/js/pdfmake.min.js"></script>
+        <script src="plugins/pdfmake/js/vfs_fonts.js"></script>
 
         <!-- ======= DataTables.JS ======= -->
-        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.colVis.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
-        <script src="https://cdn.datatables.net/datetime/1.4.1/js/dataTables.dateTime.min.js"></script>
-        <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
-        <script src="https://cdn.datatables.net/fixedheader/3.3.2/js/dataTables.fixedHeader.min.js"></script>
-        <script src="https://cdn.datatables.net/keytable/2.9.0/js/dataTables.keyTable.min.js"></script>
-        <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-        <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
-        <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
-        <script src="https://cdn.datatables.net/rowreorder/1.3.3/js/dataTables.rowReorder.min.js"></script>
-        <script src="https://cdn.datatables.net/scroller/2.1.1/js/dataTables.scroller.min.js"></script>
-        <script src="https://cdn.datatables.net/searchbuilder/1.4.2/js/dataTables.searchBuilder.min.js"></script>
-        <script src="https://cdn.datatables.net/searchbuilder/1.4.2/js/searchBuilder.bootstrap5.min.js"></script>
-        <script src="https://cdn.datatables.net/datetime/1.4.1/js/dataTables.dateTime.min.js"></script>
-        <script src="https://cdn.datatables.net/staterestore/1.2.2/js/dataTables.stateRestore.min.js"></script>
-        <script src="https://cdn.datatables.net/staterestore/1.2.2/js/stateRestore.bootstrap5.min.js"></script>
-        <script src="https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
+        <script src="plugins/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.bootstrap5.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.buttons.min.js"></script>
+        <script src="plugins/datatables/js/buttons.bootstrap5.min.js"></script>
+        <script src="plugins/datatables/js/buttons.colVis.min.js"></script>
+        <script src="plugins/datatables/js/buttons.html5.min.js"></script>
+        <script src="plugins/datatables/js/buttons.print.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.dateTime.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.fixedColumns.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.fixedHeader.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.keyTable.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.responsive.min.js"></script>
+        <script src="plugins/datatables/js/responsive.bootstrap5.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.rowGroup.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.rowReorder.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.scroller.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.searchBuilder.min.js"></script>
+        <script src="plugins/datatables/js/searchBuilder.bootstrap5.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.dateTime.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.stateRestore.min.js"></script>
+        <script src="plugins/datatables/js/stateRestore.bootstrap5.min.js"></script>
+        <script src="plugins/datatables/js/dataTables.select.min.js"></script>
 
-        <!-- ======= DataTables.JS ======= -->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <!-- ======= FullCalendar.JS ======= -->
+        <script src="plugins/fullcalendar/js/index.global.min.js"></script>
+
+        <!-- ======= Select2.JS ======= -->
+        <script src="plugins/select2/js/select2.min.js"></script>
+
+        <!-- ======= TinyMCE.JS ======= -->
+        <script src="plugins/tinymce/tinymce.min.js"></script>
+        <script src="plugins/tinymce/js/tinymce-jquery.min.js"></script>
     </head>
     <body data-bs-spy="scroll" data-bs-target="#main-nav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0" class="h-100 w-100">
 
@@ -1180,8 +1178,8 @@
                                     <!-- ======= End Search Field ======= -->
 
                                     <!-- ======= Search Button ======= -->
-                                    <li class="nav-item">
-                                        <a id="searchBtn" href="#searchField" class="nav-link text-decoration-none py-2 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="Toggle Search Field">
+                                    <li class="nav-item animate-slide-hover-top-20">
+                                        <a id="searchBtn" href="#searchField" class="nav-link text-decoration-none py-2" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="Toggle Search Field">
                                             <i class="bi bi-search fs-4" style="height: 2.25rem !important;width: 1.5rem !important"></i>
                                         </a>
                                     </li>
@@ -1200,19 +1198,19 @@
                                     <!-- ======= End Notifications ======= -->
 
                                     <!-- ======= FullScreen ======= -->
-                                    <li class="nav-item">
-                                        <a id="fullscreenToggle" href="#" class="nav-link text-decoration-none py-2 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(0, -.125rem, 0);">
+                                    <li class="nav-item animate-slide-hover-top-20">
+                                        <button id="fullscreenToggle" type="button" class="nav-link text-decoration-none py-2">
                                             <i class="bi bi-fullscreen fs-4" style="height: 2.25rem !important;width: 1.5rem !important"></i>
-                                        </a>
+                                        </button>
                                     </li>
                                     <!-- ======= End FullScreen ======= -->
 
                                     <!-- ======= Profile ======= -->
                                     <li class="nav-item dropdown">
-                                        <a id="profileMenu" href="#" class="nav-link text-decoration-none py-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="profileMenu" type="button" class="nav-link text-decoration-none py-0" data-bs-toggle="dropdown" aria-expanded="false">
                                             <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&d=mp" alt="mdo" width="48" height="48" class="rounded-circle">
                                             <span class="position-absolute top-80 start-80 translate-middle text-bg-success border border-light rounded-circle" style="padding: 8px; display:block;"></span>
-                                        </a>
+                                        </button>
                                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu" style="min-width:350px;max-width:500px;">
                                             <li class="my-2">
                                                 <div class="d-flex flex-column justify-content-center align-items-center">

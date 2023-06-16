@@ -753,10 +753,10 @@ class Task {
         this.#object.id = this.#object.attr('id');
 
         // Configure as Dropdown
-        this.#object.addClass('dropdown');
+        this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
 
         // Create Button
-        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').addClass('icon-link icon-link-hover').attr('style','--bs-icon-link-transform: translate3d(0, -.125rem, 0);').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
 
@@ -859,9 +859,11 @@ class Task {
         if(count > 0){
             this.#object.menu.header.title.count.removeClass('d-none');
             this.#object.btn.badge.removeClass('d-none');
+            this.#object.btn.addClass('animate-pulse');
         } else {
             this.#object.menu.header.title.count.addClass('d-none');
             this.#object.btn.badge.addClass('d-none');
+            this.#object.btn.addClass('animate-pulse');
         }
 
         // Return Count
@@ -1078,10 +1080,10 @@ class Message {
         this.#object.id = this.#object.attr('id');
 
         // Configure as Dropdown
-        this.#object.addClass('dropdown');
+        this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
 
         // Create Button
-        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').addClass('icon-link icon-link-hover').attr('style','--bs-icon-link-transform: translate3d(0, -.125rem, 0);').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
 
@@ -1184,9 +1186,11 @@ class Message {
         if(count > 0){
             this.#object.menu.header.title.count.removeClass('d-none');
             this.#object.btn.badge.removeClass('d-none');
+            this.#object.btn.addClass('animate-bounce');
         } else {
             this.#object.menu.header.title.count.addClass('d-none');
             this.#object.btn.badge.addClass('d-none');
+            this.#object.btn.removeClass('animate-bounce');
         }
 
         // Return Count
@@ -1427,10 +1431,10 @@ class Notification {
         this.#object.id = this.#object.attr('id');
 
         // Configure as Dropdown
-        this.#object.addClass('dropdown');
+        this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
 
         // Create Button
-        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').addClass('icon-link icon-link-hover').attr('style','--bs-icon-link-transform: translate3d(0, -.125rem, 0);').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+        this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
 
@@ -1531,9 +1535,11 @@ class Notification {
         if(count > 0){
             this.#object.menu.header.title.count.removeClass('d-none');
             this.#object.btn.badge.removeClass('d-none');
+            this.#object.btn.addClass('animate-wobble');
         } else {
             this.#object.menu.header.title.count.addClass('d-none');
             this.#object.btn.badge.addClass('d-none');
+            this.#object.btn.removeClass('animate-wobble');
         }
 
         // Return Count
@@ -5832,6 +5838,12 @@ class Feed {
         return this.#feed.html();
     }
 
+    outerHTML(){
+
+        // Return Object
+        return this.#feed.outerHTML();
+    }
+
     text(){
 
         // Return Object
@@ -5842,6 +5854,24 @@ class Feed {
 
         // Clear Feed's Children
         this.#feed.children().remove();
+
+        // Return Object
+        return this;
+    }
+
+    show(){
+
+        // Show Feed
+        this.#feed.show();
+
+        // Return Object
+        return this;
+    }
+
+    hide(){
+
+        // Hide Feed
+        this.#feed.hide();
 
         // Return Object
         return this;
@@ -5963,10 +5993,10 @@ class Feed {
         post.user.avatar = $(document.createElement('img')).addClass('img-circle rounded-circle img-bordered-sm').attr('alt','Avatar').appendTo(post.user);
         post.user.username = $(document.createElement('span')).addClass('username mt-2').appendTo(post.user);
         post.user.link = $(document.createElement('a')).addClass('text-decoration-none').appendTo(post.user.username);
-        post.user.date = $(document.createElement('span')).addClass('description mt-1').attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('data-bs-placement','top').appendTo(post.user);
-        post.user.date.bootstrap = new bootstrap.Tooltip(post.user.date);
+        post.user.date = $(document.createElement('span')).addClass('description mt-1').appendTo(post.user);
         post.user.date.icon = $(document.createElement('i')).addClass('bi-clock me-1').appendTo(post.user.date);
-        post.user.date.timeago = $(document.createElement('time')).attr('data-bs-toggle','tooltip').attr('datetime',datetime.toLocaleString()).html(datetime.toLocaleString()).appendTo(post.user.date).timeago();
+        post.user.date.timeago = $(document.createElement('time')).attr('data-bs-toggle','tooltip').attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('data-bs-placement','top').attr('datetime',datetime.toLocaleString()).html(datetime.toLocaleString()).appendTo(post.user.date).timeago();
+        post.user.date.timeago.bootstrap = new bootstrap.Tooltip(post.user.date.timeago);
 
         // Set User Avatar
         if(defaults.username != null){
@@ -7308,6 +7338,12 @@ class Alert {
         // Return Object
         return this.#object.text();
     }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#object[0].outerHTML;
+    }
 }
 
 // Blockquote
@@ -7498,6 +7534,12 @@ class Blockquote {
 
         // Return Object
         return this.#object.text();
+    }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#object[0].outerHTML;
     }
 }
 
@@ -8421,8 +8463,8 @@ class Stepper {
     }
 }
 
-// Template
-class Template {
+// Calendar
+class Calendar {
 
     #object = null;
     #options = {
@@ -8487,7 +8529,7 @@ class Template {
         for(const [key, value] of Object.entries(options)){
             if(typeof this.#options[key] !== 'undefined'){
                 switch(key){
-                    case"extend":
+                    case"defaults":
                         if(typeof this.#options[key] !== 'undefined'){
                             for(const [k, v] of Object.entries(value)){
                                 if(typeof this.#options[key][k] !== 'undefined'){
@@ -8562,5 +8604,197 @@ class Template {
 
         // Return Object
         return this.#object.text();
+    }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#object[0].outerHTML;
+    }
+
+    show(){
+
+        // Show Object
+        this.#object.show();
+
+        // Return Object
+        return this;
+    }
+
+    hide(){
+
+        // Hide Object
+        this.#object.hide();
+
+        // Return Object
+        return this;
+    }
+}
+
+// Template
+class Template {
+
+    #object = null;
+    #options = {
+        class: {
+            object: null,
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string' || param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Create Object
+		this.#object = $(document.createElement('div')).attr('id','object' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Set Object Class
+        if(this.#options.class.object){
+            this.#object.addClass(this.#options.class.object);
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+
+        // Check if Selector is Set
+        if(selector != null){
+
+            // Append to Selector
+            this.appendTo(selector);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    appendTo(object){
+        
+        // Append Object To
+        this.#object.appendTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    prependTo(object){
+        
+        // Prepend Object To
+        this.#object.prependTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    append(object){
+        
+        // Append Object
+        this.#object.append(object);
+
+        // Return Object
+        return this;
+    }
+
+    prepend(object){
+        
+        // Prepend Object
+        this.#object.prepend(object);
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#object[0].outerHTML;
+    }
+
+    show(){
+
+        // Show Object
+        this.#object.show();
+
+        // Return Object
+        return this;
+    }
+
+    hide(){
+
+        // Hide Object
+        this.#object.hide();
+
+        // Return Object
+        return this;
     }
 }

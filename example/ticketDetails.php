@@ -4,5 +4,5 @@
 		<div class="col-12" id="details"></div>
 	</div>
 </div>
-<script src="/js/<?= $page ?>.js"></script>
+<script src="/js/ticketDetails.js"></script>
 <!-- ======= End Ticket Details ======= -->

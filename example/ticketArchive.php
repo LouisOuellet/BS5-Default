@@ -4,5 +4,5 @@
 		<div class="col-12" id="list"></div>
 	</div>
 </div>
-<script src="/js/<?= $page ?>.js"></script>
+<script src="/js/ticketArchive.js"></script>
 <!-- ======= End Ticket Archive ======= -->
