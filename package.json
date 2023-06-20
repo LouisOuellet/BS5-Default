@@ -1,9 +1,14 @@
 {
   "scripts": {
     "build": "npm run css",
-    "css-compile": "sass --style compressed --source-map --embed-sources --no-error-css --load-path=node_modules scss/:css/",
-    "css-lint": "stylelint scss/",
-    "css-prefix": "postcss --replace css/styles.css --use autoprefixer --map",
+    "clean": "find dist/css -type f \\( -name '*.css' -o -name '*.map' \\) -exec rm -f {} \\;",
+    "css-compile": "npm-run-all clean css-compile-compressed css-compile-expanded",
+    "css-compile-compressed": "sass --style compressed --source-map --embed-sources --no-error-css --load-path=node_modules scss/:dist/css/ && find dist/css -type f -name '*.css' -exec sh -c 'mv \"$0\" \"${0%.css}.min.css\"' {} \\;",
+    "css-compile-expanded": "sass --style expanded --source-map --embed-sources --no-error-css --load-path=node_modules scss/:dist/css/",
+    "css-lint": "stylelint 'scss/**/*.scss'",
+    "css-prefix": "npm-run-all css-prefix-compressed css-prefix-expanded",
+    "css-prefix-compressed": "find dist/css -type f -name '*.min.css' ! -name '*.map' -exec grep -L '@charset\\|@import' {} \\; | xargs -I {} postcss --replace {} --use autoprefixer --map",
+    "css-prefix-expanded": "find dist/css -type f -not -name '*.min.css' -not -name '*.map' -exec grep -L '@charset\\|@import' {} \\; | xargs -I {} postcss --replace {} --use autoprefixer --map",
     "css": "npm-run-all css-compile css-prefix",
     "server": "sirv --dev --no-clear --port 3000",
     "start": "npm-run-all --parallel watch server",

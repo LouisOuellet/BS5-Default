@@ -413,12 +413,17 @@
                                     "icon" => "list-columns",
                                     "link" => "?p=requestsDetails",
                                 ],
+                                "requestsNew" => [
+                                    "label" => "New Request",
+                                    "icon" => "person-lines-fill",
+                                    "link" => "?p=requestsNew",
+                                ],
                             ],
                         ],
-                        "vacation" => [
-                            "label" => "Vacation",
+                        "attendance" => [
+                            "label" => "Attendance",
                             "icon" => "calendar-x",
-                            "link" => "?p=vacation",
+                            "link" => "?p=attendance",
                         ],
                     ],
                 ],

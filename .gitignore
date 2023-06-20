@@ -2,9 +2,9 @@ composer.phar
 /vendor/
 .DS_Store
 /node_modules/
-/plugins/
+/dist/plugins/
 /example/shipment.php
-/js/shipment.js
+/dist/js/shipment.js
 .git
 download.sh
 
