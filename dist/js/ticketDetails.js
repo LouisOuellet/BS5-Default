@@ -92,7 +92,7 @@ $(document).ready(function(){
         4: {label: 'Urgent', description: 'The issue needs immediate attention, usually because it is causing a stop to critical services.', icon: 'exclamation-diamond-fill', color: 'danger'},
     };
 
-    const Options = {lockCategory: false, lockSubCategory: false, lockItem: false, showRemoteAccess: false, showDates: false, showFiles:false, showReferences:false, showMeta:false, showFeed:true, showAccept:false, showDecline:false, showShare: true, showClose: true, showArchive: true};
+    const Options = {lockCategory: false, lockSubCategory: false, lockItem: false, showCalendar:false, showStart: false, showEnd:false, showRemoteAccess: false, showDates: false, showFiles:false, showReferences:false, showMeta:false, showFeed:true, showAccept:false, showDecline:false, showShare: true, showClose: true, showArchive: true};
 
     const Categories = {
         'Accounting': {label: 'Accounting', description: 'Accounting related issues.', icon: 'currency-dollar', color: 'info', sub: {
@@ -644,142 +644,60 @@ $(document).ready(function(){
 
             details.category = $(document.createElement("strong")).addClass('mt-2').html('Category: ').appendTo(details);
             details.category.select = $(document.createElement("select")).addClass('form-select w-100').appendTo(details);
-            details.category.update = function(category = null){
-                var select = details.category.select;
-                select.empty();
-                $.each(Categories, function(key, value) {
-                    select.append($("<option></option>")
-                        .attr("value", key)
-                        .text(value.label));
-                });
-                if(category){
-                    select.val(category);
-                }
-            };
 
             details.subCategory = $(document.createElement("strong")).addClass('mt-2').html('Sub Category: ').appendTo(details);
             details.subCategory.select = $(document.createElement("select")).addClass('form-select w-100').appendTo(details);
-            details.subCategory.update = function(subCategory = null){
-                var select = details.subCategory.select;
-                var categoryKey = details.category.select.val();
-                select.empty();
-                if(typeof Categories[categoryKey] !== 'undefined' && typeof Categories[categoryKey].sub !== 'undefined'){
-                    details.subCategory.removeClass('d-none');
-                    details.subCategory.select.removeClass('d-none');
-                    $.each(Categories[categoryKey].sub, function(key, value) {
-                        select.append($("<option></option>")
-                            .attr("value", key)
-                            .text(value.label));
-                    });
-                    if(subCategory){
-                        select.val(subCategory);
-                    }
-                } else {
-                    details.subCategory.addClass('d-none');
-                    details.subCategory.select.addClass('d-none');
-                }
-            };
 
             details.item = $(document.createElement("strong")).addClass('mt-2').html('Item: ').appendTo(details);
             details.item.select = $(document.createElement("select")).addClass('form-select w-100').appendTo(details);
-            details.item.update = function(item = null){
-                var select = details.item.select;
-                var categoryKey = details.category.select.val();
-                var subCategoryKey = details.subCategory.select.val();
-                select.empty();
-                if(typeof Categories[categoryKey] !== 'undefined' && typeof Categories[categoryKey].sub !== 'undefined' && typeof Categories[categoryKey].sub[subCategoryKey] !== 'undefined' && typeof Categories[categoryKey].sub[subCategoryKey].sub !== 'undefined'){
-                    details.item.removeClass('d-none');
-                    details.item.select.removeClass('d-none');
-                    $.each(Categories[categoryKey].sub[subCategoryKey].sub, function(key, value) {
-                        select.append($("<option></option>")
-                            .attr("value", key)
-                            .text(value.label));
-                    });
-                    if(item){
-                        select.val(item);
-                    }
-                } else {
-                    details.item.addClass('d-none');
-                    details.item.select.addClass('d-none');
-                }
-                if(typeof Categories[categoryKey].sub[subCategoryKey] !== 'undefined'){
-                    if(typeof Categories[categoryKey].sub[subCategoryKey].opts !== 'undefined'){
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.showFiles){
-                            files.removeClass('d-none');
-                        } else {
-                            files.addClass('d-none').remove();
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.showShare){
-                            controls.share.removeClass('d-none');
-                        } else {
-                            controls.share.addClass('d-none').remove();
-                        }
-                        if( ! Categories[categoryKey].sub[subCategoryKey].opts.showClose || Ticket.status >= 8 ){
-                            controls.close.addClass('d-none').remove();
-                        }
-                        if( ! Categories[categoryKey].sub[subCategoryKey].opts.showArchive || Ticket.status != 8 ){
-                            controls.archive.addClass('d-none').remove();
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.showReferences){
-                            references.removeClass('d-none');
-                        } else {
-                            references.addClass('d-none').remove();
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.showMeta){
-                            meta.removeClass('d-none');
-                        } else {
-                            meta.addClass('d-none').remove();
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.showFeed){
-                            ticketFeed.show();
-                            controls.reply.removeClass('d-none');
-                        } else {
-                            ticketFeed.hide();
-                            controls.reply.addClass('d-none').remove();
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.showAccept){
-                            accept.show();
-                        } else {
-                            accept.hide().remove();
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.showDecline){
-                            deny.show();
-                        } else {
-                            deny.hide().remove();
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.lockCategory || Ticket.status > 7 ){
-                            details.category.select.attr('disabled', 'disabled');
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.lockSubCategory || Ticket.status > 7 ){
-                            details.subCategory.select.attr('disabled', 'disabled');
-                        }
-                        if( Categories[categoryKey].sub[subCategoryKey].opts.lockItem || Ticket.status > 7 ){
-                            details.item.select.attr('disabled', 'disabled');
-                        }
-                        if( details.category.select.attr('disabled') === 'disabled' && details.subCategory.select.attr('disabled') === 'disabled' && details.item.select.attr('disabled') === 'disabled' ){
-                            details.submit.button.attr('disabled', 'disabled').addClass('d-none').remove();
-                        }
-                    }
-                }
-            };
-
-            details.category.select.change(function() {
-                details.subCategory.update();
-                details.item.update();
-            });
-            details.subCategory.select.change(function() {
-                details.item.update();
-            });
             
             details.submit = $(document.createElement("div")).addClass('px-3 w-100 mt-3').appendTo(details);
             details.submit.button = $(document.createElement("button")).addClass('btn btn-success w-100').html('Save changes').appendTo(details.submit);
             details.submit.button.icon = $(document.createElement("i")).addClass('bi bi-save me-2').prependTo(details.submit.button);
+            
+            var calContainer = $(document.createElement("div")).addClass('mt-3').appendTo(row.col2.row1.col1);
+            calContainer.calendar = new Calendar(
+                calContainer,
+                {
+                    class: {
+                        header: 'p-0',
+                    },
+                    headerToolbar: {
+                        left: 'prev,next',
+                        center: '',
+                        right: 'title'
+                    },
+                    initialView: 'dayGridMonth',
+                    events: [
+                        {
+                            title: 'My Event',
+                            description: 'This is a cool event',
+                            icon: 'person',
+                            start: '2023-07-01',
+                            end: '2023-07-02',
+                            allDay: true,
+                            color: 'danger',
+                        },
+                    ],
+                },
+                function(calendar){
+                    // calendar.add({
+                    //     title: 'My Event',
+                    //     description: 'This is a cool event',
+                    //     icon: 'person',
+                    //     start: '2023-07-01',
+                    //     end: '2023-07-02',
+                    //     allDay: true,
+                    //     color: 'danger',
+                    // });
+                },
+            );
 
-            var accept = $(document.createElement("div")).addClass('px-3 w-100 mt-3').appendTo(details);
+            var accept = $(document.createElement("div")).addClass('px-3 w-100 mt-3').appendTo(row.col2.row1.col1);
             accept.button = $(document.createElement("button")).addClass('btn btn-success w-100').html('Accept').appendTo(accept);
             accept.button.icon = $(document.createElement("i")).addClass('bi bi-check-lg me-2').prependTo(accept.button);
 
-            var deny = $(document.createElement("div")).addClass('px-3 w-100 mt-3').appendTo(details);
+            var deny = $(document.createElement("div")).addClass('px-3 w-100 mt-3').appendTo(row.col2.row1.col1);
             deny.button = $(document.createElement("button")).addClass('btn btn-danger w-100').html('Deny').appendTo(deny);
             deny.button.icon = $(document.createElement("i")).addClass('bi bi-x-lg me-2').prependTo(deny.button);
 
@@ -862,6 +780,146 @@ $(document).ready(function(){
                 }, 
             );
 
+            const render = function(){
+                const keys = {
+                    category: details.category.select.val(),
+                    subCategory: details.subCategory.select.val(),
+                    item: details.item.select.val(),
+                };
+
+                if(typeof Categories[keys.category].sub[keys.subCategory] !== 'undefined'){
+                    if(typeof Categories[keys.category].sub[keys.subCategory].opts !== 'undefined'){
+                        if( Categories[keys.category].sub[keys.subCategory].opts.showFiles){
+                            files.removeClass('d-none');
+                        } else {
+                            files.addClass('d-none').remove();
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.showShare){
+                            controls.share.removeClass('d-none');
+                        } else {
+                            controls.share.addClass('d-none').remove();
+                        }
+                        if( ! Categories[keys.category].sub[keys.subCategory].opts.showClose || Ticket.status >= 8 ){
+                            controls.close.addClass('d-none').remove();
+                        }
+                        if( ! Categories[keys.category].sub[keys.subCategory].opts.showArchive || Ticket.status != 8 ){
+                            controls.archive.addClass('d-none').remove();
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.showReferences){
+                            references.removeClass('d-none');
+                        } else {
+                            references.addClass('d-none').remove();
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.showMeta){
+                            meta.removeClass('d-none');
+                        } else {
+                            meta.addClass('d-none').remove();
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.showFeed){
+                            ticketFeed.show();
+                            controls.reply.removeClass('d-none');
+                        } else {
+                            ticketFeed.hide();
+                            controls.reply.addClass('d-none').remove();
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.showAccept){
+                            accept.show();
+                        } else {
+                            accept.hide().remove();
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.showDecline){
+                            deny.show();
+                        } else {
+                            deny.hide().remove();
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.lockCategory || Ticket.status > 7 ){
+                            details.category.select.attr('disabled', 'disabled');
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.lockSubCategory || Ticket.status > 7 ){
+                            details.subCategory.select.attr('disabled', 'disabled');
+                        }
+                        if( Categories[keys.category].sub[keys.subCategory].opts.lockItem || Ticket.status > 7 ){
+                            details.item.select.attr('disabled', 'disabled');
+                        }
+                        if( details.category.select.attr('disabled') === 'disabled' && details.subCategory.select.attr('disabled') === 'disabled' && details.item.select.attr('disabled') === 'disabled' ){
+                            details.submit.button.attr('disabled', 'disabled').addClass('d-none').remove();
+                        }
+                    }
+                }
+            };
+
+            // Update the category list
+            details.category.update = function(category = null){
+                var select = details.category.select;
+                select.empty();
+                $.each(Categories, function(key, value) {
+                    select.append($("<option></option>")
+                        .attr("value", key)
+                        .text(value.label));
+                });
+                if(category){
+                    select.val(category);
+                }
+                render();
+            };
+
+            // Update the sub category list
+            details.subCategory.update = function(subCategory = null){
+                var select = details.subCategory.select;
+                var categoryKey = details.category.select.val();
+                select.empty();
+                if(typeof Categories[categoryKey] !== 'undefined' && typeof Categories[categoryKey].sub !== 'undefined'){
+                    details.subCategory.removeClass('d-none');
+                    details.subCategory.select.removeClass('d-none');
+                    $.each(Categories[categoryKey].sub, function(key, value) {
+                        select.append($("<option></option>")
+                            .attr("value", key)
+                            .text(value.label));
+                    });
+                    if(subCategory){
+                        select.val(subCategory);
+                    }
+                } else {
+                    details.subCategory.addClass('d-none');
+                    details.subCategory.select.addClass('d-none');
+                }
+                render();
+            };
+
+            // Update the item list
+            details.item.update = function(item = null){
+                var select = details.item.select;
+                var categoryKey = details.category.select.val();
+                var subCategoryKey = details.subCategory.select.val();
+                select.empty();
+                if(typeof Categories[categoryKey] !== 'undefined' && typeof Categories[categoryKey].sub !== 'undefined' && typeof Categories[categoryKey].sub[subCategoryKey] !== 'undefined' && typeof Categories[categoryKey].sub[subCategoryKey].sub !== 'undefined'){
+                    details.item.removeClass('d-none');
+                    details.item.select.removeClass('d-none');
+                    $.each(Categories[categoryKey].sub[subCategoryKey].sub, function(key, value) {
+                        select.append($("<option></option>")
+                            .attr("value", key)
+                            .text(value.label));
+                    });
+                    if(item){
+                        select.val(item);
+                    }
+                } else {
+                    details.item.addClass('d-none');
+                    details.item.select.addClass('d-none');
+                }
+                render();
+            };
+
+            // Add the event listeners
+            details.category.select.change(function() {
+                details.subCategory.update();
+                details.item.update();
+            });
+            details.subCategory.select.change(function() {
+                details.item.update();
+            });
+            
+            // Update the category, sub category and item lists
             details.category.update(Ticket.category);
             details.subCategory.update(Ticket.subCategory);
             details.item.update(Ticket.item);

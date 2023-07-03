@@ -14868,6 +14868,30 @@ textarea.form-control-lg {
   background: rgba(249, 248, 252, 0.75) !important;
 }
 
+.fc-dayGridMonth-view .fc-scrollgrid-section td[role=presentation] {
+  border-top-right-radius: 0;
+}
+
+.fc-dayGridMonth-view .fc-scrollgrid-section th[role=presentation] {
+  border-bottom-right-radius: 0;
+}
+
+.fc-timeGridWeek-view .fc-scrollgrid-section:last-child td[role=presentation] {
+  border-top-right-radius: 0;
+}
+
+.fc-timeGridWeek-view .fc-scrollgrid-section:first-child th[role=presentation] {
+  border-top-right-radius: 0.375rem;
+}
+
+.fc-timeGridDay-view .fc-scrollgrid-section:last-child td[role=presentation] {
+  border-top-right-radius: 0;
+}
+
+.fc-timeGridDay-view .fc-scrollgrid-section:first-child th[role=presentation] {
+  border-top-right-radius: 0.375rem;
+}
+
 .dashboard.edit {
   margin: 8px;
 }

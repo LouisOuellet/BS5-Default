@@ -15415,6 +15415,50 @@ pre {
   background: rgba(255, 255, 255, 0.75) !important;
 }
 
+.fc-multiMonthYear-view {
+  border-radius: 25px;
+}
+
+.fc-dayGridMonth-view .fc-scrollgrid {
+  border-radius: 25px;
+}
+
+.fc-dayGridMonth-view .fc-scrollgrid-section td[role=presentation] {
+  border-radius: 25px;
+  border-top-right-radius: 0;
+}
+
+.fc-dayGridMonth-view .fc-scrollgrid-section th[role=presentation] {
+  border-radius: 25px;
+  border-bottom-right-radius: 0;
+}
+
+.fc-timeGridWeek-view .fc-scrollgrid {
+  border-radius: 25px;
+}
+
+.fc-timeGridWeek-view .fc-scrollgrid-section:last-child td[role=presentation] {
+  border-radius: 25px;
+  border-top-right-radius: 0;
+}
+
+.fc-timeGridWeek-view .fc-scrollgrid-section:first-child th[role=presentation] {
+  border-top-right-radius: 25px;
+}
+
+.fc-timeGridDay-view .fc-scrollgrid {
+  border-radius: 25px;
+}
+
+.fc-timeGridDay-view .fc-scrollgrid-section:last-child td[role=presentation] {
+  border-radius: 25px;
+  border-top-right-radius: 0;
+}
+
+.fc-timeGridDay-view .fc-scrollgrid-section:first-child th[role=presentation] {
+  border-top-right-radius: 25px;
+}
+
 .dashboard.edit {
   margin: 8px;
 }

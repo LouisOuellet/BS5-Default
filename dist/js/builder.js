@@ -8467,11 +8467,55 @@ class Stepper {
 class Calendar {
 
     #object = null;
+    #selector = null;
+    #count = 0;
     #options = {
+        themeSystem: 'bootstrap5',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        initialDate: null,
+        initialView: 'dayGridMonth',
+        selectable: false,
+        editable: false,
+        eventDragMinDistance: 0,
         class: {
-            object: null,
+            calendar: null,
+            header: null,
+        },
+        callback: {
+            dateClick: function(info) {},
+            select: function(info) {},
+            eventClick: function(info) {},
+            eventMouseEnter: function(info) {},
+            eventMouseLeave: function(info) {},
+            eventDrop: function(info) {},
+            eventResize: function(info) {},
+            eventDidMount: function(info) {},
+        },
+        events: [],
+        defaults: {
+            start: null,
+            end: null,
+            allDay: false,
+            isBackground: false,
+            color: null,
+            icon: null,
+            title: null,
+            description: null,
+            popover: true,
+            callback: {
+                click: function(info) {},
+                mouseEnter: function(info) {},
+                mouseLeave: function(info) {},
+                drop: function(info) {},
+                resize: function(info) {},
+            },
         },
     };
+    #events = {};
 
 	constructor(param1 = null, param2 = null, param3 = null){
 
@@ -8502,24 +8546,76 @@ class Calendar {
         builderCount++;
 
         // Create Object
-		this.#object = $(document.createElement('div')).attr('id','object' + builderCount);
+		this.#object = $(document.createElement('div')).attr('id','calendar' + builderCount);
         this.#object.id = this.#object.attr('id');
 
-        // Set Object Class
-        if(this.#options.class.object){
-            this.#object.addClass(this.#options.class.object);
-        }
-
-        // Execute Callback
-        if(typeof callback === 'function'){
-            callback(this,this.#object);
+        // Set wrapper Class
+        if(this.#options.class.wrapper){
+            this.#object.addClass(this.#options.class.wrapper);
         }
 
         // Check if Selector is Set
         if(selector != null){
 
+            if(typeof selector === 'string'){
+                selector = $(selector);
+            }
+
+            this.#selector = selector;
+
             // Append to Selector
             this.appendTo(selector);
+        } else {
+
+            // Return Error
+            console.error('Calendar: No selector specified');
+            return false;
+        }
+
+        // Set intialDate
+        if(this.#options.initialDate === null){
+            this.#options.initialDate = new Date();
+        }
+
+        // Set Options
+        this.#object.options = {
+            themeSystem: this.#options.themeSystem,
+            headerToolbar: this.#options.headerToolbar,
+            initialDate: this.#options.initialDate,
+            initialView: this.#options.initialView,
+            selectable: this.#options.selectable,
+            editable: this.#options.editable,
+            eventDragMinDistance: this.#options.eventDragMinDistance,
+            dateClick: function(info) { self.#dateClick(info); },
+            select: function(info) { self.#select(info); },
+            eventClick: function(info) { self.#eventClick(info); },
+            eventMouseEnter: function(info) { self.#eventMouseEnter(info); },
+            eventMouseLeave: function(info) { self.#eventMouseLeave(info); },
+            eventDrop: function(info) { self.#eventDrop(info); },
+            eventResize: function(info) { self.#eventResize(info); },
+            eventDidMount: function(info) { self.#eventDidMount(info); },
+            eventContent: function(arg) { return self.#eventContent(arg); },
+        };
+
+        // Create Calendar
+        this.#object.fullCalendar = new FullCalendar.Calendar(this.#object[0], this.#object.options);
+
+        // Initialize Calendar
+        this.render();
+
+        // Set header Class
+        if(this.#options.class.header){
+            this.#object.find('.fc-header-toolbar').addClass(this.#options.class.header);
+        }
+
+        // Add Events
+        for(const [key, value] of Object.entries(this.#options.events)){
+            this.add(value);
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
         }
     }
 
@@ -8529,6 +8625,8 @@ class Calendar {
         for(const [key, value] of Object.entries(options)){
             if(typeof this.#options[key] !== 'undefined'){
                 switch(key){
+                    case"headerToolbar":
+                    case"callback":
                     case"defaults":
                         if(typeof this.#options[key] !== 'undefined'){
                             for(const [k, v] of Object.entries(value)){
@@ -8556,6 +8654,315 @@ class Calendar {
 
         // Return Object
         return this;
+    }
+
+    add(param1 = null, param2 = null){
+
+        // Set Self
+        const self = this;
+
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        let properties = {};
+
+        // Configure Options
+        for(const [key, value] of Object.entries(this.#options.defaults)){
+            if(typeof properties[key] === 'undefined'){
+                properties[key] = value;
+            }
+        }
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"callback":
+                        if(typeof properties[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof properties[key][k] !== 'undefined'){
+                                    properties[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(properties[key][section] != null){
+                                properties[key][section] += ' ' + classes;
+                            } else {
+                                properties[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Increment Count
+        this.#count++;
+
+        // Set ID
+        const EventID = this.#count;
+
+        // Set Event
+        var event = {
+            title: properties.title,
+            start: properties.start,
+            end: properties.end,
+            allDay: properties.allDay,
+            id: EventID,
+        };
+
+        if(properties.color){
+            event.classNames = 'text-bg-' + properties.color + ' border-' + properties.color;
+        }
+
+        if(properties.icon){
+            event.extendedProps = {icon: properties.icon};
+        }
+
+        if(properties.isBackground){
+            event.display = 'background';
+        }
+
+        // Set Event
+        this.#events[EventID] = {
+            id: EventID,
+            event: event,
+            properties: properties,
+            callback: properties.callback,
+        };
+
+        // Add Event to Calendar
+        var calendarEvent = this.#object.fullCalendar.addEvent(event);
+
+        // Set Calendar Event
+        this.#events[EventID].calEvent = calendarEvent;
+    }
+
+    render(){
+
+        // Set Self
+        const self = this;
+
+        // Get all ancestors of the calendar element
+        var ancestors = this.#selector.parents();
+        
+        // Filter out only the collapsible ancestors
+        var collapsibles = ancestors.filter(function() {
+            return $(this).hasClass('collapse');
+        });
+
+        console.log(ancestors,collapsibles)
+        
+        // Listen for the shown.bs.collapse event on each collapsible ancestor
+        collapsibles.on('shown.bs.collapse', function () {
+            // Call the updateSize method after the collapsible is shown
+            self.#object.fullCalendar.updateSize();
+        });
+        
+        // Render Calendar
+        this.#object.fullCalendar.render();
+
+        setTimeout(function() {
+            // Call the updateSize method after the timeout
+            self.#object.fullCalendar.updateSize();
+        }, 100);
+    }
+
+    #dateClick(info){
+
+        // Execute Callback
+        if(typeof this.#options.callback.dateClick === 'function'){
+            this.#options.callback.dateClick(info,this);
+        }
+    }
+
+    #select(info){
+
+        // Execute Callback
+        if(typeof this.#options.callback.select === 'function'){
+            this.#options.callback.select(info,this);
+        }
+    }
+
+    #eventContent(arg) {
+        let arrayOfDomNodes = [];
+
+        let spacerElement = document.createElement('span');
+        spacerElement.classList.add('ms-1');
+        arrayOfDomNodes.push(spacerElement);
+
+        if (arg.event.extendedProps.icon) {
+            let iconElement = document.createElement('i');
+            iconElement.classList.add('me-1','bi', 'bi-' + arg.event.extendedProps.icon);
+            arrayOfDomNodes.push(iconElement);
+        }
+
+        let titleElement = document.createElement('span');
+        titleElement.innerText = arg.event.title;
+        arrayOfDomNodes.push(titleElement);
+
+        return { domNodes: arrayOfDomNodes };
+    }
+
+    #eventClick(info){
+        const EventID = info.event._def.publicId;
+        const EventName = {calendar: 'eventClick', event: 'click'};
+
+        // Check if Event Exists
+        if(typeof this.#events[EventID] !== 'undefined'){
+
+            const Event = this.#events[EventID];
+
+            // Execute Calendar Callback
+            if(typeof this.#options.callback[EventName.calendar] === 'function'){
+                this.#options.callback[EventName.calendar](Event,info,this);
+            }
+
+            // Execute Event Callback
+            if(typeof Event.callback[EventName.event] === 'function'){
+                Event.callback[EventName.event](Event,info,this);
+            }
+        }
+    }
+
+    #eventMouseEnter(info){
+        const EventID = info.event._def.publicId;
+        const EventName = {calendar: 'eventMouseEnter', event: 'mouseEnter'};
+
+        // Check if Event Exists
+        if(typeof this.#events[EventID] !== 'undefined'){
+
+            const Event = this.#events[EventID];
+
+            // Execute Calendar Callback
+            if(typeof this.#options.callback[EventName.calendar] === 'function'){
+                this.#options.callback[EventName.calendar](Event,info,this);
+            }
+
+            // Execute Event Callback
+            if(typeof Event.callback[EventName.event] === 'function'){
+                Event.callback[EventName.event](Event,info,this);
+            }
+        }
+    }
+
+    #eventMouseLeave(info){
+        const EventID = info.event._def.publicId;
+        const EventName = {calendar: 'eventMouseLeave', event: 'mouseLeave'};
+
+        // Check if Event Exists
+        if(typeof this.#events[EventID] !== 'undefined'){
+
+            const Event = this.#events[EventID];
+
+            // Execute Calendar Callback
+            if(typeof this.#options.callback[EventName.calendar] === 'function'){
+                this.#options.callback[EventName.calendar](Event,info,this);
+            }
+
+            // Execute Event Callback
+            if(typeof Event.callback[EventName.event] === 'function'){
+                Event.callback[EventName.event](Event,info,this);
+            }
+        }
+    }
+
+    #eventDrop(info){
+        const EventID = info.event._def.publicId;
+        const EventName = {calendar: 'eventDrop', event: 'drop'};
+
+        // Check if Event Exists
+        if(typeof this.#events[EventID] !== 'undefined'){
+
+            const Event = this.#events[EventID];
+
+            // Execute Calendar Callback
+            if(typeof this.#options.callback[EventName.calendar] === 'function'){
+                this.#options.callback[EventName.calendar](Event,info,this);
+            }
+
+            // Execute Event Callback
+            if(typeof Event.callback[EventName.event] === 'function'){
+                Event.callback[EventName.event](Event,info,this);
+            }
+        }
+    }
+
+    #eventResize(info){
+        const EventID = info.event._def.publicId;
+        const EventName = {calendar: 'eventResize', event: 'resize'};
+
+        // Check if Event Exists
+        if(typeof this.#events[EventID] !== 'undefined'){
+
+            const Event = this.#events[EventID];
+
+            // Execute Calendar Callback
+            if(typeof this.#options.callback[EventName.calendar] === 'function'){
+                this.#options.callback[EventName.calendar](Event,info,this);
+            }
+
+            // Execute Event Callback
+            if(typeof Event.callback[EventName.event] === 'function'){
+                Event.callback[EventName.event](Event,info,this);
+            }
+        }
+    }
+
+    #eventDidMount(info){
+        const EventID = info.event._def.publicId;
+        const EventName = {calendar: 'eventDidMount', event: 'didMount'};
+
+        // Check if Event Exists
+        if(typeof this.#events[EventID] !== 'undefined'){
+
+            const Event = this.#events[EventID];
+
+            // Create Popover
+            if(Event.properties.popover){
+                // Create focus trigger
+                $(info.el).hover(function() {
+                    $(this).trigger('focus');
+                });
+
+                // Create Popover
+                var title = $(document.createElement('span')).text(Event.properties.title);
+                if(Event.properties.icon){
+                    title.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + Event.properties.icon).prependTo(title);
+                }
+                info.el.setAttribute('data-bs-toggle','popover');
+                info.el.setAttribute('data-bs-trigger','focus');
+                info.el.setAttribute('data-bs-html','true');
+                info.el.setAttribute('data-bs-title',title.html());
+                info.el.setAttribute('data-bs-content',Event.properties.description);
+                const popover = bootstrap.Popover.getOrCreateInstance(info.el);
+            }
+
+            // Execute Calendar Callback
+            if(typeof this.#options.callback[EventName.calendar] === 'function'){
+                this.#options.callback[EventName.calendar](Event,info,this);
+            }
+
+            // Execute Event Callback
+            if(typeof Event.callback[EventName.event] === 'function'){
+                Event.callback[EventName.event](Event,info,this);
+            }
+        }
     }
 
     appendTo(object){
