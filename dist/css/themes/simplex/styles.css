@@ -15159,6 +15159,16 @@ textarea.form-control-lg {
   background: rgba(255, 255, 255, 0.75) !important;
 }
 
+.fc .fc-scrollgrid-section-sticky > * {
+  background: none;
+}
+
+a.fc-event {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fc-multiMonthYear-view {
   border-radius: 0.375rem;
 }

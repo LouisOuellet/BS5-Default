@@ -16166,6 +16166,16 @@ select.form-control[multiple] {
   background: rgba(248, 249, 250, 0.75) !important;
 }
 
+.fc .fc-scrollgrid-section-sticky > * {
+  background: none;
+}
+
+a.fc-event {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fc-multiMonthYear-view {
   border-radius: 0.375rem;
 }

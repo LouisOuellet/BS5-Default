@@ -8476,6 +8476,7 @@ class Calendar {
             center: 'title',
             right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay'
         },
+        height: 'auto',
         initialDate: null,
         initialView: 'dayGridMonth',
         selectable: false,
@@ -8585,6 +8586,7 @@ class Calendar {
             initialView: this.#options.initialView,
             selectable: this.#options.selectable,
             editable: this.#options.editable,
+            height: this.#options.height,
             eventDragMinDistance: this.#options.eventDragMinDistance,
             dateClick: function(info) { self.#dateClick(info); },
             select: function(info) { self.#select(info); },
@@ -8765,8 +8767,6 @@ class Calendar {
         var collapsibles = ancestors.filter(function() {
             return $(this).hasClass('collapse');
         });
-
-        console.log(ancestors,collapsibles)
         
         // Listen for the shown.bs.collapse event on each collapsible ancestor
         collapsibles.on('shown.bs.collapse', function () {

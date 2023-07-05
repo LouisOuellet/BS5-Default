@@ -15342,6 +15342,16 @@ a.list-group-item-danger.active:hover, a.list-group-item-danger.active:focus {
   background: rgba(246, 246, 246, 0.75) !important;
 }
 
+.fc .fc-scrollgrid-section-sticky > * {
+  background: none;
+}
+
+a.fc-event {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fc-multiMonthYear-view {
   border-radius: 0.375rem;
 }

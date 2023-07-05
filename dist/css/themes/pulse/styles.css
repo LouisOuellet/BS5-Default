@@ -14868,6 +14868,16 @@ textarea.form-control-lg {
   background: rgba(249, 248, 252, 0.75) !important;
 }
 
+.fc .fc-scrollgrid-section-sticky > * {
+  background: none;
+}
+
+a.fc-event {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fc-dayGridMonth-view .fc-scrollgrid-section td[role=presentation] {
   border-top-right-radius: 0;
 }

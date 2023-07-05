@@ -1,3 +1,15 @@
+// Remove Background
+.fc .fc-scrollgrid-section-sticky > * {
+    background: none;
+}
+
+// Add text-overflow: ellipsis to event titles
+a.fc-event {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 // Year View
 .fc-multiMonthYear-view{
     @include border-radius($border-radius);

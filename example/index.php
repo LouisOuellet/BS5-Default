@@ -684,6 +684,11 @@
                                     "icon" => "ticket-detailed",
                                     "link" => "?p=ticketDetails",
                                 ],
+                                "ticketNew" => [
+                                    "label" => "New",
+                                    "icon" => "ticket-perforated",
+                                    "link" => "?p=ticketNew",
+                                ],
                             ],
                         ],
                         "help" => [
@@ -725,8 +730,11 @@
         <!-- ======= Boostrap Icons ======= -->
         <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-icons.min.css">
 
-        <!-- ======= Leaflet ======= -->
+        <!-- ======= Leaflet.JS ======= -->
         <link rel="stylesheet" href="plugins/leaflet/css/leaflet.css">
+
+        <!-- ======= Tempus-Dominus.JS ======= -->
+        <link rel="stylesheet" href="plugins/tempus-dominus/css/tempus-dominus.min.css">
 
         <!-- ======= Prism.JS ======= -->
         <link rel="stylesheet" href="plugins/prism/css/prism-tomorrow.min.css">
@@ -786,8 +794,10 @@
         <link rel="stylesheet" href="css/themes/zephyr/styles.css" data-theme="zephyr" disabled>
 
         <!-- ======= JQuery ======= -->
-        <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
         <script src="plugins/jquery/js/jquery.min.js"></script>
+
+        <!-- ======= JQuery - Input Mask ======= -->
+        <script src="plugins/jquery/js/jquery.inputmask.min.js"></script>
 
         <!-- ======= Bootstrap ======= -->
         <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -798,8 +808,11 @@
         <!-- ======= Chart.JS ======= -->
         <script src="plugins/chart/js/chart.js"></script>
 
-        <!-- ======= Leaflet ======= -->
+        <!-- ======= Leaflet.JS ======= -->
         <script src="plugins/leaflet/js/leaflet.js"></script>
+
+        <!-- ======= Tempus-Dominus.JS ======= -->
+        <script src="plugins/tempus-dominus/js/tempus-dominus.min.js"></script>
 
         <!-- ======= Prism.JS ======= -->
         <script src="plugins/prism/js/prism.min.js"></script>
