@@ -1,0 +1,14 @@
+{
+    "name": "laswitchtech/bs5-default",
+    "description": "Bootstrap 5 Theme and Libraries",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Louis Ouellet",
+            "email": "louis_ouellet@hotmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
