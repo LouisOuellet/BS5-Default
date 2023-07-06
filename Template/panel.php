@@ -442,7 +442,14 @@
                                 <i class="bi bi-bootstrap-fill me-2 fs-1"></i>
                                 <h4 class="brand m-0">Panel</h4>
                             </a>
-                            <?= generateMenu($sidebar) ?>
+                            <?= $this->getTemplate() ?>
+                            <?php
+                                foreach($this->getRoutes() as $route => $param){
+                                    if($param['template'] == $this->getTemplate()){
+                                        echo $route;
+                                    }
+                                }
+                            ?>
                         </div>
                     </div>
                     <!-- ======= End Sidebar ======= -->
