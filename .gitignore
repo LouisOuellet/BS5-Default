@@ -2,7 +2,7 @@ composer.phar
 /vendor/
 .DS_Store
 /node_modules/
-/dist/plugins/
+# /dist/plugins/
 /example/shipment.php
 /dist/js/shipment.js
 .git
