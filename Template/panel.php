@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Panel - <?= $title; ?></title>
+        <title><?= $this->getLabel() ?></title>
 
         <!-- ======= Bootstrap 5 ======= -->
         <link rel="stylesheet" href="css/themes/default/styles.css">
@@ -218,7 +218,7 @@
     <body data-bs-spy="scroll" data-bs-target="#main-nav" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0" class="h-100 w-100">
 
         <!-- ======= Controls ======= -->
-        <div id="controls" class="d-flex position-fixed bottom-0 end-0 mb-3 me-3" style="z-index:1041;">
+        <div id="controls" class="d-flex position-fixed bottom-0 end-0 mb-3 me-3 d-none" style="z-index:1041;">
 
             <!-- ======= Collapsible ======= -->
             <div id="controlsCollapsible" class="collapse collapse-horizontal show">
@@ -612,11 +612,7 @@
             
                         <!-- ======= Page Content ======= -->
                         <div class="row mt-4 px-3 mx-0 pb-3">
-                            <?php
-                                if(file_exists($file)){
-                                    require $page . '.php';
-                                }
-                            ?>
+                            <?php require $this->getViewFile(); ?>
                         </div>
                         <!-- ======= End Page Content ======= -->
 
@@ -630,14 +626,4 @@
         </main>
         <!-- ======= End Main ======= -->
     </body>
-</html>
-
-
-<html>
-  <head>
-    <title><?= $this->getLabel() ?></title>
-  </head>
-  <body>
-    <?php require $this->getViewFile(); ?>
-  </body>
 </html>
