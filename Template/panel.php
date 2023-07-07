@@ -30,6 +30,24 @@ function renderMenu($menu) {
     
     return $html;
 }
+
+function renderCrumbs($route, $routes) {
+    $link = '';
+    $html = '';
+    $parts = array_filter(explode('/', $route));
+
+    foreach($parts as $part){
+        $link = '/' . $part;
+        if(isset($routes[$link])){
+            $html .= '<a class="nav-link" href="' . $link . '">';
+            $html .= '<i class="me-1 bi bi-' . $routes[$link]['icon'] . '"></i>';
+            $html .= '<span class="brand">' . $routes[$link]['label'] . '</span>';
+            $html .= '</a>';
+        }
+    }
+    
+    return $html;
+}
 ?>
 <!doctype html>
 <html lang="en" data-bs-theme="light" data-theme="glass" class="h-100 w-100">
@@ -269,26 +287,26 @@ function renderMenu($menu) {
                     <!-- ======= Light Mode Selector ======= -->
                     <div class="mx-1 dropdown dropup">
                         <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-                        <i class="bi bi-circle-half my-1 theme-icon-active" style="font-size:1em;"></i>
-                        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+                            <i class="bi bi-circle-half my-1 theme-icon-active" style="font-size:1em;"></i>
+                            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
                         <li>
                             <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                            <i class="bi bi-sun-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                            Light
+                                <i class="bi bi-sun-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
+                                Light
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                            <i class="bi bi-moon-stars-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                            Dark
+                                <i class="bi bi-moon-stars-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
+                                Dark
                             </button>
                         </li>
                         <li>
                             <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-                            <i class="bi bi-circle-half me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                            Auto
+                                <i class="bi bi-circle-half me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
+                                Auto
                             </button>
                         </li>
                         </ul>
@@ -494,7 +512,8 @@ function renderMenu($menu) {
                                 <!-- ======= End Sidebar Toggler ======= -->
 
                                 <!-- ======= Nav ======= -->
-                                <div id="navbarNavs" class="nav nav-pills d-flex align-items-center">
+                                <div id="navbarCrumbs" class="nav nav-pills d-flex align-items-center">
+                                    <?= renderCrumbs($this->getRoute(),$this->getRoutes()); ?>
                                 </div>
                                 <!-- ======= End Nav ======= -->
 
