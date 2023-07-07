@@ -1,3 +1,36 @@
+<?php
+function renderMenuItem($id, $menu, $level) {
+    $label = $menu['label'];
+    $icon = $menu['icon'];
+    $link = $menu['link'];
+    $items = $menu['items'];
+
+    $html = '<li class="nav-item ps-2">';
+    if (count($items) > 0) {
+        $html .= '<button class="nav-link" data-bs-toggle="collapse" data-bs-target="#menu'. str_replace('/','-',$link) .'-'.$level.'" role="button" aria-expanded="false" aria-controls="menu'. str_replace('/','-',$link) .'-'.$level.'"><i class="bi bi-'. $icon .' me-1"></i><span class="">'. $label .'</span></button>';
+        $html .= '<div class="collapse" id="menu'. str_replace('/','-',$link) .'-'.$level.'"><ul class="nav nav-pills flex-column">';
+        foreach($items as $route => $item) {
+            $html .= renderMenuItem($route, $item, $level + 1);
+        }
+        $html .= '</ul></div>';
+    } else {
+        $html .= '<a class="nav-link" href="'.$link.'"><i class="bi bi-'.$icon.' me-1"></i><span class="">'. $label .'</span></a>';
+    }
+    $html .= '</li>';
+    return $html;
+}
+
+function renderMenu($menu) {
+
+    $html = '<ul class="nav nav-pills flex-column">';
+    foreach($menu as $route => $item) {
+        $html .= renderMenuItem($route, $item, 1);
+    }
+    $html .= '</ul>';
+    
+    return $html;
+}
+?>
 <!doctype html>
 <html lang="en" data-bs-theme="light" data-theme="glass" class="h-100 w-100">
     <head>
@@ -437,19 +470,12 @@
 
                     <!-- ======= Sidebar ======= -->
                     <div class="col-md-2 sidebar vh-100 pb-4 bg-dark bg-glass position-fixed vh-100 overflow-y collapse collapse-horizontal show" id="sidebar">
-                        <div class="container-fluid">
+                        <div class="container-fluid text-light">
                             <a class="sidebar-brand w-100 d-flex justify-content-center align-items-center py-4 fs-4 text-decoration-none" href="/">
                                 <i class="bi bi-bootstrap-fill me-2 fs-1"></i>
                                 <h4 class="brand m-0">Panel</h4>
                             </a>
-                            <?= $this->getTemplate() ?>
-                            <?php
-                                foreach($this->getRoutes() as $route => $param){
-                                    if($param['template'] == $this->getTemplate()){
-                                        echo $route;
-                                    }
-                                }
-                            ?>
+                            <?= renderMenu($this->menu('sidebar')); ?>
                         </div>
                     </div>
                     <!-- ======= End Sidebar ======= -->
@@ -477,7 +503,7 @@
 
                                     <!-- ======= Search Field ======= -->
                                     <li id="searchField" class="nav-item collapse collapse-horizontal">
-                                        <form class="d-flex" action="?p=searchResults" method="post" autocomplete="on" novalidate>
+                                        <form class="d-flex" action="/search" method="post" autocomplete="on" novalidate>
                                             <input type="text" class="form-control search" placeholder="Search..." aria-label="Search" aria-describedby="searchBtn" value="<?php if(isset($_POST['search'])){ echo $_POST['search']; } ?>">
                                         </form>
                                     </li>
@@ -563,26 +589,26 @@
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="?p=profile">
+                                                <a class="dropdown-item" href="/profile">
                                                     <i class="bi bi-person me-1"></i>
                                                     <span>Profile</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="?p=settings">
+                                                <a class="dropdown-item" href="/settings">
                                                     <i class="bi bi-gear me-1"></i>
                                                     <span>Settings</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="?p=help">
+                                                <a class="dropdown-item" href="/help">
                                                     <i class="bi bi-question-circle me-1"></i>
                                                     <span>Help</span>
                                                 </a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item" href="#">
+                                                <a class="dropdown-item" href="?signout&csrf=<?= $this->CSRF->token() ?>">
                                                     <i class="bi bi-box-arrow-right me-1"></i>
                                                     <span>Sign Out</span>
                                                 </a>
@@ -601,7 +627,7 @@
                         <!-- ======= Page Title and Breadcrumbs ======= -->
                         <div class="row py-2 px-3 mx-0 d-flex align-items-center">
                             <div class="col-md-6 d-flex align-items-center justify-content-start">
-                                <h1 class="m-0"><?= $title; ?></h1>
+                                <h1 class="m-0"><?= $this->getLabel(); ?></h1>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end">
                                 <nav aria-label="breadcrumb">
