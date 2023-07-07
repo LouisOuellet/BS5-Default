@@ -1,4 +1,4 @@
-<!-- ======= Help ======= -->
+<!-- ======= Help - FAQ ======= -->
 <div class="col-12">
     <div class="row">
         <div class="col-12 mb-2">
@@ -13,4 +13,4 @@
     </div>
 </div>
 <script src="/js/faq.js"></script>
-<!-- ======= End Help ======= -->
+<!-- ======= End Help - FAQ ======= -->
