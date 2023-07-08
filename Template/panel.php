@@ -7,7 +7,7 @@ function renderMenuItem($id, $menu, $level) {
 
     $html = '<li class="nav-item ps-2">';
     if (count($items) > 0) {
-        $html .= '<button class="nav-link" data-bs-toggle="collapse" data-bs-target="#menu'. str_replace('/','-',$link) .'-'.$level.'" role="button" aria-expanded="false" aria-controls="menu'. str_replace('/','-',$link) .'-'.$level.'"><i class="bi bi-'. $icon .' me-1"></i><span class="">'. $label .'</span></button>';
+        $html .= '<button class="nav-link" data-route="'.$link.'" data-bs-toggle="collapse" data-bs-target="#menu'. str_replace('/','-',$link) .'-'.$level.'" role="button" aria-expanded="false" aria-controls="menu'. str_replace('/','-',$link) .'-'.$level.'"><i class="bi bi-'. $icon .' me-1"></i><span class="">'. $label .'</span></button>';
         $html .= '<div class="collapse" id="menu'. str_replace('/','-',$link) .'-'.$level.'"><ul class="nav nav-pills flex-column">';
         foreach($items as $route => $item) {
             $html .= renderMenuItem($route, $item, $level + 1);
@@ -37,7 +37,7 @@ function renderCrumbs($route, $routes) {
     $parts = array_filter(explode('/', $route));
 
     foreach($parts as $part){
-        $link = '/' . $part;
+        $link .= '/' . $part;
         if(isset($routes[$link])){
             $html .= '<a class="nav-link" href="' . $link . '">';
             $html .= '<i class="me-1 bi bi-' . $routes[$link]['icon'] . '"></i>';

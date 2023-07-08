@@ -103,6 +103,13 @@ $('a').each(function () {
 		$(this).parents('[data-bs-toggle="collapse"]').attr('aria-expanded',true);
 	}
 });
+$('button').each(function () {
+	if ($(this).attr('data-route') === window.location.href) {
+		$(this).addClass('active');
+		$(this).parents('.collapse').addClass('show');
+		$(this).parents('[data-bs-toggle="collapse"]').attr('aria-expanded',true);
+	}
+});
 
 // Create Hierarchy Breadcrumbs
 var breadcrumbArray = []; // create an empty array
