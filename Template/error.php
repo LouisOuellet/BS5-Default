@@ -50,6 +50,12 @@
 
         <!-- ======= JQuery Timeago ======= -->
         <script src="/plugins/timeago/js/jquery.timeago.min.js"></script>
+
+        <!-- ======= Builder.JS ======= -->
+        <script src="/js/builder.js"></script>
+
+        <!-- ======= Panel.JS ======= -->
+        <script src="/js/panel.js"></script>
     </head>
 	<body class="h-100 w-100">
 		
