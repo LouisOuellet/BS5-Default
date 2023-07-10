@@ -22,7 +22,7 @@
         "mobile": "<?= $this->Auth->User->get('mobile') ?>",
         "status": <?= $this->Auth->User->get('status') ?>,
         "database": "<?= $this->Auth->User->get('database') ?>",
-        "server": "<?= $this->Auth->User->get('server') ?>",
+        "server": "<?= json_encode($this->Auth->User->get('server'), JSON_UNESCAPED_SLASHES) ?>",
         "domain": "<?= $this->Auth->User->get('domain') ?>"
     };
 </script>
