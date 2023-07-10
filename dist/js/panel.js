@@ -105,10 +105,17 @@ $('a').each(function () {
 });
 $('button').each(function () {
 	if ($(this).attr('data-route') === window.location.pathname) {
-		console.log($(this).attr('data-route'), window.location.pathname);
 		$(this).addClass('active');
 		$(this).parents('.collapse').addClass('show');
 		$(this).parents('[data-bs-toggle="collapse"]').attr('aria-expanded',true);
+	}
+});
+
+// Set Avatars
+$('img[data-avatar]').each(function () {
+	if (!$(this).attr('src')) {
+		const avatar = new Gravatar(email);
+		$(this).attr('src',avatar.url())
 	}
 });
 

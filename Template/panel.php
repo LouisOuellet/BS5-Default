@@ -559,18 +559,18 @@ function renderCrumbs($route, $routes) {
                                     <!-- ======= Profile ======= -->
                                     <li class="nav-item dropdown">
                                         <button id="profileMenu" type="button" class="nav-link text-decoration-none py-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&d=mp" alt="mdo" width="48" height="48" class="rounded-circle">
+                                            <img src="" data-avatar="<?= $this->Auth->User->get('username') ?>" alt="mdo" width="48" height="48" class="rounded-circle">
                                             <span class="position-absolute top-80 start-80 translate-middle text-bg-success border border-light rounded-circle" style="padding: 8px; display:block;"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu" style="min-width:350px;max-width:500px;">
                                             <li class="my-2">
                                                 <div class="d-flex flex-column justify-content-center align-items-center">
                                                     <div class="">
-                                                        <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&d=mp" alt="mdo" width="72" height="72" class="rounded-circle my-2">
+                                                        <img src="" data-avatar="<?= $this->Auth->User->get('username') ?>" alt="mdo" width="72" height="72" class="rounded-circle my-2">
                                                         <span class="position-absolute translate-middle text-bg-success border border-light rounded-circle" style="padding: 8px; display:block;top: 96px;right:38%;"></span>
                                                     </div>
                                                     <div>
-                                                        <h5>John Doe</h5>
+                                                        <h5><?= $this->Auth->User->get('username') ?></h5>
                                                     </div>
                                                 </div>
                                             </li>
