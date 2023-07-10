@@ -570,7 +570,7 @@ function renderCrumbs($route, $routes) {
                                                         <span class="position-absolute translate-middle text-bg-success border border-light rounded-circle" style="padding: 8px; display:block;top: 96px;right:38%;"></span>
                                                     </div>
                                                     <div>
-                                                        <h5><?= $this->Auth->User->get('username') ?></h5>
+                                                        <h5><?= $this->Auth->User->get('name') ?></h5>
                                                     </div>
                                                 </div>
                                             </li>
