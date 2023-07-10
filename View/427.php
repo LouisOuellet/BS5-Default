@@ -5,7 +5,7 @@
 		<input type="text" name="2fa" class="form-control form-control-lg" placeholder="2-Factor Authentication Code" id="2fa">
 		<label for="2fa">2-Factor Authentication Code</label>
 	</div>
-	<input type="hidden" class="d-none" name="csrf" value="">
+	<input type="hidden" class="d-none" name="csrf" value="<?= $this->CSRF->token() ?>">
 	<?php if(isset($_POST['remember'])){ ?>
 		<input type="hidden" name="username" class="d-none" value="<?= $_POST['username'] ?>">
 	<?php } ?>

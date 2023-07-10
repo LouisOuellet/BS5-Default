@@ -1,5 +1,25 @@
 <!-- ======= Sign In ======= -->
 <h3 class="mb-3">Sign In</h3>
+<?php
+    switch($this->Auth->Authentication->status()){
+        case 1:
+            echo "<p class='m-0'>Your account has been deleted!</p>";
+            break;
+        case 2:
+            echo "<p class='m-0'>Your account has been banned!</p>";
+            break;
+        case 3:
+            echo "<p class='m-0'>Your account has been locked out!</p>";
+            echo "<p class='m-0'>You may try again in " . $this->Configurator->get('auth','lockoutDuration') . " seconds.</p>";
+            break;
+        case 4:
+            echo "<p class='m-0'>You attempted to login too many times.</p>";
+            break;
+        case 5:
+            echo "<p class='m-0'>Your account is not active!</p>";
+            break;
+    }
+?>
 <form method="post" class="w-100">
     <div class="form-floating my-3">
         <input type="text" name="username" class="form-control form-control-lg" style="width:350px;" placeholder="username@domain.com" id="username" autocomplete="current-username">

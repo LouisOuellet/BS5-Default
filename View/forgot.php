@@ -8,7 +8,7 @@
         <input type="text" name="username" class="form-control form-control-lg" placeholder="username@domain.com" id="username">
         <label for="username">Email Address</label>
     </div>
-    <input type="hidden" class="d-none" name="csrf" value="">
+    <input type="hidden" class="d-none" name="csrf" value="<?= $this->CSRF->token() ?>">
     <button type="submit" name="forgot" class="btn btn-primary w-100">Request new password</button>
 </form>
 <div class="d-flex align-items-center justify-content-between w-100 mt-3">

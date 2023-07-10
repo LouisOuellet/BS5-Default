@@ -17,7 +17,7 @@
         <input class="form-check-input" style="margin-left: -1.4em; margin-right: 1.4em;transform: scale(1.8);" type="checkbox" role="switch" name="agrement" id="agrement">
         <label class="form-check-label" for="agrement">I agree to the <a href="terms.php">terms</a></label>
     </div>
-    <input type="hidden" class="d-none" name="csrf" value="">
+    <input type="hidden" class="d-none" name="csrf" value="<?= $this->CSRF->token() ?>">
     <button type="submit" name="register" class="btn btn-primary w-100">Register</button>
 </form>
 <div class="d-flex align-items-center justify-content-between w-100 mt-3">

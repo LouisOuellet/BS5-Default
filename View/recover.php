@@ -12,7 +12,7 @@
         <input type="password" name="password2" class="form-control form-control-lg" placeholder="*******************" id="password">
         <label for="password">Retype Password</label>
     </div>
-    <input type="hidden" class="d-none" name="csrf" value="">
+    <input type="hidden" class="d-none" name="csrf" value="<?= $this->CSRF->token() ?>">
     <button type="submit" name="recover" class="btn btn-primary w-100">Change password</button>
 </form>
 <div class="d-flex align-items-center justify-content-between w-100 mt-3">
