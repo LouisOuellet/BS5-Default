@@ -6832,7 +6832,6 @@ class Accordion {
         // Configure Options
         for(const [key, value] of Object.entries(this.#options.defaults)){
             if(typeof properties[key] === 'undefined'){
-                console.log(key)
                 properties[key] = value;
             }
         }

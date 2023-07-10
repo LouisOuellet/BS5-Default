@@ -104,7 +104,8 @@ $('a').each(function () {
 	}
 });
 $('button').each(function () {
-	if ($(this).attr('data-route') === window.location.href) {
+	if ($(this).attr('data-route') === window.location.pathname) {
+		console.log($(this).attr('data-route'), window.location.pathname);
 		$(this).addClass('active');
 		$(this).parents('.collapse').addClass('show');
 		$(this).parents('[data-bs-toggle="collapse"]').attr('aria-expanded',true);
