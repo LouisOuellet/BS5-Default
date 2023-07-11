@@ -262,6 +262,9 @@ function renderCrumbs($route, $routes) {
         <!-- ======= Select2.JS ======= -->
         <script src="/plugins/select2/js/select2.min.js"></script>
 
+        <!-- ======= Showdown.JS ======= -->
+        <script src="/plugins/showdown/js/showdown.min.js"></script>
+
         <!-- ======= TinyMCE.JS ======= -->
         <script src="/plugins/tinymce/tinymce.min.js"></script>
         <script src="/plugins/tinymce/js/tinymce-jquery.min.js"></script>
@@ -271,206 +274,13 @@ function renderCrumbs($route, $routes) {
         <!-- ======= Controls ======= -->
         <div id="controls" class="d-flex position-fixed bottom-0 end-0 mb-3 me-3 d-none" style="z-index:1041;">
 
-            <!-- ======= Collapsible ======= -->
-            <div id="controlsCollapsible" class="collapse collapse-horizontal show">
-
-                <div class="d-flex">
-
-                    <!-- ======= Back to Top ======= -->
-                    <div class="mx-1 back-to-top" style="display:none;">
-                        <a href="#" class="d-flex align-items-center justify-content-center btn btn-primary py-2">
-                            <i class="bi bi-arrow-up my-1" style="font-size:1em;"></i>
-                        </a>
-                    </div>
-                    <!-- ======= End Back to Top ======= -->
-
-                    <!-- ======= Light Mode Selector ======= -->
-                    <div class="mx-1 dropdown dropup">
-                        <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-                            <i class="bi bi-circle-half my-1 theme-icon-active" style="font-size:1em;"></i>
-                            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-                        <li>
-                            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                                <i class="bi bi-sun-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                                Light
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-                                <i class="bi bi-moon-stars-fill me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                                Dark
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-                                <i class="bi bi-circle-half me-2 opacity-50 theme-icon" style="font-size:1em;"></i>
-                                Auto
-                            </button>
-                        </li>
-                        </ul>
-                    </div>
-                    <!-- ======= End Light Mode Selector ======= -->
-
-                    <!-- ======= Theme Selector ======= -->
-                    <div class="mx-1 dropdown dropup">
-                        <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
-                            <i class="bi bi-palette my-1 theme-icon-active" style="font-size:1em;"></i>
-                            <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center active" data-theme-value="default" aria-pressed="true">
-                                Default
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cerulean" aria-pressed="false">
-                                Cerulean
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cosmos" aria-pressed="false">
-                                Cosmos
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="cyborg" aria-pressed="false">
-                                Cyborg
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="darkly" aria-pressed="false">
-                                Darkly
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="flathy" aria-pressed="false">
-                                Flathy
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="glass" aria-pressed="false">
-                                Glass
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="journal" aria-pressed="false">
-                                Journal
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="litera" aria-pressed="false">
-                                Litera
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="lumen" aria-pressed="false">
-                                Lumen
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="lux" aria-pressed="false">
-                                Lux
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="materia" aria-pressed="false">
-                                Materia
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="minty" aria-pressed="false">
-                                Minty
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="morph" aria-pressed="false">
-                                Morph
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="pulse" aria-pressed="false">
-                                Pulse
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="quartz" aria-pressed="false">
-                                Quartz
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="sandstone" aria-pressed="false">
-                                Sandstone
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="simplex" aria-pressed="false">
-                                Simplex
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="sketchy" aria-pressed="false">
-                                Sketchy
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="slate" aria-pressed="false">
-                                Slate
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="solar" aria-pressed="false">
-                                Solar
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="spacelab" aria-pressed="false">
-                                Spacelab
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="superhero" aria-pressed="false">
-                                Superhero
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="united" aria-pressed="false">
-                                United
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="vapor" aria-pressed="false">
-                                Vapor
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="yeti" aria-pressed="false">
-                                Yeti
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button" class="dropdown-item d-flex align-items-center" data-theme-value="zephyr" aria-pressed="false">
-                                Zephyr
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- ======= End Theme Selector ======= -->
-
-                </div>
-
+            <!-- ======= Back to Top ======= -->
+            <div class="mx-1 back-to-top" style="display:none;">
+                <a href="#" class="d-flex align-items-center justify-content-center btn btn-primary py-2">
+                    <i class="bi bi-arrow-up my-1" style="font-size:1em;"></i>
+                </a>
             </div>
-            <!-- ======= End Collapsible ======= -->
-
-            <!-- ======= Collapse ======= -->
-            <div class="mx-1">
-                <button type="button" class="d-flex align-items-center justify-content-center btn btn-primary py-2" data-bs-toggle="collapse" data-bs-target="#controlsCollapsible" aria-expanded="true" aria-controls="controlsCollapsible">
-                    <i class="bi bi-chevron-right my-1" style="font-size:1em;"></i>
-                </button>
-            </div>
-            <!-- ======= End Collapse ======= -->
+            <!-- ======= End Back to Top ======= -->
 
         </div>
         <!-- ======= End Controls ======= -->
