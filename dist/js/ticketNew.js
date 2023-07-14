@@ -256,9 +256,9 @@ $(document).ready(function(){
             });
             
             // Update the category, sub category and item lists
-            section.category.update(Ticket.category);
-            section.subCategory.update(Ticket.subCategory);
-            section.item.update(Ticket.item);
+            section.category.update(Record.category);
+            section.subCategory.update(Record.subCategory);
+            section.item.update(Record.item);
         },
     );
 });

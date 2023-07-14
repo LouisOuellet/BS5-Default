@@ -2,11 +2,26 @@
 <div class="col-12">
     <div class="row">
         <div class="col-12 my-2">
-            <div class="card card-body" id="new">
-                <h4>Title:</h4>
-                <input id="newTitle" class="form-control form-control-lg mb-3" type="text" placeholder="Title">
-                <h4>Article:</h4>
-                <div id="newArticle"></div>
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title"><i class="bi bi-pencil-square me-1"></i>Form</h4>
+                </div>
+                <div class="card-body" id="new">
+                    <h4>Title:</h4>
+                    <input id="newTitle" class="form-control form-control-lg" type="text" placeholder="Title">
+                    <h4>Section:</h4>
+                    <select id="newSection" class="form-control form-control-lg">
+                        <option value="0">Select Section</option>
+                        <option value="FAQs">FAQs</option>
+                        <option value="How-tos">How-tos</option>
+                        <option value="Bugs">Bugs</option>
+                        <option value="Announcements">Announcements</option>
+                        <option value="Troubleshooting guides">Troubleshooting guides</option>
+                        <option value="Informational">Informational</option>
+                    </select>
+                    <h4>Article:</h4>
+                    <div id="newArticle"></div>
+                </div>
             </div>
         </div>
         <div id="preview" class="col-12 my-2">

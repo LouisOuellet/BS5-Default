@@ -8657,6 +8657,11 @@ class Calendar {
             this.add(value);
         }
 
+        // Add Event to Calendar on Sidebar Toggle
+        $('#sidebarToggle').click(function(){
+            this.#object.fullCalendar.render();
+        });
+
         // Execute Callback
         if(typeof callback === 'function'){
             callback(this,this.#object);
@@ -9142,7 +9147,7 @@ class IDE {
 
                     var start = this.selectionStart;
                     var end = this.selectionEnd;
-                    
+
                     this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
                     this.selectionStart = this.selectionEnd = start + 1;
                 }

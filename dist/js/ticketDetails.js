@@ -11,7 +11,7 @@ $(document).ready(function(){
                 body: "p-0",
             },
             icon: "chat-dots",
-            title: 'Ticket# ' + Ticket.id,
+            title: 'Ticket# ' + Record.id,
         },
         function(card){
 
@@ -36,14 +36,14 @@ $(document).ready(function(){
                     class: {
                         box: 'h-100 cursor-pointer',
                     },
-                    icon:Statuses[Ticket.status].icon,
-                    color:Statuses[Ticket.status].color,
+                    icon:Statuses[Record.status].icon,
+                    color:Statuses[Record.status].color,
                     type: "small",
                 },
                 function(box){
                     
                     // Set Content
-                    var header = $(document.createElement("h4")).html(Statuses[Ticket.status].label).appendTo(box.content);
+                    var header = $(document.createElement("h4")).html(Statuses[Record.status].label).appendTo(box.content);
                     var paragraph = $(document.createElement("p")).addClass().html("Status").appendTo(box.content);
 
                     // Change Status
@@ -63,7 +63,7 @@ $(document).ready(function(){
                             for(const [key, value] of Object.entries(Statuses)){
                                 $(document.createElement("option")).attr('value',key).html(value.label).appendTo(element.select);
                             }
-                            element.select.val(Ticket.status);
+                            element.select.val(Record.status);
                         },
                     );
                 }
@@ -75,14 +75,14 @@ $(document).ready(function(){
                     class: {
                         box: 'h-100 cursor-pointer',
                     },
-                    icon:Priorities[Ticket.priority].icon,
-                    color:Priorities[Ticket.priority].color,
+                    icon:Priorities[Record.priority].icon,
+                    color:Priorities[Record.priority].color,
                     type: "small",
                 },
                 function(box){
                     
                     // Set Content
-                    var header = $(document.createElement("h4")).html(Priorities[Ticket.priority].label).appendTo(box.content);
+                    var header = $(document.createElement("h4")).html(Priorities[Record.priority].label).appendTo(box.content);
                     var paragraph = $(document.createElement("p")).addClass().html("Priority").appendTo(box.content);
 
                     // Change Priority
@@ -105,7 +105,7 @@ $(document).ready(function(){
                                     .attr("value", key)
                                     .text(value.label + ' - ' + randomDescription));
                             });
-                            element.select.val(Ticket.priority);
+                            element.select.val(Record.priority);
                         },
                     );
                 }
@@ -142,7 +142,7 @@ $(document).ready(function(){
                                 }
                                 ticketFeed.post(
                                     {
-                                        username: Ticket.owner,
+                                        username: Record.owner,
                                         content: element.textarea.tinymce().getContent() + quote,
                                     }
                                 );
@@ -211,7 +211,7 @@ $(document).ready(function(){
                                 },
                             }
                         );
-                        element.select.val([Ticket.owner,Ticket.assignedTo]).trigger('change');
+                        element.select.val([Record.owner,Record.assignedTo]).trigger('change');
                         element.dialog.content.footer.submit.text("Share");
                     },
                 );
@@ -255,17 +255,17 @@ $(document).ready(function(){
                 );
             };
 
-            var subject = $(document.createElement("h2")).html(Ticket.subject).appendTo(row.col1.row2.col1);
+            var subject = $(document.createElement("h2")).html(Record.subject).appendTo(row.col1.row2.col1);
             var datetime = {};
-            datetime.openedOn = new Date(Ticket.openedOn);
+            datetime.openedOn = new Date(Record.openedOn);
             var openedOn = $(document.createElement('div')).addClass('mt-1 mb-2').appendTo(row.col1.row2.col1);
             openedOn.Label = $(document.createElement('span')).addClass('me-2').text('Opened On:').appendTo(openedOn);
             openedOn.icon = $(document.createElement('i')).addClass('bi-clock me-1').appendTo(openedOn);
             openedOn.timeago = $(document.createElement('time')).addClass('timeago').attr('data-bs-toggle','tooltip').attr('title',datetime.openedOn.toLocaleString()).attr('data-bs-title',datetime.openedOn.toLocaleString()).attr('data-bs-placement','top').attr('datetime',datetime.openedOn.toLocaleString()).html(datetime.openedOn.toLocaleString()).appendTo(openedOn);
             openedOn.timeago.timeago();
             openedOn.timeago.bootstrap = new bootstrap.Tooltip(openedOn.timeago);
-            if(Ticket.closedOn){
-                datetime.closedOn = new Date(Ticket.closedOn);
+            if(Record.closedOn){
+                datetime.closedOn = new Date(Record.closedOn);
                 var closedOn = {};
                 closedOn.Label = $(document.createElement('span')).addClass('ms-3 me-2').text('Closed On:').appendTo(openedOn);
                 closedOn.icon = $(document.createElement('i')).addClass('bi-clock me-1').appendTo(openedOn);
@@ -273,7 +273,7 @@ $(document).ready(function(){
                 closedOn.timeago.timeago();
                 closedOn.timeago.bootstrap = new bootstrap.Tooltip(closedOn.timeago);
             }
-            var description = $(document.createElement("p")).html(Ticket.description).appendTo(row.col1.row2.col1);
+            var description = $(document.createElement("p")).html(Record.description).appendTo(row.col1.row2.col1);
 
             const ticketFeed = new Feed(
                 row.col1.row3.col1,
@@ -359,7 +359,7 @@ $(document).ready(function(){
                     },
                 },
                 function(feed){
-                    for(const [key, post] of Object.entries(Ticket.posts)){
+                    for(const [key, post] of Object.entries(Record.posts)){
                         feed.post(
                             {
                                 datetime: post.created,
@@ -392,7 +392,7 @@ $(document).ready(function(){
             var ticketOwner = $(document.createElement("h4")).html('Owner').appendTo(row.col2.row1.col1);
             ticketOwner.container = $(document.createElement("div")).addClass('d-flex justify-content-start align-items-center ms-2 user-select-none').appendTo(row.col2.row1.col1);
             ticketOwner.container.avatar = new Avatar(
-                Ticket.owner,
+                Record.owner,
                 {
                     class: {
                         object: "rounded-circle",
@@ -405,12 +405,12 @@ $(document).ready(function(){
                 },
             ).appendTo(ticketOwner.container);
             ticketOwner.container.contactInfo = $(document.createElement("div")).addClass('ms-2 d-flex flex-column justify-content-center align-items-start').appendTo(ticketOwner.container);
-            ticketOwner.container.contactInfo.contact = $(document.createElement("strong")).text(Ticket.owner).appendTo(ticketOwner.container.contactInfo);
+            ticketOwner.container.contactInfo.contact = $(document.createElement("strong")).text(Record.owner).appendTo(ticketOwner.container.contactInfo);
 
             var ticketAssigned = $(document.createElement("h4")).html('Assigned To').addClass('mt-3').appendTo(row.col2.row1.col1);
             ticketAssigned.container = $(document.createElement("div")).addClass('d-flex justify-content-start align-items-center ms-2 user-select-none cursor-pointer').appendTo(row.col2.row1.col1);
             ticketAssigned.container.avatar = new Avatar(
-                Ticket.assignedTo,
+                Record.assignedTo,
                 {
                     class: {
                         object: "rounded-circle",
@@ -423,7 +423,7 @@ $(document).ready(function(){
                 },
             ).appendTo(ticketAssigned.container);
             ticketAssigned.container.contactInfo = $(document.createElement("div")).addClass('ms-2 d-flex flex-column justify-content-center align-items-start').appendTo(ticketAssigned.container);
-            ticketAssigned.container.contactInfo.contact = $(document.createElement("strong")).text(Ticket.assignedTo).appendTo(ticketAssigned.container.contactInfo);
+            ticketAssigned.container.contactInfo.contact = $(document.createElement("strong")).text(Record.assignedTo).appendTo(ticketAssigned.container.contactInfo);
             ticketAssigned.container.contactInfo.title = $(document.createElement("span")).text('Team Lead Customer Support').appendTo(ticketAssigned.container.contactInfo);
             // Change Assigned To
             ticketAssigned.modal = new Modal(
@@ -444,7 +444,7 @@ $(document).ready(function(){
                     $(document.createElement("option")).attr('value','john.doe@domain.com').html('john.doe@domain.com').appendTo(element.select);
                     $(document.createElement("option")).attr('value','jane.doe@domain.com').html('jane.doe@domain.com').appendTo(element.select);
                     $(document.createElement("option")).attr('value','david.brown@domain.com').html('david.brown@domain.com').appendTo(element.select);
-                    element.select.val(Ticket.assignedTo);
+                    element.select.val(Record.assignedTo);
                 },
             );
 
@@ -477,23 +477,18 @@ $(document).ready(function(){
                         right: 'title'
                     },
                     initialView: 'dayGridMonth',
-                    initialDate: Ticket.start,
+                    initialDate: Record.start,
                     events: [
                         {
-                            title: Ticket.subject,
-                            description: Ticket.description,
+                            title: Record.subject,
+                            description: Record.description,
                             icon: 'question',
-                            start: Ticket.start,
-                            end: Ticket.end,
+                            start: Record.start,
+                            end: Record.end,
                             allDay: true,
                             color: 'info',
                         },
                     ],
-                },
-                function(calendar){
-                    $('#sidebarToggle').click(function(){
-                        calendar.render();
-                    });
                 },
             );
 
@@ -515,11 +510,11 @@ $(document).ready(function(){
                 },
                 function(list){
                     list.item(
-                        { icon: 'hash', field: Ticket.remoteID, click: function(item){ Helper.copyToClipboard(Ticket.remoteID); } },
+                        { icon: 'hash', field: Record.remoteID, click: function(item){ Helper.copyToClipboard(Record.remoteID); } },
                         function(item){},
                     );
                     list.item(
-                        { icon: 'key-fill', field: Ticket.remotePassword, click: function(item){ Helper.copyToClipboard(Ticket.remotePassword); } },
+                        { icon: 'key-fill', field: Record.remotePassword, click: function(item){ Helper.copyToClipboard(Record.remotePassword); } },
                         function(item){},
                     );
                 }, 
@@ -539,7 +534,7 @@ $(document).ready(function(){
                     },
                 },
                 function(list){
-                    for(const [key, file] of Object.entries(Ticket.files)){
+                    for(const [key, file] of Object.entries(Record.files)){
                         var icon = "file-earmark";
                         list.item(
                             { icon: icon, field: file.filename, click: function(item){} },
@@ -558,7 +553,7 @@ $(document).ready(function(){
                     tools: { upload: { icon: "plus-lg", label: "Add", color: "success", callback: function(tool){} } },
                 },
                 function(list){
-                    for(const [category, values] of Object.entries(Ticket.references)){
+                    for(const [category, values] of Object.entries(Record.references)){
                         list.item(
                             function(item){
                                 item.field.container = $(document.createElement("div")).addClass('d-flex justify-content-start align-items-center').appendTo(item.field);
@@ -595,7 +590,7 @@ $(document).ready(function(){
                     },
                 },
                 function(list){
-                    for(const [key, value] of Object.entries(Ticket.meta)){
+                    for(const [key, value] of Object.entries(Record.meta)){
                         list.item(
                             { field: value, click: function(item){} },
                             function(item){},
@@ -626,10 +621,10 @@ $(document).ready(function(){
                         } else {
                             controls.share.addClass('d-none');
                         }
-                        if( ! subCategory.opts.showClose || Ticket.status >= 8 ){
+                        if( ! subCategory.opts.showClose || Record.status >= 8 ){
                             controls.close.addClass('d-none');
                         }
-                        if( ! subCategory.opts.showArchive || Ticket.status != 8 ){
+                        if( ! subCategory.opts.showArchive || Record.status != 8 ){
                             controls.archive.addClass('d-none');
                         }
                         if( subCategory.opts.showReferences){
@@ -671,13 +666,13 @@ $(document).ready(function(){
                             calContainer.hide();
                             calContainer.calendar.render();
                         }
-                        if( subCategory.opts.lockCategory || Ticket.status > 7 ){
+                        if( subCategory.opts.lockCategory || Record.status > 7 ){
                             details.category.select.attr('disabled', 'disabled');
                         }
-                        if( subCategory.opts.lockSubCategory || Ticket.status > 7 ){
+                        if( subCategory.opts.lockSubCategory || Record.status > 7 ){
                             details.subCategory.select.attr('disabled', 'disabled');
                         }
-                        if( subCategory.opts.lockItem || Ticket.status > 7 ){
+                        if( subCategory.opts.lockItem || Record.status > 7 ){
                             details.item.select.attr('disabled', 'disabled');
                         }
                         if( details.category.select.attr('disabled') === 'disabled' && details.subCategory.select.attr('disabled') === 'disabled' && details.item.select.attr('disabled') === 'disabled' ){
@@ -763,9 +758,9 @@ $(document).ready(function(){
             });
             
             // Update the category, sub category and item lists
-            details.category.update(Ticket.category);
-            details.subCategory.update(Ticket.subCategory);
-            details.item.update(Ticket.item);
+            details.category.update(Record.category);
+            details.subCategory.update(Record.subCategory);
+            details.item.update(Record.item);
         },
     );
 });

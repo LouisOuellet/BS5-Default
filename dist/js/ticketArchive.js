@@ -49,7 +49,7 @@ $(document).ready(function(){
                                         action: function ( e, dt, node, config ) {
 
                                             // Filter logic
-                                            dt.columns(5).search( 'jane.doe@domain.com' ).draw();
+                                            dt.columns(5).search( AssignedTo ).draw();
 
                                             // Hide column
                                             dt.column(5).visible(false);
@@ -96,7 +96,7 @@ $(document).ready(function(){
                                         action: function ( e, dt, node, config ) {
 
                                             // Filter logic
-                                            dt.columns(2).search( 'michael.smith@domain.com' ).draw();
+                                            dt.columns(2).search( Owner ).draw();
 
                                             // Hide column
                                             dt.column(2).visible(false);
@@ -284,13 +284,19 @@ $(document).ready(function(){
                     },
                 },
                 function(table,datatable){
-                    datatable.columns(2).search('michael.smith@domain.com').draw();
-                    datatable.column(2).visible(false);
-                    datatable.columns(5).search('jane.doe@domain.com').draw();
-                    datatable.column(5).visible(false);
-                    for(const [key, record] of Object.entries(Records)){
-                        if(record.status >= 9){
-                            table.add(record);
+                    if(typeof Owner !== 'undefined' && Owner !== null){
+                        datatable.columns(2).search(Owner).draw();
+                        datatable.column(2).visible(false);
+                    }
+                    if(typeof AssignedTo !== 'undefined' && AssignedTo !== null){
+                        datatable.columns(5).search(AssignedTo).draw();
+                        datatable.column(5).visible(false);
+                    }
+                    if(typeof Records !== 'undefined' && Records !== null){
+                        for(const [key, record] of Object.entries(Records)){
+                            if(record.status >= 9){
+                                table.add(record);
+                            }
                         }
                     }
                 }, 
