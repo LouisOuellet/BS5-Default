@@ -15802,4 +15802,44 @@ a.fc-event {
   opacity: 0.9;
 }
 
+.ide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: auto;
+  position: relative;
+  border-radius: 0;
+}
+
+.ide * {
+  font-family: monospace;
+  font-size: 16px;
+  line-height: 20px;
+  white-space: pre;
+  padding: 10px;
+}
+
+.ide div.ide-lines {
+  background-color: #eee;
+  color: #222;
+  text-align: right;
+  width: 50px;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  user-select: none;
+}
+
+.ide textarea.ide-input {
+  background-color: #222;
+  color: #eee;
+  text-align: left;
+  flex-grow: 1;
+  z-index: 0;
+  overflow-wrap: normal;
+  overflow-y: hidden;
+  overflow-x: auto;
+  resize: none;
+}
+
 /*# sourceMappingURL=styles.css.map */

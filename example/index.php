@@ -151,6 +151,16 @@
                     "icon" => "caret-down-square",
                     "link" => "?p=dropdown",
                 ],
+                "ide" => [
+                    "label" => "IDE",
+                    "icon" => "pencil-square",
+                    "link" => "?p=ide",
+                ],
+                "mce" => [
+                    "label" => "MCE",
+                    "icon" => "pencil-square",
+                    "link" => "?p=mce",
+                ],
                 "feed" => [
                     "label" => "Feed",
                     "icon" => "chat-left-text",
@@ -343,6 +353,11 @@
                             "link" => "?p=dispatchDetails",
                         ],
                     ],
+                ],
+                "editors" => [
+                    "label" => "Editors",
+                    "icon" => "pencil-square",
+                    "link" => "?p=editors",
                 ],
                 "error" => [
                     "label" => "Error",
@@ -932,6 +947,9 @@
 
         <!-- ======= Showdown.JS ======= -->
         <script src="/plugins/showdown/js/showdown.min.js"></script>
+
+        <!-- ======= Turndown.JS ======= -->
+        <script src="/plugins/turndown/js/turndown.js"></script>
 
         <!-- ======= TinyMCE.JS ======= -->
         <script src="/plugins/tinymce/tinymce.min.js"></script>

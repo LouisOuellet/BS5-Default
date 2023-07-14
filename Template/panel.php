@@ -265,6 +265,9 @@ function renderCrumbs($route, $routes) {
         <!-- ======= Showdown.JS ======= -->
         <script src="/plugins/showdown/js/showdown.min.js"></script>
 
+        <!-- ======= Turndown.JS ======= -->
+        <script src="/plugins/turndown/js/turndown.js"></script>
+
         <!-- ======= TinyMCE.JS ======= -->
         <script src="/plugins/tinymce/tinymce.min.js"></script>
         <script src="/plugins/tinymce/js/tinymce-jquery.min.js"></script>

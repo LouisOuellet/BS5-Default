@@ -73,7 +73,7 @@ class UtilitySearch {
 
         // Add Search Event
 		if(typeof object === 'object' && object != null){
-			this.#field.keyup(function(){
+			this.#field.on('input propertychange',function(){
 				if($(this).val() !== ''){
                     object.find('[data-search]').hide();
                     object.find('[data-search*="'+$(this).val().toString().toUpperCase()+'"]').show();
@@ -172,6 +172,40 @@ class UtilityHelper {
         const userAgent = navigator.userAgent;
         var mobileDeviceUserAgents = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
         return mobileDeviceUserAgents.test(userAgent);
+    }
+
+    // Convert to Markdown
+    htmlToMarkdown(html) {
+        const converter = new TurndownService();
+
+        // Use '#' for headers
+        converter.addRule('heading', {
+            filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+            replacement: function(content, node) {
+                var hLevel = node.nodeName.charAt(1);
+                var hPrefix = '';
+                for(var i=0; i<hLevel; i++){
+                    hPrefix += '#';
+                }
+                return '\n\n' + hPrefix + ' ' + content + '\n\n';
+            }
+        });
+    
+        // Use triple backticks for code blocks
+        converter.addRule('codeBlock', {
+            filter: 'pre',
+            replacement: function(content) {
+                return '\n\n```' + '\n' + content + '\n' + '```\n\n';
+            }
+        });
+
+        return converter.turndown(html);
+    }
+
+    // Convert to HTML
+    markdownToHTML(markdown) {
+        const converter = new showdown.Converter();
+        return converter.makeHtml(markdown);
     }
 
     // Check the OS Type
@@ -5688,6 +5722,7 @@ class Feed {
         },
         defaults: {
             username: null,
+            title: null,
             content: null,
             datetime: null,
             class: {
@@ -5987,6 +6022,15 @@ class Feed {
             order = defaults.order;
         }
 		post.attr('data-order',order);
+
+        // Create Title Block
+        post.title = $(document.createElement('div')).addClass('title-block').appendTo(post);
+        post.title.header = $(document.createElement('h2')).addClass('title').appendTo(post.title);
+
+        // Set Title
+        if(defaults.title != null){
+            post.title.header.text(defaults.title);
+        }
 
         // Create User Block
         post.user = $(document.createElement('div')).addClass('user-block user-select-none').appendTo(post);
@@ -8568,7 +8612,6 @@ class Calendar {
         } else {
 
             // Return Error
-            console.error('Calendar: No selector specified');
             return false;
         }
 
@@ -9034,6 +9077,511 @@ class Calendar {
 
         // Return Object
         return this;
+    }
+}
+
+// IDE
+class IDE {
+
+    #object = null;
+    #editor = null;
+    #options = {
+        class: {
+            ide: null,
+            numbers: null,
+            input: null,
+        },
+        callback: {
+            input: null,
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string' || param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Create Object
+		this.#object = $(document.createElement('div')).addClass('ide').attr('id','IDE' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Add IDE Lines
+        this.#object.lines = $(document.createElement('div')).addClass('ide-lines').appendTo(this.#object);
+
+        // Add IDE Input
+        this.#editor = $(document.createElement('textarea')).addClass('ide-input').appendTo(this.#object);
+
+        // Add IDE Events
+        this.#editor
+            .keydown(function(e) {
+                if(e.keyCode === 9) {
+                    e.preventDefault();
+
+                    var start = this.selectionStart;
+                    var end = this.selectionEnd;
+                    
+                    this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 1;
+                }
+            })
+            .on('input propertychange', function() {
+                var lines = $(this).val().split('\n').length;
+                var lineNumbers = '';
+                for (var i = 1; i <= lines; i++) {
+                    lineNumbers += i + '\n';
+                }
+                self.#object.lines.text(lineNumbers);
+            })
+            .trigger('propertychange')
+
+        // Set IDE Class
+        if(this.#options.class.ide){
+            this.#object.addClass(this.#options.class.ide);
+        }
+
+        // Set Line Numbers Class
+        if(this.#options.class.numbers){
+            this.#object.lines.addClass(this.#options.class.numbers);
+        }
+
+        // Set Input Class
+        if(this.#options.class.input){
+            this.#editor.addClass(this.#options.class.input);
+        }
+
+        // Execute Callback Input
+        if(typeof this.#options.callback.input === 'function'){
+            this.#editor.on('input propertychange', function() {
+                self.#options.callback.input(this,self);
+            });
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+
+        // Check if Selector is Set
+        if(selector != null){
+
+            // Append to Selector
+            this.appendTo(selector);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    appendTo(object){
+        
+        // Append Object To
+        this.#object.appendTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    prependTo(object){
+        
+        // Prepend Object To
+        this.#object.prependTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    append(object){
+        
+        // Append Object
+        this.#object.append(object);
+
+        // Return Object
+        return this;
+    }
+
+    prepend(object){
+        
+        // Prepend Object
+        this.#object.prepend(object);
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#object[0].outerHTML;
+    }
+
+    show(){
+
+        // Show Object
+        this.#object.show();
+
+        // Return Object
+        return this;
+    }
+
+    hide(){
+
+        // Hide Object
+        this.#object.hide();
+
+        // Return Object
+        return this;
+    }
+
+    sync(){
+        this.#editor.trigger('propertychange');
+    }
+
+    val(value = null){
+
+        if(value){
+
+            // Set Input Value
+            this.#editor.val(value).trigger('propertychange');
+
+            // Return Object
+            return this;
+        }
+
+        // Return Input Value
+        return this.#editor.val();
+    }
+
+    toHTML(){
+
+        // Return Input Value as HTML
+        return Helper.markdownToHTML(this.val());
+    }
+
+    toMarkdown(){
+
+        // Return Input Value as Markdown
+        return Helper.htmlToMarkdown(this.val());
+    }
+}
+
+// MCE
+class MCE {
+
+    #object = null;
+    #editor = null;
+    #options = {
+        class: {
+            mce: null,
+        },
+        callback: {
+            input: null,
+        },
+    };
+
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
+
+        let selector = null;
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2, param3].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'string' || param instanceof jQuery) {
+                    selector = param;
+                } else if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        // Configure Options
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Create Object
+		this.#object = $(document.createElement('div')).addClass('mce').attr('id','MCE' + builderCount);
+        this.#object.id = this.#object.attr('id');
+
+        // Add IDE Input
+        this.#object.input = $(document.createElement('textarea')).appendTo(this.#object);
+
+        // Add MCE Events
+        this.#object.input.tinymce({
+            height: 400,
+            width: '100%',
+            menubar: false,
+            plugins: [
+                'advlist','autolink',
+                'lists','link','image','charmap','preview','anchor','searchreplace','visualblocks',
+                'fullscreen','insertdatetime','media','table','help','wordcount'
+            ],
+            toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help',
+            init_instance_callback: function (editor) {
+                self.#editor = editor;
+                var container = $(editor.getContainer());
+                container.find('.tox-statusbar').addClass("d-none");
+
+                // Execute Callback Input
+                if(typeof self.#options.callback.input === 'function'){
+                    editor.on('input propertychange', function() {
+                        self.#options.callback.input(editor,self);
+                    });
+                }
+            },
+        });
+
+        // Set IDE Class
+        if(this.#options.class.mce){
+            this.#object.addClass(this.#options.class.mce);
+        }
+
+        // Execute Callback Input
+        if(typeof this.#options.callback.input === 'function'){
+            this.#object.input.on('input propertychange', function() {
+                self.#options.callback.input(this,self);
+            });
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#object);
+        }
+
+        // Check if Selector is Set
+        if(selector != null){
+
+            // Append to Selector
+            this.appendTo(selector);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Return Object
+        return this;
+    }
+
+    appendTo(object){
+        
+        // Append Object To
+        this.#object.appendTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    prependTo(object){
+        
+        // Prepend Object To
+        this.#object.prependTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    append(object){
+        
+        // Append Object
+        this.#object.append(object);
+
+        // Return Object
+        return this;
+    }
+
+    prepend(object){
+        
+        // Prepend Object
+        this.#object.prepend(object);
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#object.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#object.text();
+    }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#object[0].outerHTML;
+    }
+
+    show(){
+
+        // Show Object
+        this.#object.show();
+
+        // Return Object
+        return this;
+    }
+
+    hide(){
+
+        // Hide Object
+        this.#object.hide();
+
+        // Return Object
+        return this;
+    }
+
+    val(value = null){
+
+        // Set Self
+        const self = this;
+
+        if(value){
+
+            // Set Input Value
+            if(this.#editor){
+                this.#editor.setContent(value);
+                // Execute Callback Input
+                if(typeof this.#options.callback.input === 'function'){
+                    this.#options.callback.input(this.#editor,this);
+                }
+            } else {
+                var interval = setInterval(function() {
+                    if(self.#editor){
+                        clearInterval(interval);
+                        self.#editor.setContent(value);
+                        // Execute Callback Input
+                        if(typeof self.#options.callback.input === 'function'){
+                            self.#options.callback.input(self.#editor,self);
+                        }
+                    }
+                }, 100);
+            }
+
+            // Return Object
+            return this;
+        }
+
+        // Return Input Value
+        return this.#editor.getContent();
+    }
+
+    toHTML(){
+
+        // Return Input Value as HTML
+        return Helper.markdownToHTML(this.val());
+    }
+
+    toMarkdown(){
+
+        // Return Input Value as Markdown
+        return Helper.htmlToMarkdown(this.val());
     }
 }
 

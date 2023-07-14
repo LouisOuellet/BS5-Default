@@ -1,20 +1,30 @@
 $(document).ready(function(){
 
     const Form = {
+        card: $('#new'),
         title: $('#newTitle'),
         article: $('#newArticle'),
     }
     const Preview = {
+        card: $('#preview'),
         title: $('#previewTitle'),
         article: $('#previewArticle'),
     }
 
-    Form.title.change(function(){
+    Preview.card.find('.timeago').timeago();
+
+    Form.title.on('input propertychange',function(){
         Preview.title.html(Form.title.val());
     });
-    Form.article.change(function(){
-        var converter = new showdown.Converter(),
-            html = converter.makeHtml(Form.article.val());
-        Preview.article.html(html);
-    });
+
+    const IDEEditor = new IDE(
+        Form.article,
+        {
+            callback: {
+                input: function(input,editor){
+                    Preview.article.html(editor.toHTML());
+                }
+            }
+        }
+    );
 });
