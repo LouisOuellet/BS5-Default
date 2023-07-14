@@ -20,7 +20,7 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <div class="p-2">
-                            <img src="https://www.gravatar.com/avatar/e05b4330e145079f1d73aa859b23ab86?s=128&amp;d=mp" data-avatar="john.doe@domain.com" alt="mdo" width="72" height="72" class="rounded-circle">
+                            <img src="" data-avatar="john.doe@domain.com" alt="mdo" width="72" height="72" class="rounded-circle">
                         </div>
                         <div class="flex-grow-1 p-2">
                             <h6 class="my-0 mb-1">john.doe@domain.com</h6>

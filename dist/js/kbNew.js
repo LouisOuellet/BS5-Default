@@ -11,6 +11,14 @@ $(document).ready(function(){
         article: $('#previewArticle'),
     }
 
+    // Set Avatar
+    Preview.card.find('img[data-avatar]').each(function () {
+        if (!$(this).attr('src')) {
+            const avatar = new Gravatar($(this).attr('data-avatar'));
+            $(this).attr('src',avatar.url())
+        }
+    });
+
     Preview.card.find('.timeago').timeago();
 
     Form.title.on('input propertychange',function(){
