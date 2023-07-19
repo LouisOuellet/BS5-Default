@@ -174,6 +174,32 @@ class UtilityHelper {
         return mobileDeviceUserAgents.test(userAgent);
     }
 
+    // Function to retrieve the available Bootstrap Icons
+    bootstrapIcons() {
+        const styleSheets = document.styleSheets;
+        var icons = [];
+  
+        for (const styleSheet of styleSheets) {
+            const rules = styleSheet.rules || styleSheet.cssRules;
+    
+            for (const rule of rules) {
+                if(typeof rule.selectorText === 'undefined'){ continue; }
+
+                if (rule.selectorText.startsWith(".bi-")) {
+
+                    const iconName = rule.selectorText.slice(4);
+
+                    // Remove "::before" from the icon name
+                    const cleanedIconName = iconName.replace("::before", "");
+
+                    icons.push(cleanedIconName);
+                }
+            }
+        }
+
+        return icons;
+    }
+
     // Convert to Markdown
     htmlToMarkdown(html) {
         const converter = new TurndownService();
@@ -3541,6 +3567,7 @@ class List {
     #options = {
         class: {
             list: null,
+            item: null,
         },
         callback: {
             tool: null,
@@ -3712,7 +3739,12 @@ class List {
         }
 
         // Create Item
-		let item = $(document.createElement('li')).addClass('list-group-item user-select-none').css('transition','all 300ms ease 0s').appendTo(this.#list);
+		let item = $(document.createElement('li')).addClass('list-group-item item user-select-none').css('transition','all 300ms ease 0s').appendTo(this.#list);
+
+        // Add Item Class
+		if(this.#options.class.item){
+			item.addClass(this.#options.class.item);
+		}
 
         // Save Options
         item.options = defaults;
@@ -3797,6 +3829,17 @@ class List {
         // Execute Callback
         if(typeof callback === 'function'){
             callback(item,self);
+        }
+
+        // Check if rounded
+        if(this.#list.hasClass('rounded') && this.#list.find('li.item').length > 0){
+            this.#list.find('li.item').removeClass('rounded rounded-top rounded-bottom');
+            if(this.#list.find('li.item').length === 1){
+                this.#list.find('li.item').addClass('rounded');
+            } else {
+                this.#list.find('li.item:first').addClass('rounded-top');
+                this.#list.find('li.item:last').addClass('rounded-bottom');
+            }
         }
 
         // Set Item Search
