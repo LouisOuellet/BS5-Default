@@ -12091,6 +12091,168 @@ textarea.form-control-lg {
   backdrop-filter: none !important;
 }
 
+.bg-primary {
+  background-color: #d9230f !important;
+}
+
+.text-bg-primary {
+  background-color: #d9230f !important;
+  color: #fff !important;
+}
+
+.bg-secondary {
+  background-color: #fff !important;
+}
+
+.text-bg-secondary {
+  background-color: #fff !important;
+  color: #373a3c !important;
+}
+
+.bg-success {
+  background-color: #469408 !important;
+}
+
+.text-bg-success {
+  background-color: #469408 !important;
+  color: #fff !important;
+}
+
+.bg-info {
+  background-color: #029acf !important;
+}
+
+.text-bg-info {
+  background-color: #029acf !important;
+  color: #fff !important;
+}
+
+.bg-warning {
+  background-color: #d9831f !important;
+}
+
+.text-bg-warning {
+  background-color: #d9831f !important;
+  color: #fff !important;
+}
+
+.bg-danger {
+  background-color: #9b479f !important;
+}
+
+.text-bg-danger {
+  background-color: #9b479f !important;
+  color: #fff !important;
+}
+
+.bg-light {
+  background-color: #fff !important;
+}
+
+.text-bg-light {
+  background-color: #fff !important;
+  color: #373a3c !important;
+}
+
+.bg-dark {
+  background-color: #373a3c !important;
+}
+
+.text-bg-dark {
+  background-color: #373a3c !important;
+  color: #fff !important;
+}
+
+.bg-blue {
+  background-color: #007bff !important;
+}
+
+.text-bg-blue {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+.bg-indigo {
+  background-color: #6610f2 !important;
+}
+
+.text-bg-indigo {
+  background-color: #6610f2 !important;
+  color: #fff !important;
+}
+
+.bg-purple {
+  background-color: #9b479f !important;
+}
+
+.text-bg-purple {
+  background-color: #9b479f !important;
+  color: #fff !important;
+}
+
+.bg-pink {
+  background-color: #e83e8c !important;
+}
+
+.text-bg-pink {
+  background-color: #e83e8c !important;
+  color: #fff !important;
+}
+
+.bg-red {
+  background-color: #d9230f !important;
+}
+
+.text-bg-red {
+  background-color: #d9230f !important;
+  color: #fff !important;
+}
+
+.bg-orange {
+  background-color: #d9831f !important;
+}
+
+.text-bg-orange {
+  background-color: #d9831f !important;
+  color: #fff !important;
+}
+
+.bg-yellow {
+  background-color: #ffc107 !important;
+}
+
+.text-bg-yellow {
+  background-color: #ffc107 !important;
+  color: #373a3c !important;
+}
+
+.bg-green {
+  background-color: #469408 !important;
+}
+
+.text-bg-green {
+  background-color: #469408 !important;
+  color: #fff !important;
+}
+
+.bg-teal {
+  background-color: #20c997 !important;
+}
+
+.text-bg-teal {
+  background-color: #20c997 !important;
+  color: #fff !important;
+}
+
+.bg-cyan {
+  background-color: #029acf !important;
+}
+
+.text-bg-cyan {
+  background-color: #029acf !important;
+  color: #fff !important;
+}
+
 .cursor-alias {
   cursor: alias;
 }
@@ -12713,6 +12875,106 @@ textarea.form-control-lg {
 }
 .blink-dark, .blink-dark button {
   animation: blink-dark 2s infinite;
+}
+
+@keyframes blink-blue {
+  50% {
+    background-color: #007bff;
+    color: #fff;
+  }
+}
+.blink-blue, .blink-blue button {
+  animation: blink-blue 2s infinite;
+}
+
+@keyframes blink-indigo {
+  50% {
+    background-color: #6610f2;
+    color: #fff;
+  }
+}
+.blink-indigo, .blink-indigo button {
+  animation: blink-indigo 2s infinite;
+}
+
+@keyframes blink-purple {
+  50% {
+    background-color: #9b479f;
+    color: #fff;
+  }
+}
+.blink-purple, .blink-purple button {
+  animation: blink-purple 2s infinite;
+}
+
+@keyframes blink-pink {
+  50% {
+    background-color: #e83e8c;
+    color: #fff;
+  }
+}
+.blink-pink, .blink-pink button {
+  animation: blink-pink 2s infinite;
+}
+
+@keyframes blink-red {
+  50% {
+    background-color: #d9230f;
+    color: #fff;
+  }
+}
+.blink-red, .blink-red button {
+  animation: blink-red 2s infinite;
+}
+
+@keyframes blink-orange {
+  50% {
+    background-color: #d9831f;
+    color: #373a3c;
+  }
+}
+.blink-orange, .blink-orange button {
+  animation: blink-orange 2s infinite;
+}
+
+@keyframes blink-yellow {
+  50% {
+    background-color: #ffc107;
+    color: #373a3c;
+  }
+}
+.blink-yellow, .blink-yellow button {
+  animation: blink-yellow 2s infinite;
+}
+
+@keyframes blink-green {
+  50% {
+    background-color: #469408;
+    color: #fff;
+  }
+}
+.blink-green, .blink-green button {
+  animation: blink-green 2s infinite;
+}
+
+@keyframes blink-teal {
+  50% {
+    background-color: #20c997;
+    color: #373a3c;
+  }
+}
+.blink-teal, .blink-teal button {
+  animation: blink-teal 2s infinite;
+}
+
+@keyframes blink-cyan {
+  50% {
+    background-color: #029acf;
+    color: #fff;
+  }
+}
+.blink-cyan, .blink-cyan button {
+  animation: blink-cyan 2s infinite;
 }
 
 @keyframes fade {
@@ -15660,6 +15922,7 @@ a.fc-event {
   line-height: 20px;
   white-space: pre;
   padding: 10px;
+  border: none;
 }
 
 .ide div.ide-lines {

@@ -12327,7 +12327,7 @@ legend {
 
 .text-bg-black-0 {
   background-color: rgba(0, 0, 0, 0) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-10 {
@@ -12336,7 +12336,7 @@ legend {
 
 .text-bg-black-10 {
   background-color: rgba(0, 0, 0, 0.1) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-20 {
@@ -12345,7 +12345,7 @@ legend {
 
 .text-bg-black-20 {
   background-color: rgba(0, 0, 0, 0.2) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-30 {
@@ -12354,7 +12354,7 @@ legend {
 
 .text-bg-black-30 {
   background-color: rgba(0, 0, 0, 0.3) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-40 {
@@ -12363,7 +12363,7 @@ legend {
 
 .text-bg-black-40 {
   background-color: rgba(0, 0, 0, 0.4) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-50 {
@@ -12372,7 +12372,7 @@ legend {
 
 .text-bg-black-50 {
   background-color: rgba(0, 0, 0, 0.5) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-60 {
@@ -12381,7 +12381,7 @@ legend {
 
 .text-bg-black-60 {
   background-color: rgba(0, 0, 0, 0.6) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-70 {
@@ -12390,7 +12390,7 @@ legend {
 
 .text-bg-black-70 {
   background-color: rgba(0, 0, 0, 0.7) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-80 {
@@ -12399,7 +12399,7 @@ legend {
 
 .text-bg-black-80 {
   background-color: rgba(0, 0, 0, 0.8) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-90 {
@@ -12408,7 +12408,7 @@ legend {
 
 .text-bg-black-90 {
   background-color: rgba(0, 0, 0, 0.9) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-0 {
@@ -12417,7 +12417,7 @@ legend {
 
 .text-bg-black-0 {
   background-color: rgba(0, 0, 0, 0) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-25 {
@@ -12426,7 +12426,7 @@ legend {
 
 .text-bg-black-25 {
   background-color: rgba(0, 0, 0, 0.25) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-50 {
@@ -12435,7 +12435,7 @@ legend {
 
 .text-bg-black-50 {
   background-color: rgba(0, 0, 0, 0.5) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-black-75 {
@@ -12444,13 +12444,175 @@ legend {
 
 .text-bg-black-75 {
   background-color: rgba(0, 0, 0, 0.75) !important;
-  color: #fff !important;
+  color: #44d9e8 !important;
 }
 
 .bg-transparent {
   background-color: transparent !important;
   background-image: none !important;
   backdrop-filter: none !important;
+}
+
+.bg-primary {
+  background-color: #6f42c1 !important;
+}
+
+.text-bg-primary {
+  background-color: #6f42c1 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-secondary {
+  background-color: #ea39b8 !important;
+}
+
+.text-bg-secondary {
+  background-color: #ea39b8 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-success {
+  background-color: #3cf281 !important;
+}
+
+.text-bg-success {
+  background-color: #3cf281 !important;
+  color: #170229 !important;
+}
+
+.bg-info {
+  background-color: #1ba2f6 !important;
+}
+
+.text-bg-info {
+  background-color: #1ba2f6 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.text-bg-warning {
+  background-color: #ffc107 !important;
+  color: #170229 !important;
+}
+
+.bg-danger {
+  background-color: #e44c55 !important;
+}
+
+.text-bg-danger {
+  background-color: #e44c55 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-light {
+  background-color: #44d9e8 !important;
+}
+
+.text-bg-light {
+  background-color: #44d9e8 !important;
+  color: #170229 !important;
+}
+
+.bg-dark {
+  background-color: #170229 !important;
+}
+
+.text-bg-dark {
+  background-color: #170229 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-blue {
+  background-color: #1ba2f6 !important;
+}
+
+.text-bg-blue {
+  background-color: #1ba2f6 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-indigo {
+  background-color: #6610f2 !important;
+}
+
+.text-bg-indigo {
+  background-color: #6610f2 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-purple {
+  background-color: #6f42c1 !important;
+}
+
+.text-bg-purple {
+  background-color: #6f42c1 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-pink {
+  background-color: #ea39b8 !important;
+}
+
+.text-bg-pink {
+  background-color: #ea39b8 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-red {
+  background-color: #e44c55 !important;
+}
+
+.text-bg-red {
+  background-color: #e44c55 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-orange {
+  background-color: #f1b633 !important;
+}
+
+.text-bg-orange {
+  background-color: #f1b633 !important;
+  color: #170229 !important;
+}
+
+.bg-yellow {
+  background-color: #ffc107 !important;
+}
+
+.text-bg-yellow {
+  background-color: #ffc107 !important;
+  color: #170229 !important;
+}
+
+.bg-green {
+  background-color: #3cf281 !important;
+}
+
+.text-bg-green {
+  background-color: #3cf281 !important;
+  color: #170229 !important;
+}
+
+.bg-teal {
+  background-color: #3f81a2 !important;
+}
+
+.text-bg-teal {
+  background-color: #3f81a2 !important;
+  color: #44d9e8 !important;
+}
+
+.bg-cyan {
+  background-color: #32fbe2 !important;
+}
+
+.text-bg-cyan {
+  background-color: #32fbe2 !important;
+  color: #170229 !important;
 }
 
 .cursor-alias {
@@ -13075,6 +13237,106 @@ legend {
 }
 .blink-dark, .blink-dark button {
   animation: blink-dark 2s infinite;
+}
+
+@keyframes blink-blue {
+  50% {
+    background-color: #1ba2f6;
+    color: #170229;
+  }
+}
+.blink-blue, .blink-blue button {
+  animation: blink-blue 2s infinite;
+}
+
+@keyframes blink-indigo {
+  50% {
+    background-color: #6610f2;
+    color: #44d9e8;
+  }
+}
+.blink-indigo, .blink-indigo button {
+  animation: blink-indigo 2s infinite;
+}
+
+@keyframes blink-purple {
+  50% {
+    background-color: #6f42c1;
+    color: #44d9e8;
+  }
+}
+.blink-purple, .blink-purple button {
+  animation: blink-purple 2s infinite;
+}
+
+@keyframes blink-pink {
+  50% {
+    background-color: #ea39b8;
+    color: #44d9e8;
+  }
+}
+.blink-pink, .blink-pink button {
+  animation: blink-pink 2s infinite;
+}
+
+@keyframes blink-red {
+  50% {
+    background-color: #e44c55;
+    color: #44d9e8;
+  }
+}
+.blink-red, .blink-red button {
+  animation: blink-red 2s infinite;
+}
+
+@keyframes blink-orange {
+  50% {
+    background-color: #f1b633;
+    color: #170229;
+  }
+}
+.blink-orange, .blink-orange button {
+  animation: blink-orange 2s infinite;
+}
+
+@keyframes blink-yellow {
+  50% {
+    background-color: #ffc107;
+    color: #170229;
+  }
+}
+.blink-yellow, .blink-yellow button {
+  animation: blink-yellow 2s infinite;
+}
+
+@keyframes blink-green {
+  50% {
+    background-color: #3cf281;
+    color: #170229;
+  }
+}
+.blink-green, .blink-green button {
+  animation: blink-green 2s infinite;
+}
+
+@keyframes blink-teal {
+  50% {
+    background-color: #3f81a2;
+    color: #44d9e8;
+  }
+}
+.blink-teal, .blink-teal button {
+  animation: blink-teal 2s infinite;
+}
+
+@keyframes blink-cyan {
+  50% {
+    background-color: #32fbe2;
+    color: #170229;
+  }
+}
+.blink-cyan, .blink-cyan button {
+  animation: blink-cyan 2s infinite;
 }
 
 @keyframes fade {
@@ -16022,6 +16284,7 @@ a.fc-event {
   line-height: 20px;
   white-space: pre;
   padding: 10px;
+  border: none;
 }
 
 .ide div.ide-lines {

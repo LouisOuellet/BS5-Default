@@ -25,6 +25,16 @@
                 </div>
                 <div class="accordion-item bg-transparent">
                     <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settingsMenuMaintenance" aria-expanded="false" aria-controls="settingsMenuMaintenance">
+                            <i class="bi bi-tools me-1"></i>Maintenance
+                        </button>
+                    </h2>
+                    <div id="settingsMenuMaintenance" class="accordion-collapse collapse" data-bs-parent="#settingsMenu">
+                        <div class="accordion-body p-0" id="settingsMenuMaintenanceMenu"></div>
+                    </div>
+                </div>
+                <div class="accordion-item bg-transparent">
+                    <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settingsMenuLogger" aria-expanded="false" aria-controls="settingsMenuLogger">
                             <i class="bi bi-body-text me-1"></i>Logger
                         </button>
@@ -36,11 +46,17 @@
             </div>
         </div>
         <div class="col-8 col-lg-9">
-            <div class="card card-body">
+            <div class="card">
                 <div class="accordion" id="settingsContent"></div>
             </div>
         </div>
     </div>
 </div>
+<script src="/js/sampleData.js"></script>
+<script>
+    const Users = sampleUsers;
+    const Organizations = sampleOrganizations;
+    const Versions = sampleVersions;
+</script>
 <script src="/js/settings.js"></script>
 <!-- ======= End Settings ======= -->

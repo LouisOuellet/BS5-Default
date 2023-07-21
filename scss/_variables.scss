@@ -16,3 +16,26 @@ $ribbon-xl-wrapper-size: 180px !default;
 $ribbon-xl-width: 240px !default;
 $ribbon-xl-top: 47px !default;
 $ribbon-xl-right: 4px !default;
+
+// Colors
+// --------------------------------------------------------
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "light": $light,
+    "dark": $dark,
+    "blue": $blue,
+    "indigo": $indigo,
+    "purple": $purple,
+    "pink": $pink,
+    "red": $red,
+    "orange": $orange,
+    "yellow": $yellow,
+    "green": $green,
+    "teal": $teal,
+    "cyan": $cyan,
+);

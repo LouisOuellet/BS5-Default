@@ -2091,6 +2091,12 @@ class Dropdown {
         // Return Object
         return this.#object.text();
     }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#object[0].outerHTML;
+    }
 }
 
 // Progress Bar
@@ -6528,7 +6534,7 @@ class Table {
                     icon: "three-dots-vertical",
                     class: {
                         object: "dropstart",
-                        button: "px-3 py-2",
+                        button: "p-0 px-2",
                     },
                 },
                 function(dropdown){
@@ -6552,7 +6558,7 @@ class Table {
                     title: "Action",
                     data: null,
                     width: '80px',
-                    defaultContent: this.#object.actions.html(),
+                    defaultContent: this.#object.actions.outerHTML(),
                 }
             );
         }

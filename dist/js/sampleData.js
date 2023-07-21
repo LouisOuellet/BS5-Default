@@ -34,12 +34,126 @@ const sampleContacts = [
     'david.brown@domain.com',
 ];
 
-var sampleFilesTickets = [];
+var tmpUsers = [];
+for(const [key, username] of Object.entries(sampleContacts)){
+    var domain = username.split('@').pop();
+    var name = username.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    var randomOwner = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
+    var randomUpdatedBy = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
+    tmpUsers.push({
+        'id':key, 
+        'created':sampleDate, 
+        'modified':sampleDate, 
+        'owner':randomOwner, 
+        'updatedBy':randomUpdatedBy, 
+        'username':username,
+        'passwordSalt':null,
+        'passwordHash':null,
+        '2FASalt':null,
+        '2FAHash':null,
+        'last2FA':sampleDate,
+        '2FAMethod':'["smtp"]',
+        'bearerToken':null,
+        'name':name,
+        'address':null,
+        'city':null,
+        'state':null,
+        'country':null,
+        'zipcode':null,
+        'phone':null,
+        'mobile':null,
+        'status':0,
+        'database':'SQL',
+        'server':'[]',
+        'domain':domain,
+        'sessionId':null,
+        'attempts':0,
+        'lastAttempt':null,
+        'requests':1,
+        'lastRequest':null,
+        'isActive':1,
+        'isVerified':1,
+        'verifiedSalt':null,
+        'verifiedHash':null,
+        'verifiedOn':sampleDate,
+        'verifiedUntil':sampleDate,
+        'isBanned':0,
+        'isDeleted':0,
+        'isAPI':0,
+        'isContactInfoDynamic':1,
+    });
+}
+const sampleUsers = tmpUsers;
+
+var tmpOrganizations = [];
+var tmpOrganizationsUnique = new Set(); // Use a Set to store unique values
+for(const [key, username] of Object.entries(sampleContacts)){
+    var rootDomain = username.split('@').pop();
+    
+    // Check if the rootDomain is already in the set
+    if (tmpOrganizationsUnique.has(rootDomain)) {
+        continue; // Skip the iteration if it's a duplicate
+    }
+    
+    // Add the rootDomain to the set
+    tmpOrganizationsUnique.add(rootDomain);
+
+    var domain = rootDomain.split('.')[0];
+    var name = domain.replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    var randomOwner = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
+    var randomUpdatedBy = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
+    tmpOrganizations.push({
+        'id':key, 
+        'created':sampleDate, 
+        'modified':sampleDate, 
+        'owner':randomOwner, 
+        'updatedBy':randomUpdatedBy, 
+        'name':name,
+        'sbnr/ein':null,
+        'address':null,
+        'city':null,
+        'state':null,
+        'country':null,
+        'zipcode':null,
+        'email':null,
+        'fax':null,
+        'phone':null,
+        'tollfree':null,
+        'website':null,
+        'domain':rootDomain,
+        'database':'SQL',
+        'server':'[]',
+        'isSubsidiary':0,
+        'isDeleted':0,
+        'isActive':1,
+    });
+}
+const sampleOrganizations = tmpOrganizations;
+
+const sampleVersions = [
+    {name:'portal',label:'Portal',version:'4.5.0',color:'info',icon:'bootstrap'},
+    {name:'bootstrap',label:'Bootstrap',version:'4.5.0',color:'indigo',icon:'bootstrap'},
+    {name:'bs5-default',label:'Theme',version:'4.5.0',color:'indigo',icon:'bootstrap'},
+    {name:'php-auth',label:'Auth',version:'4.5.0',color:'success',icon:'bootstrap'},
+    {name:'php-cli',label:'CLI',version:'4.5.0',color:'primary',icon:'bootstrap'},
+    {name:'php-configurator',label:'Configurator',version:'4.5.0',color:'warning',icon:'bootstrap'},
+    {name:'php-csrf',label:'CSRF',version:'4.5.0',color:'success',icon:'bootstrap'},
+    {name:'php-database',label:'Database',version:'4.5.0',color:'green',icon:'bootstrap'},
+    {name:'php-imap',label:'IMAP',version:'4.5.0',color:'teal',icon:'bootstrap'},
+    {name:'php-logger',label:'Logger',version:'4.5.0',color:'info',icon:'bootstrap'},
+    {name:'php-net',label:'Net',version:'4.5.0',color:'success',icon:'bootstrap'},
+    {name:'php-router',label:'Router',version:'4.5.0',color:'teal',icon:'bootstrap'},
+    {name:'php-sms',label:'SMS',version:'4.5.0',color:'success',icon:'bootstrap'},
+    {name:'php-smtp',label:'SMTP',version:'4.5.0',color:'success',icon:'bootstrap'},
+    {name:'php-updater',label:'Updater',version:'4.5.0',color:'warning',icon:'bootstrap'},
+];
+
+var tmpFilesTickets = [];
 for(const [key, file] of Object.entries(['manifest.pdf','billoflading.pdf','purchaseorder.pdf','commercialinvoice.pdf'])){
     var extension = file.split('.').pop();
     var randomOwner = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
     var randomUpdatedBy = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
-    sampleFilesTickets.push({
+    tmpFilesTickets.push({
         id:key, 
         created:sampleDate, 
         modified:sampleDate, 
@@ -57,17 +171,18 @@ for(const [key, file] of Object.entries(['manifest.pdf','billoflading.pdf','purc
         isAttachment:true,
     });
 }
+const sampleFilesTickets = tmpFilesTickets;
 
 const sampleFiles = {
     default: [],
     tickets: sampleFilesTickets,
 };
 
-var samplePostsTickets = [];
+var tmpPostsTickets = [];
 for (var id = 1; id <= 10; id++){
     var randomOwner = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
     var randomUpdatedBy = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
-    samplePostsTickets.push({
+    tmpPostsTickets.push({
         id:id, 
         created:sampleDate, 
         modified:sampleDate, 
@@ -76,6 +191,7 @@ for (var id = 1; id <= 10; id++){
         content:sampleLoremContent,
     });
 }
+const samplePostsTickets = tmpPostsTickets;
 
 const samplePosts = {
     default: [],
@@ -423,7 +539,7 @@ const sampleCategories = {
     },
 };
 
-var sampleRecordsTickets = [];
+var tmpRecordsTickets = [];
 for (var id = 1; id <= 20; id++){
     var randomOwner = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
     var randomUpdatedBy = sampleContacts[Math.floor(Math.random() * sampleContacts.length)];
@@ -484,8 +600,9 @@ for (var id = 1; id <= 20; id++){
     if(typeof randomItem !== 'undefined' && typeof randomItem.label !== 'undefined'){
         sample.item = randomItem.label;
     }
-    sampleRecordsTickets.push(sample);
+    tmpRecordsTickets.push(sample);
 }
+const sampleRecordsTickets = tmpRecordsTickets;
 
 const sampleRecords = {
     default: [],

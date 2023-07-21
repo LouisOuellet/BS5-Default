@@ -1,37 +1,54 @@
+// Functions
+@function textColor($bgColor) {
+	$red: red($bgColor);
+	$green: green($bgColor);
+	$blue: blue($bgColor);
+
+	$luminance: 0.2126 * math.div($red, 255) + 0.7152 * math.div($green, 255) + 0.0722 * math.div($blue, 255);
+
+	@if ($luminance > 0.7) {
+		@return $dark;
+	} @else {
+		@return $light;
+	}
+}
+
 // Background
 
 $count: 0;
 @while $count < 10 {
-  $index: 10 * $count;
-  $value: calc($count / 10);
+	$index: 10 * $count;
+	$value: calc($count / 10);
+	$color: rgba(0, 0, 0, $value);
 
-  .bg-black-#{$index} {
-    background-color: rgba(0, 0, 0, $value) !important;
-  }
+	.bg-black-#{$index} {
+		background-color: $color !important;
+	}
 
-  .text-bg-black-#{$index} {
-    background-color: rgba(0, 0, 0, $value) !important;
-    color: #fff !important;
-  }
+	.text-bg-black-#{$index} {
+		background-color: $color !important;
+		color: textColor($color) !important;
+	}
 
-  $count: $count + 1;
+	$count: $count + 1;
 }
 
 $count: 0;
 @while $count < 4 {
-  $index: 25 * $count;
-  $value: calc($index / 100);
+	$index: 25 * $count;
+	$value: calc($index / 100);
+	$color: rgba(0, 0, 0, $value);
 
-  .bg-black-#{$index} {
-    background-color: rgba(0, 0, 0, $value) !important;
-  }
+	.bg-black-#{$index} {
+		background-color: $color !important;
+	}
 
-  .text-bg-black-#{$index} {
-    background-color: rgba(0, 0, 0, $value) !important;
-    color: #fff !important;
-  }
+	.text-bg-black-#{$index} {
+		background-color: $color !important;
+		color: textColor($color) !important;
+	}
 
-  $count: $count + 1;
+	$count: $count + 1;
 }
 
 // Transparent
@@ -40,4 +57,17 @@ $count: 0;
     background-color: transparent !important;
     background-image: none !important;
     backdrop-filter: none !important;
+}
+
+// Adding all colors
+@each $color, $value in $theme-colors {
+
+	.bg-#{$color} {
+		background-color: $value !important;
+	}
+
+	.text-bg-#{$color} {
+		background-color: $value !important;
+		color: textColor($value) !important;
+	}
 }

@@ -11993,7 +11993,7 @@ legend {
 
 .text-bg-black-0 {
   background-color: rgba(0, 0, 0, 0) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-10 {
@@ -12002,7 +12002,7 @@ legend {
 
 .text-bg-black-10 {
   background-color: rgba(0, 0, 0, 0.1) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-20 {
@@ -12011,7 +12011,7 @@ legend {
 
 .text-bg-black-20 {
   background-color: rgba(0, 0, 0, 0.2) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-30 {
@@ -12020,7 +12020,7 @@ legend {
 
 .text-bg-black-30 {
   background-color: rgba(0, 0, 0, 0.3) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-40 {
@@ -12029,7 +12029,7 @@ legend {
 
 .text-bg-black-40 {
   background-color: rgba(0, 0, 0, 0.4) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-50 {
@@ -12038,7 +12038,7 @@ legend {
 
 .text-bg-black-50 {
   background-color: rgba(0, 0, 0, 0.5) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-60 {
@@ -12047,7 +12047,7 @@ legend {
 
 .text-bg-black-60 {
   background-color: rgba(0, 0, 0, 0.6) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-70 {
@@ -12056,7 +12056,7 @@ legend {
 
 .text-bg-black-70 {
   background-color: rgba(0, 0, 0, 0.7) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-80 {
@@ -12065,7 +12065,7 @@ legend {
 
 .text-bg-black-80 {
   background-color: rgba(0, 0, 0, 0.8) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-90 {
@@ -12074,7 +12074,7 @@ legend {
 
 .text-bg-black-90 {
   background-color: rgba(0, 0, 0, 0.9) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-0 {
@@ -12083,7 +12083,7 @@ legend {
 
 .text-bg-black-0 {
   background-color: rgba(0, 0, 0, 0) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-25 {
@@ -12092,7 +12092,7 @@ legend {
 
 .text-bg-black-25 {
   background-color: rgba(0, 0, 0, 0.25) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-50 {
@@ -12101,7 +12101,7 @@ legend {
 
 .text-bg-black-50 {
   background-color: rgba(0, 0, 0, 0.5) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-black-75 {
@@ -12110,13 +12110,175 @@ legend {
 
 .text-bg-black-75 {
   background-color: rgba(0, 0, 0, 0.75) !important;
-  color: #fff !important;
+  color: #222 !important;
 }
 
 .bg-transparent {
   background-color: transparent !important;
   background-image: none !important;
   backdrop-filter: none !important;
+}
+
+.bg-primary {
+  background-color: #2a9fd6 !important;
+}
+
+.text-bg-primary {
+  background-color: #2a9fd6 !important;
+  color: #222 !important;
+}
+
+.bg-secondary {
+  background-color: #555 !important;
+}
+
+.text-bg-secondary {
+  background-color: #555 !important;
+  color: #222 !important;
+}
+
+.bg-success {
+  background-color: #77b300 !important;
+}
+
+.text-bg-success {
+  background-color: #77b300 !important;
+  color: #222 !important;
+}
+
+.bg-info {
+  background-color: #93c !important;
+}
+
+.text-bg-info {
+  background-color: #93c !important;
+  color: #222 !important;
+}
+
+.bg-warning {
+  background-color: #f80 !important;
+}
+
+.text-bg-warning {
+  background-color: #f80 !important;
+  color: #222 !important;
+}
+
+.bg-danger {
+  background-color: #c00 !important;
+}
+
+.text-bg-danger {
+  background-color: #c00 !important;
+  color: #222 !important;
+}
+
+.bg-light {
+  background-color: #222 !important;
+}
+
+.text-bg-light {
+  background-color: #222 !important;
+  color: #222 !important;
+}
+
+.bg-dark {
+  background-color: #adafae !important;
+}
+
+.text-bg-dark {
+  background-color: #adafae !important;
+  color: #222 !important;
+}
+
+.bg-blue {
+  background-color: #2a9fd6 !important;
+}
+
+.text-bg-blue {
+  background-color: #2a9fd6 !important;
+  color: #222 !important;
+}
+
+.bg-indigo {
+  background-color: #6610f2 !important;
+}
+
+.text-bg-indigo {
+  background-color: #6610f2 !important;
+  color: #222 !important;
+}
+
+.bg-purple {
+  background-color: #6f42c1 !important;
+}
+
+.text-bg-purple {
+  background-color: #6f42c1 !important;
+  color: #222 !important;
+}
+
+.bg-pink {
+  background-color: #e83e8c !important;
+}
+
+.text-bg-pink {
+  background-color: #e83e8c !important;
+  color: #222 !important;
+}
+
+.bg-red {
+  background-color: #c00 !important;
+}
+
+.text-bg-red {
+  background-color: #c00 !important;
+  color: #222 !important;
+}
+
+.bg-orange {
+  background-color: #fd7e14 !important;
+}
+
+.text-bg-orange {
+  background-color: #fd7e14 !important;
+  color: #222 !important;
+}
+
+.bg-yellow {
+  background-color: #f80 !important;
+}
+
+.text-bg-yellow {
+  background-color: #f80 !important;
+  color: #222 !important;
+}
+
+.bg-green {
+  background-color: #77b300 !important;
+}
+
+.text-bg-green {
+  background-color: #77b300 !important;
+  color: #222 !important;
+}
+
+.bg-teal {
+  background-color: #20c997 !important;
+}
+
+.text-bg-teal {
+  background-color: #20c997 !important;
+  color: #222 !important;
+}
+
+.bg-cyan {
+  background-color: #93c !important;
+}
+
+.text-bg-cyan {
+  background-color: #93c !important;
+  color: #222 !important;
 }
 
 .cursor-alias {
@@ -12741,6 +12903,106 @@ legend {
 }
 .blink-dark, .blink-dark button {
   animation: blink-dark 2s infinite;
+}
+
+@keyframes blink-blue {
+  50% {
+    background-color: #2a9fd6;
+    color: #adafae;
+  }
+}
+.blink-blue, .blink-blue button {
+  animation: blink-blue 2s infinite;
+}
+
+@keyframes blink-indigo {
+  50% {
+    background-color: #6610f2;
+    color: #222;
+  }
+}
+.blink-indigo, .blink-indigo button {
+  animation: blink-indigo 2s infinite;
+}
+
+@keyframes blink-purple {
+  50% {
+    background-color: #6f42c1;
+    color: #222;
+  }
+}
+.blink-purple, .blink-purple button {
+  animation: blink-purple 2s infinite;
+}
+
+@keyframes blink-pink {
+  50% {
+    background-color: #e83e8c;
+    color: #222;
+  }
+}
+.blink-pink, .blink-pink button {
+  animation: blink-pink 2s infinite;
+}
+
+@keyframes blink-red {
+  50% {
+    background-color: #c00;
+    color: #222;
+  }
+}
+.blink-red, .blink-red button {
+  animation: blink-red 2s infinite;
+}
+
+@keyframes blink-orange {
+  50% {
+    background-color: #fd7e14;
+    color: #adafae;
+  }
+}
+.blink-orange, .blink-orange button {
+  animation: blink-orange 2s infinite;
+}
+
+@keyframes blink-yellow {
+  50% {
+    background-color: #f80;
+    color: #adafae;
+  }
+}
+.blink-yellow, .blink-yellow button {
+  animation: blink-yellow 2s infinite;
+}
+
+@keyframes blink-green {
+  50% {
+    background-color: #77b300;
+    color: #adafae;
+  }
+}
+.blink-green, .blink-green button {
+  animation: blink-green 2s infinite;
+}
+
+@keyframes blink-teal {
+  50% {
+    background-color: #20c997;
+    color: #adafae;
+  }
+}
+.blink-teal, .blink-teal button {
+  animation: blink-teal 2s infinite;
+}
+
+@keyframes blink-cyan {
+  50% {
+    background-color: #93c;
+    color: #222;
+  }
+}
+.blink-cyan, .blink-cyan button {
+  animation: blink-cyan 2s infinite;
 }
 
 @keyframes fade {
@@ -15688,6 +15950,7 @@ a.fc-event {
   line-height: 20px;
   white-space: pre;
   padding: 10px;
+  border: none;
 }
 
 .ide div.ide-lines {
