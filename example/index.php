@@ -1345,10 +1345,11 @@
                         <!-- ======= End Page Title and Breadcrumbs ======= -->
 
                         <!-- ======= Builder.JS ======= -->
-                        <script src="/js/builder.js"></script>
+                        <!-- <script src="/js/builder.js"></script> -->
+                        <script src="/js/builder2.js"></script>
 
                         <!-- ======= Panel.JS ======= -->
-                        <script src="/js/panel.js"></script>
+                        <!-- <script src="/js/panel.js"></script> -->
             
                         <!-- ======= Page Content ======= -->
                         <div class="row mt-4 px-3 mx-0 pb-3">

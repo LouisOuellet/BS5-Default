@@ -1,103 +1,21 @@
-$(document).ready(function () {
+// Settings
+class layoutSettings {
 
-    const ContentMenu = $('#settingsMenu');
-
-    const ContentAccordion = $('#settingsContent');
-
-    var ContentAccordionCount = 0;
-    const ContentAdd = function(param1 = null, param2 = null){
-
-        let options = {};
-        let callback = null;
-
-        // Set selector, options, and callback
-        [param1, param2].forEach(param => {
-            if(param !== null){
-                if (typeof param === 'object') {
-                    options = param;
-                } else if (typeof param === 'function') {
-                    callback = param;
-                }
-            }
-        });
-
-        // Configure Options
-        let defaults = {
-            id: null,
-            icon: null,
-            header: null,
-        };
-        for(const [key, value] of Object.entries(options)){
-            if(typeof defaults[key] !== 'undefined'){
-                defaults[key] = value;
-            }
-        }
-
-        // Create Item
-		let item = $(document.createElement('div')).addClass('accordion-collapse collapse').attr('data-bs-parent','#settingsContent').appendTo(ContentAccordion);
-
-        // Save settings
-        item.options = defaults;
-
-        // Add ID
-        if(item.options.id !== null){
-            item.attr('id',item.options.id);
-        }
-
-        // Add Header
-        item.header = $(document.createElement('div')).addClass('accordion-header card-body pb-0').appendTo(item);
-        item.header.title = $(document.createElement('h4')).text(item.options.header).appendTo(item.header)
-        item.header.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + item.options.icon).prependTo(item.header.title);
-
-        // Check for icon
-        if(item.options.icon === null){
-            item.header.icon.remove();
-        }
-
-        // Check for header
-        if(item.options.header === null){
-            item.header.remove();
-        }
-
-        // Add Form
-		item.form = $(document.createElement('form')).attr({'method': 'post','autocomplete': 'off'}).addClass('card-body').appendTo(item);
-
-        // Prevent Default
-        item.form.on('submit', function(e){
-            e.preventDefault();
-        });
-
-        // Add Form Fields Container
-        item.form.fields = $(document.createElement('div')).appendTo(item.form);
-
-        // Add Submit Button
-        item.form.submit = $(document.createElement('button')).attr({'type': 'submit'}).addClass('btn btn-success w-100').text('Save').appendTo(item.form);
-        item.form.submit.icon = $(document.createElement('i')).addClass('bi bi-save me-1').prependTo(item.form.submit);
-
-        // Open first item
-        if(ContentAccordion.children().length > 0){
-            ContentAccordion.children().first().addClass('show');
-        }
-
-        // Add Event Listener
-        item.on('show.bs.collapse', function(){
-            // Clear Active
-            ContentMenu.find('.active').removeClass('active');
-            // Set Active
-            ContentMenu.find('[data-bs-target="#'+item.options.id+'"]').addClass('active');
-        });
-
-        // Callback
-        if(typeof callback === 'function'){
-            callback(item);
-        }
-
-        // Return item
-        return item;
+    #layout = null;
+    #options = {
+        class: {
+            layout: null,
+            content: null,
+            menu: null,
+        },
     };
+    #count = 0;
+    #forms = {};
 
-    var FormFieldCount = 0;
-    const FormFieldAdd = function(param1, param2 = null, param3 = null){
+	constructor(param1 = null, param2 = null, param3 = null){
+
+        // Set Self
+        const self = this;
 
         let selector = null;
         let options = {};
@@ -117,637 +35,567 @@ $(document).ready(function () {
         });
 
         // Configure Options
-        let defaults = {
-            id: null,
-            name: null,
-            label: null,
-            icon: 'input-cursor-text',
-            type: 'text',
-            value: null,
-            options: null,
-        };
-        switch(defaults.type){
-            case 'textarea':
-                defaults.icon = 'textarea-t';
-                break;
-            case 'select':
-                defaults.icon = 'list';
-                break;
-            default:
-                defaults.icon = 'input-cursor-text';
-                break;
+        this.config(options);
+
+        // Increment Count
+        builderCount++;
+
+        // Create Layout
+		this.#layout = $(document.createElement('div')).addClass('row').attr('id','layout' + builderCount);
+        this.#layout.id = this.#layout.attr('id');
+
+        // Create side menu
+        this.#layout.menu = $(document.createElement('div')).addClass('col-4 col-lg-3').appendTo(this.#layout);
+        this.#layout.menu.accordion = $(document.createElement('div')).addClass('accordion').attr('id',this.#layout.id + 'menu').appendTo(this.#layout.menu);
+        this.#layout.menu.id = this.#layout.menu.accordion.attr('id');
+
+        // Create content
+        this.#layout.content = $(document.createElement('div')).addClass('col-8 col-lg-9').appendTo(this.#layout);
+        this.#layout.content.card = $(document.createElement('div')).addClass('card').appendTo(this.#layout.content);
+        this.#layout.content.accordion = $(document.createElement('div')).addClass('accordion').attr('id',this.#layout.id + 'content').appendTo(this.#layout.content.card);
+        this.#layout.content.id = this.#layout.content.accordion.attr('id');
+
+        // Set Object Class
+        if(this.#options.class.layout){
+            this.#layout.addClass(this.#options.class.layout);
         }
+
+        // Set Object Class
+        if(this.#options.class.menu){
+            this.#layout.menu.addClass(this.#options.class.menu);
+        }
+
+        // Set Object Class
+        if(this.#options.class.content){
+            this.#layout.content.addClass(this.#options.class.content);
+        }
+
+        // Execute Callback
+        if(typeof callback === 'function'){
+            callback(this,this.#layout);
+        }
+
+        // Check if Selector is Set
+        if(selector != null){
+
+            // Append to Selector
+            this.appendTo(selector);
+        }
+    }
+
+    config(options = {}){
+
+        // Configure Options
         for(const [key, value] of Object.entries(options)){
-            if(typeof defaults[key] !== 'undefined'){
-                defaults[key] = value;
+            if(typeof this.#options[key] !== 'undefined'){
+                switch(key){
+                    case"defaults":
+                        if(typeof this.#options[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof this.#options[key][k] !== 'undefined'){
+                                    this.#options[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    case"class":
+                        for(const [section, classes] of Object.entries(value)){
+                            if(this.#options[key][section] != null){
+                                this.#options[key][section] += ' ' + classes;
+                            } else {
+                                this.#options[key][section] = classes;
+                            }
+                        }
+                        break;
+                    default:
+                        this.#options[key] = value;
+                        break;
+                }
             }
         }
 
-        // Check for selector
-        if(selector === null){
-            return false;
+        // Return Object
+        return this;
+    }
+
+    add(param1 = null, param2 = null){
+
+        const self = this;
+
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        let properties = {
+            icon: 'gear',
+            label: null,
+            class: null,
+        };
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"callback":
+                        if(typeof properties[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof properties[key][k] !== 'undefined'){
+                                    properties[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
         }
 
-        // Increment Form Field Count
-        FormFieldCount++;
+        // Increment Count
+        this.#count++;
 
-        // Create Field
-		let field = $(document.createElement('div')).addClass('input-group mb-3').appendTo(selector);
-        field.id = "settingsFormField" + FormFieldCount;
-        field.label = $(document.createElement('label')).addClass('input-group-text').attr('for',field.id).text(defaults.label).appendTo(field);
-        field.label.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + defaults.icon).prependTo(field.label);
-        switch(defaults.type){
-            case 'textarea':
-                field.input = $(document.createElement('textarea')).addClass('form-control').attr({'id': field.id, 'name': defaults.name, 'autocomplete': 'off'}).appendTo(field);
-                break;
-            case 'select':
-                field.input = $(document.createElement('select')).addClass('form-select').attr({'id': field.id, 'name': defaults.name, 'autocomplete': 'off'}).appendTo(field);
-                if(defaults.options !== null){
-                    for(const [key, option] of Object.entries(defaults.options)){
-                        field.input.option = $(document.createElement('option')).attr('value',option.id).text(option.text).appendTo(field.input);
+        // Create Category
+        var category = $(document.createElement('div')).addClass('accordion-item bg-transparent').appendTo(this.#layout.menu.accordion);
+        category.id = this.#layout.menu.id + 'category' + this.#count;
+        category.properties = properties;
+
+        // Create Header
+        category.header = $(document.createElement('h2')).addClass('accordion-header').appendTo(category);
+
+        // Create Button
+        category.button = $(document.createElement('button')).attr({
+            'type': 'button',
+            'data-bs-toggle': 'collapse',
+            'aria-expanded': 'false',
+            'class': 'accordion-button collapsed',
+            'type': 'button',
+            'id': category.id + 'button',
+        }).text(properties.label).appendTo(category.header);
+        category.button.id = category.button.attr('id');
+        category.button.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(category.button);
+
+        // Create Collapse
+        category.collapse = $(document.createElement('div')).attr({
+            'id': category.id,
+            'class': 'accordion-collapse collapse',
+            'data-bs-parent': '#' + this.#layout.menu.id,
+        }).appendTo(category);
+        category.collapse.id = category.collapse.attr('id');
+
+        // Configure Button
+        category.button.attr({
+            'aria-controls': category.collapse.id,
+            'data-bs-target': '#' + category.collapse.id,
+        });
+
+        // Create Menu
+        category.menu = $(document.createElement('div')).attr({
+            'id': category.id + 'menu',
+            'class': 'accordion-body p-0',
+            'data-bs-parent': '#' + this.#layout.menu.id,
+        }).appendTo(category.collapse);
+        category.menu.id = category.menu.attr('id');
+
+        // Create Menu List
+        category.menu.list = $(document.createElement('ul')).attr({
+            'id': category.menu.id + 'list',
+            'class': 'list-group list-group-flush w-100',
+        }).appendTo(category.menu);
+        category.menu.list.id = category.menu.list.attr('id');
+
+        // Add method to add content
+        category.add = function(param1 = null, param2 = null){
+            self.#item(category,param1,param2);
+        }
+
+        if(properties.icon == null){
+            category.button.icon.remove();
+        }
+
+        if(properties.class){
+            category.addClass(properties.class);
+        }
+
+        if(this.#count <= 1){
+            category.button.removeClass('collapsed').attr('aria-expanded',true);
+            category.collapse.addClass('show');
+        }
+
+        if(typeof callback === "function"){
+            callback(category,self);
+        }
+
+        // Return
+        return this;
+    }
+
+    #item(category, param1 = null, param2 = null){
+
+        const self = this;
+
+        let options = {};
+        let callback = null;
+
+        // Set selector, options, and callback
+        [param1, param2].forEach(param => {
+            if(param !== null){
+                if (typeof param === 'object') {
+                    options = param;
+                } else if (typeof param === 'function') {
+                    callback = param;
+                }
+            }
+        });
+
+        let properties = {
+            icon: 'gear',
+            label: null,
+            class: null,
+            body: false,
+            form: true,
+            submit: function(form){},
+        };
+
+        // Configure Options
+        for(const [key, value] of Object.entries(options)){
+            if(typeof properties[key] !== 'undefined'){
+                switch(key){
+                    case"callback":
+                        if(typeof properties[key] !== 'undefined'){
+                            for(const [k, v] of Object.entries(value)){
+                                if(typeof properties[key][k] !== 'undefined'){
+                                    properties[key][k] = v;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        properties[key] = value;
+                        break;
+                }
+            }
+        }
+
+        // Increment Count
+        this.#count++;
+
+        // Create Content Item
+        var content = $(document.createElement('div')).attr({
+            'id': category.id + 'content' + this.#count,
+            'class': 'accordion-collapse collapse',
+            'data-bs-parent': '#' + this.#layout.content.id,
+        }).appendTo(this.#layout.content.accordion);
+        content.id = content.attr('id');
+        content.properties = properties;
+        content.header = $(document.createElement('div')).attr({
+            'class': 'accordion-header card-body pb-0',
+        }).appendTo(content);
+        content.header.title = $(document.createElement('h4')).text(properties.label).appendTo(content.header);
+        content.header.title.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(content.header.title);
+        content.body = $(document.createElement('div')).addClass('card-body').appendTo(content);
+        content.form = $(document.createElement('form')).attr({
+            'class': 'card-body',
+            'method': 'post',
+            'autocomplete': 'off',
+        }).appendTo(content);
+        content.form.inputs = $(document.createElement('div')).appendTo(content.form);
+        content.form.submit = $(document.createElement('button')).attr({
+            'class': 'btn btn-success w-100',
+            'type': 'submit',
+        }).text('Save').appendTo(content.form);
+        content.form.submit.icon = $(document.createElement('i')).addClass('bi bi-save me-1').prependTo(content.form.submit);
+        this.#forms[content.id] = {};
+        content.form.val = function(values = null){
+            // Set Values
+            if(typeof values === 'object'){
+                for(const [key, value] of Object.entries(values)){
+                    if(typeof self.#forms[content.id][key] !== 'undefined'){
+                        self.#forms[content.id][key].val(value);
                     }
                 }
-                break;
-            default:
-                field.input = $(document.createElement('input')).addClass('form-control').attr({'type': defaults.type, 'id': field.id, 'name': defaults.name, 'value': defaults.value, 'autocomplete': 'off'}).appendTo(field);
-                break;
-        }
+            }
 
-        // Save settings
-        field.options = defaults;
+            // Retrieve Values
+            values = {};
+            for(const [key, input] of Object.entries(self.#forms[content.id])){
+                values[key] = input.val();
+            }
 
-        // Add ID
-        if(field.options.id !== null){
-            field.attr('id',field.options.id);
-        }
-
-        // Check for icon
-        if(field.options.icon === null){
-            field.label.icon.remove();
-        }
-
-        // Callback
-        if(typeof callback === 'function'){
-            callback(field);
-        }
-
-        // Return Field
-        return field;
-    };
-
-    const GeneralMenu = new List(
-        "#settingsMenuGeneralMenu",
-        {
-            class: {
-                list: "w-100",
-            },
-            icon: 'gear',
-            callback: {
-                item: function(item, list){
-                    ContentAccordionCount++;
-                    item.id = "settingsContentGeneralMenu" + ContentAccordionCount;
-                    item.attr({
-                        "id": item.id,
-                        "data-bs-toggle": "collapse",
-                        "data-bs-target": "#" + item.id + "Content",
-                    });
-                    item.content = ContentAdd({
-                        id:item.id + "Content",
-                        header: item.text(),
-                        icon: item.options.icon,
-                    });
-                },
-            },
-        },
-        function(list){
-            list.item(
-                {
-                    icon: 'journal-richtext',
-                    field: "About",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                    item.body = $(document.createElement('div')).addClass('card-body').appendTo(item.content);
-                    item.content.logo = $(document.createElement('div')).addClass('d-flex flex-column justify-content-center align-items-center').appendTo(item.body);
-                    item.content.logo.icon = $(document.createElement('i')).css({'font-size':'200px'}).addClass('bi bi-bootstrap-fill').appendTo(item.content.logo);
-                    item.content.logo.brand = $(document.createElement('h1')).text('Panel').appendTo(item.content.logo);
-                    item.content.badges = $(document.createElement('div')).addClass('d-flex flex-wrap justify-content-center align-items-center').appendTo(item.body);
-                    for(const [key, version] of Object.entries(Versions)){
-                        item.content.badges[version.name] = $(document.createElement('div')).addClass('badge bg-dark p-0 fs-4 m-1').appendTo(item.content.badges);
-                        item.content.badges[version.name].label = $(document.createElement('span')).addClass('badge text-bg-' + version.color).text(version.label).appendTo(item.content.badges[version.name]);
-                        item.content.badges[version.name].label.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + version.icon).prependTo(item.content.badges[version.name].label);
-                        item.content.badges[version.name].version = $(document.createElement('span')).addClass('badge').text(version.version).appendTo(item.content.badges[version.name]);
+            // Return
+            return values;
+        };
+        content.form.add = function(param1, param2 = null){
+    
+            let selector = content.form.inputs;
+            let options = {};
+            let callback = null;
+    
+            // Set selector, options, and callback
+            [param1, param2].forEach(param => {
+                if(param !== null){
+                    if (typeof param === 'object') {
+                        options = param;
+                    } else if (typeof param === 'function') {
+                        callback = param;
                     }
-                },
-            );
-            list.item(
-                {
-                    icon: 'arrow-repeat',
-                    field: "Updates",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                    item.body = $(document.createElement('div')).addClass('card-body').appendTo(item.content);
-                },
-            );
-            list.item(
-                {
-                    icon: 'sliders',
-                    field: "Identity",
-                    click: function(item){},
-                },
-                function(item){
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "name",
-                            label: "Name",
-                            icon: "app-indicator",
-                            value: "Panel",
-                        },
-                    );
-                },
-            );
-            list.item(
-                {
-                    icon: "database",
-                    field: "Database",
-                    click: function(item){},
-                },
-                function(item){
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "host",
-                            label: "Host",
-                            icon: "hdd-network",
-                            value: "localhost",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "database",
-                            label: "Database",
-                            icon: "database",
-                            value: "demo",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "username",
-                            label: "Username",
-                            icon: "person",
-                            value: "demo",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "password",
-                            label: "Password",
-                            icon: "lock",
-                            type: "password",
-                            value: "demo",
-                        },
-                    );
-                },
-            );
-            list.item(
-                {
-                    icon: "send",
-                    field: "SMTP",
-                    click: function(item){},
-                },
-                function(item){
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "host",
-                            label: "Host",
-                            icon: "hdd-network",
-                            value: "localhost",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "port",
-                            label: "Port",
-                            icon: "ethernet",
-                            type: "number",
-                            value: "465",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "encryption",
-                            label: "Encryption",
-                            icon: "shield",
-                            type: "select",
-                            value: "ssl",
-                            options: [
-                                {id: "ssl", text: "SSL"},
-                                {id: "tls", text: "TLS"},
-                                {id: "none", text: "None"},
-                            ],
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "username",
-                            label: "Username",
-                            icon: "person",
-                            value: "demo",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "password",
-                            label: "Password",
-                            icon: "lock",
-                            type: "password",
-                            value: "demo",
-                        },
-                    );
-                },
-            );
-            list.item(
-                {
-                    icon: "chat-square-text",
-                    field: "SMS",
-                    click: function(item){},
-                },
-                function(item){
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "provider",
-                            label: "Provider",
-                            icon: "reception-4",
-                            type: "select",
-                            value: "twilio",
-                            options: [
-                                {id: "twilio", text: "Twilio"},
-                            ],
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "sid",
-                            label: "SID",
-                            value: "ABCDEF1234567890",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "token",
-                            label: "Token",
-                            value: "ABCDEF1234567890",
-                        },
-                    );
-                    FormFieldAdd(
-                        item.content.form.fields,
-                        {
-                            name: "phone",
-                            label: "Phone",
-                            icon: "telephone",
-                            value: "+01234567890",
-                        },
-                    );
-                },
-            );
-        }, 
-    );
+                }
+            });
+    
+            // Configure Options
+            let defaults = {
+                name: null,
+                label: null,
+                icon: 'input-cursor-text',
+                type: 'text',
+                value: null,
+                options: null,
+            };
+            switch(defaults.type){
+                case 'textarea':
+                    defaults.icon = 'textarea-t';
+                    break;
+                case 'select':
+                    defaults.icon = 'list';
+                    break;
+                default:
+                    defaults.icon = 'input-cursor-text';
+                    break;
+            }
+            for(const [key, value] of Object.entries(options)){
+                if(typeof defaults[key] !== 'undefined'){
+                    defaults[key] = value;
+                }
+            }
+    
+            // Increment Count
+            self.#count++;
+    
+            // Create Field
+            let field = $(document.createElement('div')).attr({
+                'id': content.id + 'group' + self.#count,
+                'class': 'input-group mb-3',
+            }).appendTo(selector);
+            field.id = field.attr('id');
+            field.options = defaults;
 
-    const AuthenticationMenu = new List(
-        "#settingsMenuAuthenticationMenu",
-        {
-            class: {
-                list: "w-100",
-            },
-            icon: 'gear',
-            callback: {
-                item: function(item, list){
-                    ContentAccordionCount++;
-                    item.id = "settingsContentGeneralMenu" + ContentAccordionCount;
-                    item.attr({
-                        "id": item.id,
-                        "data-bs-toggle": "collapse",
-                        "data-bs-target": "#" + item.id + "Content",
-                    });
-                    item.content = ContentAdd({
-                        id:item.id + "Content",
-                        header: item.text(),
-                        icon: item.options.icon,
-                    });
-                },
-            },
-        },
-        function(list){
-            list.item(
-                {
-                    icon: 'people',
-                    field: "Groups",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                },
-            );
-            list.item(
-                {
-                    icon: 'person',
-                    field: "Users",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                    item.content.table = new Table(
-                        item.content,
-                        {
-                            class: {
-                                buttons: 'px-4 pt-4',
-                                table: 'border-top',
-                                footer: 'px-4 pt-2 pb-4',
-                            },
-                            showButtonsLabel: false,
-                            columnsVisibility: false,
-                            selectTools:false,
-                            actions:{
-                                remove:{
-                                    label:'Remove',
-                                    icon:'trash',
-                                    action:function(event, table, node, row, data){
-                                        table.delete(row);
-                                    },
-                                },
-                            },
-                            datatable:{ //Datatable options
-                                columnDefs:[
-                                    { target: 0, visible: false, responsivePriority: 1, title: 'ID', name: 'id', data: 'id' },
-                                    { target: 1, visible: false, responsivePriority: 2, title: 'Created', name: 'created', data: 'created' },
-                                    { target: 2, visible: false, responsivePriority: 3, title: 'Modified', name: 'modified', data: 'modified' },
-                                    { target: 3, visible: false, responsivePriority: 4, title: 'Owner', name: 'owner', data: 'owner' },
-                                    { target: 4, visible: false, responsivePriority: 5, title: 'Updated By', name: 'updatedBy', data: 'updatedBy' },
-                                    { target: 5, visible: true, responsivePriority: 6, title: 'Username', name: 'username', data: 'username' },
-                                    { target: 6, visible: false, responsivePriority: 7, title: 'Password Salt', name: 'passwordSalt', data: 'passwordSalt' },
-                                    { target: 7, visible: false, responsivePriority: 8, title: 'Password Hash', name: 'passwordHash', data: 'passwordHash' },
-                                    { target: 8, visible: false, responsivePriority: 9, title: '2FA Salt', name: '2FASalt', data: '2FASalt' },
-                                    { target: 9, visible: false, responsivePriority: 10, title: '2FA Hash', name: '2FAHash', data: '2FAHash' },
-                                    { target: 10, visible: false, responsivePriority: 11, title: 'Last 2FA', name: 'last2FA', data: 'last2FA' },
-                                    { target: 11, visible: false, responsivePriority: 12, title: '2FA Method', name: '2FAMethod', data: '2FAMethod' },
-                                    { target: 12, visible: false, responsivePriority: 13, title: 'Bearer Token', name: 'bearerToken', data: 'bearerToken' },
-                                    { target: 13, visible: true, responsivePriority: 14, title: 'Name', name: 'name', data: 'name' },
-                                    { target: 14, visible: false, responsivePriority: 15, title: 'Address', name: 'address', data: 'address' },
-                                    { target: 15, visible: false, responsivePriority: 16, title: 'City', name: 'city', data: 'city' },
-                                    { target: 16, visible: false, responsivePriority: 17, title: 'State', name: 'state', data: 'state' },
-                                    { target: 17, visible: false, responsivePriority: 18, title: 'Country', name: 'country', data: 'country' },
-                                    { target: 18, visible: false, responsivePriority: 19, title: 'Zipcode', name: 'zipcode', data: 'zipcode' },
-                                    { target: 19, visible: false, responsivePriority: 20, title: 'Phone', name: 'phone', data: 'phone' },
-                                    { target: 20, visible: false, responsivePriority: 21, title: 'Mobile', name: 'mobile', data: 'mobile' },
-                                    { target: 21, visible: true, responsivePriority: 22, title: 'Status', name: 'status', data: 'status' },
-                                    { target: 22, visible: true, responsivePriority: 23, title: 'Database', name: 'database', data: 'database' },
-                                    { target: 23, visible: false, responsivePriority: 24, title: 'Server', name: 'server', data: 'server' },
-                                    { target: 24, visible: false, responsivePriority: 25, title: 'Domain', name: 'domain', data: 'domain' },
-                                    { target: 25, visible: false, responsivePriority: 26, title: 'Session ID', name: 'sessionId', data: 'sessionId' },
-                                    { target: 26, visible: false, responsivePriority: 27, title: 'Attempts', name: 'attempts', data: 'attempts' },
-                                    { target: 27, visible: false, responsivePriority: 28, title: 'Last Attempt', name: 'lastAttempt', data: 'lastAttempt' },
-                                    { target: 28, visible: false, responsivePriority: 29, title: 'Requests', name: 'requests', data: 'requests' },
-                                    { target: 29, visible: false, responsivePriority: 30, title: 'Last Request', name: 'lastRequest', data: 'lastRequest' },
-                                    { target: 30, visible: true, responsivePriority: 31, title: 'Active', name: 'isActive', data: 'isActive' },
-                                    { target: 31, visible: false, responsivePriority: 32, title: 'Verified', name: 'isVerified', data: 'isVerified' },
-                                    { target: 32, visible: false, responsivePriority: 33, title: 'Verified Salt', name: 'verifiedSalt', data: 'verifiedSalt' },
-                                    { target: 33, visible: false, responsivePriority: 34, title: 'Verified Hash', name: 'verifiedHash', data: 'verifiedHash' },
-                                    { target: 34, visible: false, responsivePriority: 35, title: 'Verified On', name: 'verifiedOn', data: 'verifiedOn' },
-                                    { target: 35, visible: false, responsivePriority: 36, title: 'Verified Until', name: 'verifiedUntil', data: 'verifiedUntil' },
-                                    { target: 36, visible: false, responsivePriority: 37, title: 'Banned', name: 'isBanned', data: 'isBanned' },
-                                    { target: 37, visible: false, responsivePriority: 38, title: 'Deleted', name: 'isDeleted', data: 'isDeleted' },
-                                    { target: 38, visible: true, responsivePriority: 39, title: 'API', name: 'isAPI', data: 'isAPI' },
-                                    { target: 39, visible: false, responsivePriority: 40, title: 'Contact Info Dynamic', name: 'isContactInfoDynamic', data: 'isContactInfoDynamic' },
-                                ],
-                                buttons:[
-                                    {
-                                        text: '<i class="bi-plus-lg"></i>',
-                                        action:function(e, dt, node, config){
-                                            console.log(e, dt, node, config);
-                                        },
-                                    }
-                                ],
-                            },
-                        },
-                        function(table){
-                            for(const [key, user] of Object.entries(Users)){
-                                table.add(user);
-                            }
-                        }, 
-                    );
-                },
-            );
-            list.item(
-                {
-                    icon: 'shield',
-                    field: "Roles",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                },
-            );
-            list.item(
-                {
-                    icon: 'lock',
-                    field: "Permissions",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                },
-            );
-        }, 
-    );
+            // Create Label
+            field.label = $(document.createElement('label')).attr({
+                'class': 'input-group-text',
+                'for': field.id + 'input',
+            }).text(defaults.label).appendTo(field);
 
-    const MaintenanceMenu = new List(
-        "#settingsMenuMaintenanceMenu",
-        {
-            class: {
-                list: "w-100",
-            },
-            icon: 'gear',
-            callback: {
-                item: function(item, list){
-                    ContentAccordionCount++;
-                    item.id = "settingsContentGeneralMenu" + ContentAccordionCount;
-                    item.attr({
-                        "id": item.id,
-                        "data-bs-toggle": "collapse",
-                        "data-bs-target": "#" + item.id + "Content",
-                    });
-                    item.content = ContentAdd({
-                        id:item.id + "Content",
-                        header: item.text(),
-                        icon: item.options.icon,
-                    });
-                },
-            },
-        },
-        function(list){
-            list.item(
-                {
-                    icon: 'buildings',
-                    field: "Organizations",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                    item.content.table = new Table(
-                        item.content,
-                        {
-                            class: {
-                                buttons: 'px-4 pt-4',
-                                table: 'border-top',
-                                footer: 'px-4 pt-2 pb-4',
-                            },
-                            showButtonsLabel: false,
-                            columnsVisibility: false,
-                            selectTools:false,
-                            actions:{
-                                remove:{
-                                    label:'Remove',
-                                    icon:'trash',
-                                    action:function(event, table, node, row, data){
-                                        table.delete(row);
-                                    },
-                                },
-                            },
-                            datatable:{ //Datatable options
-                                columnDefs:[
-                                    { target: 0, visible: false, responsivePriority: 1, title: 'ID', name: 'id', data: 'id' },
-                                    { target: 1, visible: false, responsivePriority: 2, title: 'Created', name: 'created', data: 'created' },
-                                    { target: 2, visible: false, responsivePriority: 3, title: 'Modified', name: 'modified', data: 'modified' },
-                                    { target: 3, visible: false, responsivePriority: 4, title: 'Owner', name: 'owner', data: 'owner' },
-                                    { target: 4, visible: false, responsivePriority: 5, title: 'Updated By', name: 'updatedBy', data: 'updatedBy' },
-                                    { target: 5, visible: true, responsivePriority: 6, title: 'Name', name: 'name', data: 'name' },
-                                    { target: 6, visible: false, responsivePriority: 7, title: 'SBNR/EIN', name: 'sbnr/ein', data: 'sbnr/ein' },
-                                    { target: 7, visible: false, responsivePriority: 8, title: 'Address', name: 'address', data: 'address' },
-                                    { target: 8, visible: false, responsivePriority: 9, title: 'City', name: 'city', data: 'city' },
-                                    { target: 9, visible: false, responsivePriority: 10, title: 'State', name: 'state', data: 'state' },
-                                    { target: 10, visible: false, responsivePriority: 11, title: 'Country', name: 'country', data: 'country' },
-                                    { target: 11, visible: false, responsivePriority: 12, title: 'Zipcode', name: 'zipcode', data: 'zipcode' },
-                                    { target: 12, visible: false, responsivePriority: 13, title: 'Email', name: 'email', data: 'email' },
-                                    { target: 13, visible: false, responsivePriority: 14, title: 'Fax', name: 'fax', data: 'fax' },
-                                    { target: 14, visible: false, responsivePriority: 15, title: 'Phone', name: 'phone', data: 'phone' },
-                                    { target: 15, visible: false, responsivePriority: 16, title: 'Toll Free', name: 'tollfree', data: 'tollfree' },
-                                    { target: 16, visible: false, responsivePriority: 17, title: 'Website', name: 'website', data: 'website' },
-                                    { target: 17, visible: false, responsivePriority: 18, title: 'Domain', name: 'domain', data: 'domain' },
-                                    { target: 18, visible: false, responsivePriority: 19, title: 'Database', name: 'database', data: 'database' },
-                                    { target: 19, visible: false, responsivePriority: 20, title: 'Server', name: 'server', data: 'server' },
-                                    { target: 20, visible: false, responsivePriority: 21, title: 'Subsidiary', name: 'isSubsidiary', data: 'isSubsidiary' },
-                                    { target: 21, visible: false, responsivePriority: 22, title: 'Deleted', name: 'isDeleted', data: 'isDeleted' },
-                                    { target: 22, visible: true, responsivePriority: 23, title: 'Active', name: 'isActive', data: 'isActive' },
-                                ],
-                                buttons:[
-                                    {
-                                        text: '<i class="bi-plus-lg"></i>',
-                                        action:function(e, dt, node, config){
-                                            console.log(e, dt, node, config);
-                                        },
-                                    }
-                                ],
-                            },
-                        },
-                        function(table){
-                            for(const [key, Organization] of Object.entries(Organizations)){
-                                table.add(Organization);
-                            }
-                        }, 
-                    );
-                },
-            );
-            list.item(
-                {
-                    icon: 'diagram-2',
-                    field: "Divisions",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                },
-            );
-            list.item(
-                {
-                    icon: 'briefcase',
-                    field: "Offices",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                },
-            );
-            list.item(
-                {
-                    icon: 'people-fill',
-                    field: "Teams",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                },
-            );
-        }, 
-    );
+            // Create Icon
+            field.label.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + defaults.icon).prependTo(field.label);
 
-    const LoggerMenu = new List(
-        "#settingsMenuLoggerMenu",
-        {
-            class: {
-                list: "w-100",
-            },
-            icon: 'gear',
-            callback: {
-                item: function(item, list){
-                    ContentAccordionCount++;
-                    item.id = "settingsContentGeneralMenu" + ContentAccordionCount;
-                    item.attr({
-                        "id": item.id,
-                        "data-bs-toggle": "collapse",
-                        "data-bs-target": "#" + item.id + "Content",
-                    });
-                    item.content = ContentAdd({
-                        id:item.id + "Content",
-                        header: item.text(),
-                        icon: item.options.icon,
-                    });
-                },
-            },
-        },
-        function(list){
-            list.item(
-                {
-                    icon: 'text-indent-left',
-                    field: "Log",
-                    click: function(item){},
-                },
-                function(item){
-                    item.content.form.remove();
-                },
-            );
-        }, 
-    );
+            // Create Input
+            switch(defaults.type){
+                case 'textarea':
+                    field.input = $(document.createElement('textarea')).attr({
+                        'id': field.id + 'input',
+                        'class': 'form-control',
+                        'name': defaults.name,
+                        'autocomplete': 'off',
+                    }).text(defaults.value).appendTo(field);
+                    field.name = field.attr('name');
+                    break;
+                case 'select':
+                    field.input = $(document.createElement('select')).attr({
+                        'id': field.id + 'input',
+                        'class': 'form-select',
+                        'name': defaults.name,
+                        'autocomplete': 'off',
+                    }).appendTo(field);
+                    if(defaults.options !== null){
+                        for(const [key, option] of Object.entries(defaults.options)){
+                            field.input.option = $(document.createElement('option')).attr('value',option.id).text(option.text).appendTo(field.input);
+                        }
+                    }
+                    field.input.val(defaults.value);
+                    field.name = field.attr('name');
+                    break;
+                default:
+                    field.input = $(document.createElement('input')).attr({
+                        'id': field.id + 'input',
+                        'class': 'form-control',
+                        'name': defaults.name,
+                        'autocomplete': 'off',
+                        'type': defaults.type,
+                        'value': defaults.value,
+                    }).appendTo(field);
+                    field.name = field.attr('name');
+                    break;
+            }
 
-    // Set Active
-    if(ContentAccordion.find('.show').length > 0){
-        // Clear Active
-        ContentMenu.find('.active').removeClass('active');
-        // Set Active
-        ContentMenu.find('[data-bs-target="#'+ContentAccordion.find('.show').attr('id')+'"]').addClass('active');
+            // Redirect Val method
+            field.val = function(param1 = null){
+                return field.input.val(param1);
+            }
+
+            // Store Input
+            self.#forms[content.id][field.name] = field;
+    
+            // Check for icon
+            if(field.options.icon === null){
+                field.label.icon.remove();
+            }
+    
+            // Callback
+            if(typeof callback === 'function'){
+                callback(field);
+            }
+    
+            // Return Field
+            return field;
+        };
+
+        // Prevent Default
+        content.form.on('submit', function(e){
+            e.preventDefault();
+            // Callback
+            if(typeof properties.submit === 'function'){
+                properties.submit(content.form);
+            }
+        });
+
+        // Create Menu Item
+        var item = $(document.createElement('li')).attr({
+            'id': category.id + 'item' + this.#count,
+            'class': 'list-group-item item user-select-none cursor-pointer',
+            'data-bs-toggle': 'collapse',
+            'data-bs-target': '#' + content.id,
+            'style': 'transition: all 300ms ease 0s;',
+        }).appendTo(category.menu.list);
+        item.id = item.attr('id');
+        item.properties = properties;
+        item.flex = $(document.createElement('div')).addClass('d-flex align-items-center').appendTo(item);
+        item.flex.icon = $(document.createElement('div')).addClass('flex-shrink-1 px-1').appendTo(item.flex);
+        item.flex.icon.i = $(document.createElement('i')).addClass('bi bi-' + properties.icon).appendTo(item.flex.icon);
+        item.flex.label = $(document.createElement('div')).addClass('flex-grow-1 px-1 text-break').text(properties.label).appendTo(item.flex);
+
+        // Check for an icon
+        if(properties.icon == null){
+            content.header.title.icon.remove();
+            item.flex.icon.remove();
+        }
+
+        // Check for a body
+        if(!properties.body){
+            content.body.remove();
+        }
+
+        // Check for a form
+        if(!properties.form){
+            content.form.remove();
+        }
+
+        // Check for classes to add
+        if(properties.class){
+            content.addClass(properties.class);
+        }
+
+        // Open first item
+        if(this.#layout.content.accordion.children().length > 0){
+            var first = this.#layout.content.accordion.children().first();
+            first.addClass('show');
+            this.#layout.menu.find('[data-bs-target="#'+first.attr('id')+'"]').addClass('active');
+        }
+
+        // Add Event Listener
+        content.on('show.bs.collapse', function(){
+            // Clear Active
+            self.#layout.menu.find('.active').removeClass('active');
+            // Set Active
+            self.#layout.menu.find('[data-bs-target="#'+content.id+'"]').addClass('active');
+        });
+
+        if(typeof callback === "function"){
+            callback(item,content,self);
+        }
+
+        // Return
+        return this;
     }
-});
+
+    appendTo(object){
+        
+        // Append Object To
+        this.#layout.appendTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    prependTo(object){
+        
+        // Prepend Object To
+        this.#layout.prependTo(object);
+
+        // Return Object
+        return this;
+    }
+
+    append(object){
+        
+        // Append Object
+        this.#layout.append(object);
+
+        // Return Object
+        return this;
+    }
+
+    prepend(object){
+        
+        // Prepend Object
+        this.#layout.prepend(object);
+
+        // Return Object
+        return this;
+    }
+
+    html(){
+
+        // Return Object
+        return this.#layout.html();
+    }
+
+    text(){
+
+        // Return Object
+        return this.#layout.text();
+    }
+
+    outerHTML(){
+
+        // Return Object
+        return this.#layout[0].outerHTML;
+    }
+
+    show(){
+
+        // Show Object
+        this.#layout.show();
+
+        // Return Object
+        return this;
+    }
+
+    hide(){
+
+        // Hide Object
+        this.#layout.hide();
+
+        // Return Object
+        return this;
+    }
+}

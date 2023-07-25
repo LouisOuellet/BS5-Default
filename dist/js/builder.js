@@ -24,6 +24,337 @@ if(typeof $.fn.select2 !== 'undefined'){
     $.fn.select2.defaults.set("allowClear", true);
 }
 
+class Builder {
+
+    #count = 0;
+
+    #utilities = {
+        search: class {
+            #field = null
+
+            constructor(selector = 'input.search'){
+
+                // Scan Search Field
+                this.scan(selector);
+            }
+
+            scan(selector = 'input.search'){
+
+                // Set Search Field
+                this.#field = $(selector);
+            }
+
+            get(){
+
+                // Return Search Field
+                return this.#field;
+            }
+
+            set(object){
+
+                // Set object as Object
+                if(typeof object === 'string'){
+                    object = $(object);
+                }
+
+                // Set Search Attribute
+                if(typeof object === 'object' && object != null){
+                    object.attr('data-search',object.text().toString().toUpperCase());
+                }
+            }
+
+            add(object){
+
+                // Set object as Object
+                if(typeof object === 'string'){
+                    object = $(object);
+                }
+
+                // Add Search Event
+                if(typeof object === 'object' && object != null){
+                    this.#field.on('input propertychange',function(){
+                        if($(this).val() !== ''){
+                            object.find('[data-search]').hide();
+                            object.find('[data-search*="'+$(this).val().toString().toUpperCase()+'"]').show();
+                        } else {
+                            object.find('[data-search]').show();
+                        }
+                    });
+                }
+            }
+        },
+        helper: class {
+
+            // Generate a random number between min and max
+            randomNumber(min = -10, max = 10){
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+        
+            // Validate an email address
+            validateEmail($email) {
+                var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
+                return ( $email.length > 0 && emailReg.test($email))
+            }
+        
+            // Check if a value is in an array
+            inArray(needle, haystack) {
+                var length = haystack.length;
+                for(var i = 0; i < length; i++) {
+                if(haystack[i] == needle) return true;
+                }
+                return false;
+            }
+        
+            // Format a number of bytes into a human readable string
+            formatBytes(bytes, decimals = 2) {
+                if (!+bytes) return '0 Bytes'
+                const k = 1024
+                const dm = decimals < 0 ? 0 : decimals
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+                const i = Math.floor(Math.log(bytes) / Math.log(k))
+                return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+            }
+        
+            // Copy a string or object content to the clipboard
+            copyToClipboard(object){
+                if(typeof object !== 'undefined' && typeof object !== null && typeof object !== 'function'){
+                    let string = ''
+                    let input = $(document.createElement('textarea')).appendTo('body')
+                    if(typeof object === 'object'){ string = object.text(); }
+                    if(typeof object === 'number'){ string = object.toString(); }
+                    if(typeof object === 'boolean'){ string = object.toString(); }
+                    if(typeof object === 'string'){ string = object; }
+                    input.val(string).select();
+                    document.execCommand("copy");
+                    navigator.clipboard.writeText(input.val());
+                    input.remove();
+                }
+            }
+        
+            // Format a phone number
+            formatPhoneNumber(phoneNumberString) {
+                var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+                var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+                if (match) {
+                return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+                }
+                return null
+            }
+        
+            // Convert a string containing HTML entities to regular characters
+            htmlEntities(str) {
+                return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+                   return '&#' + i.charCodeAt(0) + ';';
+                });
+            }
+        
+            // Check if a variable is constant
+            isConstant(variable) {
+                const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(variable), Object.keys(variable)[0]);
+                return descriptor && descriptor.writable === false;
+            }
+        
+            // Format a string to a slug
+            formatSlug (value) {
+                return value
+                    .toLowerCase()
+                    .replace(/-+/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/[^a-z0-9-]/g, '');
+            };
+        
+            // Check if the current device is a mobile device
+            isMobileDevice() {
+                const userAgent = navigator.userAgent;
+                var mobileDeviceUserAgents = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+                return mobileDeviceUserAgents.test(userAgent);
+            }
+        
+            // Function to retrieve the available Bootstrap Icons
+            bootstrapIcons() {
+                const styleSheets = document.styleSheets;
+                var icons = [];
+          
+                for (const styleSheet of styleSheets) {
+                    const rules = styleSheet.rules || styleSheet.cssRules;
+            
+                    for (const rule of rules) {
+                        if(typeof rule.selectorText === 'undefined'){ continue; }
+        
+                        if (rule.selectorText.startsWith(".bi-")) {
+        
+                            const iconName = rule.selectorText.slice(4);
+        
+                            // Remove "::before" from the icon name
+                            const cleanedIconName = iconName.replace("::before", "");
+        
+                            icons.push(cleanedIconName);
+                        }
+                    }
+                }
+        
+                return icons;
+            }
+        
+            // Convert to Markdown
+            htmlToMarkdown(html) {
+                const converter = new TurndownService();
+        
+                // Use '#' for headers
+                converter.addRule('heading', {
+                    filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+                    replacement: function(content, node) {
+                        var hLevel = node.nodeName.charAt(1);
+                        var hPrefix = '';
+                        for(var i=0; i<hLevel; i++){
+                            hPrefix += '#';
+                        }
+                        return '\n\n' + hPrefix + ' ' + content + '\n\n';
+                    }
+                });
+            
+                // Use triple backticks for code blocks
+                converter.addRule('codeBlock', {
+                    filter: 'pre',
+                    replacement: function(content) {
+                        return '\n\n```' + '\n' + content + '\n' + '```\n\n';
+                    }
+                });
+        
+                return converter.turndown(html);
+            }
+        
+            // Convert to HTML
+            markdownToHTML(markdown) {
+                const converter = new showdown.Converter();
+                return converter.makeHtml(markdown);
+            }
+        
+            // Check the OS Type
+            detectOperatingSystem() {
+                const userAgent = navigator.userAgent;
+            
+                if (/iPad|iPhone|iPod/.test(userAgent)) {
+                    return 'iOS';
+                }
+                if (/Android/.test(userAgent)) {
+                    return 'Android';
+                }
+                if (/Mac OS X/.test(userAgent)) {
+                    return 'macOS';
+                }
+                if (/Windows NT/.test(userAgent)) {
+                    return 'Windows';
+                }
+                if (/Linux/.test(userAgent)) {
+                    return 'Linux';
+                }
+                return 'Unknown OS';
+            }
+        
+            // Convert to MD5
+            md5 = (function() {
+                var MD5 = function (d) {
+                    return M(V(Y(X(d), 8 * d.length)))
+                }
+                function M (d) {
+                    for (var _, m = '0123456789abcdef', f = '', r = 0; r < d.length; r++) {
+                        _ = d.charCodeAt(r)
+                        f += m.charAt(_ >>> 4 & 15) + m.charAt(15 & _)
+                    }
+                    return f
+                }
+                function X (d) {
+                    for (var _ = Array(d.length >> 2), m = 0; m < _.length; m++) {
+                        _[m] = 0
+                    }
+                    for (m = 0; m < 8 * d.length; m += 8) {
+                        _[m >> 5] |= (255 & d.charCodeAt(m / 8)) << m % 32
+                    }
+                    return _
+                }
+                function V (d) {
+                    for (var _ = '', m = 0; m < 32 * d.length; m += 8) _ += String.fromCharCode(d[m >> 5] >>> m % 32 & 255)
+                    return _
+                }
+                function Y (d, _) {
+                    d[_ >> 5] |= 128 << _ % 32
+                    d[14 + (_ + 64 >>> 9 << 4)] = _
+                    for (var m = 1732584193, f = -271733879, r = -1732584194, i = 271733878, n = 0; n < d.length; n += 16) {
+                        var h = m
+                        var t = f
+                        var g = r
+                        var e = i
+                        f = md5ii(f = md5ii(f = md5ii(f = md5ii(f = md5hh(f = md5hh(f = md5hh(f = md5hh(f = md5gg(f = md5gg(f = md5gg(f = md5gg(f = md5ff(f = md5ff(f = md5ff(f = md5ff(f, r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 0], 7, -680876936), f, r, d[n + 1], 12, -389564586), m, f, d[n + 2], 17, 606105819), i, m, d[n + 3], 22, -1044525330), r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 4], 7, -176418897), f, r, d[n + 5], 12, 1200080426), m, f, d[n + 6], 17, -1473231341), i, m, d[n + 7], 22, -45705983), r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 8], 7, 1770035416), f, r, d[n + 9], 12, -1958414417), m, f, d[n + 10], 17, -42063), i, m, d[n + 11], 22, -1990404162), r = md5ff(r, i = md5ff(i, m = md5ff(m, f, r, i, d[n + 12], 7, 1804603682), f, r, d[n + 13], 12, -40341101), m, f, d[n + 14], 17, -1502002290), i, m, d[n + 15], 22, 1236535329), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 1], 5, -165796510), f, r, d[n + 6], 9, -1069501632), m, f, d[n + 11], 14, 643717713), i, m, d[n + 0], 20, -373897302), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 5], 5, -701558691), f, r, d[n + 10], 9, 38016083), m, f, d[n + 15], 14, -660478335), i, m, d[n + 4], 20, -405537848), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 9], 5, 568446438), f, r, d[n + 14], 9, -1019803690), m, f, d[n + 3], 14, -187363961), i, m, d[n + 8], 20, 1163531501), r = md5gg(r, i = md5gg(i, m = md5gg(m, f, r, i, d[n + 13], 5, -1444681467), f, r, d[n + 2], 9, -51403784), m, f, d[n + 7], 14, 1735328473), i, m, d[n + 12], 20, -1926607734), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 5], 4, -378558), f, r, d[n + 8], 11, -2022574463), m, f, d[n + 11], 16, 1839030562), i, m, d[n + 14], 23, -35309556), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 1], 4, -1530992060), f, r, d[n + 4], 11, 1272893353), m, f, d[n + 7], 16, -155497632), i, m, d[n + 10], 23, -1094730640), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 13], 4, 681279174), f, r, d[n + 0], 11, -358537222), m, f, d[n + 3], 16, -722521979), i, m, d[n + 6], 23, 76029189), r = md5hh(r, i = md5hh(i, m = md5hh(m, f, r, i, d[n + 9], 4, -640364487), f, r, d[n + 12], 11, -421815835), m, f, d[n + 15], 16, 530742520), i, m, d[n + 2], 23, -995338651), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 0], 6, -198630844), f, r, d[n + 7], 10, 1126891415), m, f, d[n + 14], 15, -1416354905), i, m, d[n + 5], 21, -57434055), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 12], 6, 1700485571), f, r, d[n + 3], 10, -1894986606), m, f, d[n + 10], 15, -1051523), i, m, d[n + 1], 21, -2054922799), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 8], 6, 1873313359), f, r, d[n + 15], 10, -30611744), m, f, d[n + 6], 15, -1560198380), i, m, d[n + 13], 21, 1309151649), r = md5ii(r, i = md5ii(i, m = md5ii(m, f, r, i, d[n + 4], 6, -145523070), f, r, d[n + 11], 10, -1120210379), m, f, d[n + 2], 15, 718787259), i, m, d[n + 9], 21, -343485551)
+                        m = safeadd(m, h)
+                        f = safeadd(f, t)
+                        r = safeadd(r, g)
+                        i = safeadd(i, e)
+                    }
+                    return [m, f, r, i]
+                }
+                function md5cmn (d, _, m, f, r, i) {
+                    return safeadd(bitrol(safeadd(safeadd(_, d), safeadd(f, i)), r), m)
+                }
+                function md5ff (d, _, m, f, r, i, n) {
+                    return md5cmn(_ & m | ~_ & f, d, _, r, i, n)
+                }
+                function md5gg (d, _, m, f, r, i, n) {
+                    return md5cmn(_ & f | m & ~f, d, _, r, i, n)
+                }
+                function md5hh (d, _, m, f, r, i, n) {
+                    return md5cmn(_ ^ m ^ f, d, _, r, i, n)
+                }
+                function md5ii (d, _, m, f, r, i, n) {
+                    return md5cmn(m ^ (_ | ~f), d, _, r, i, n)
+                }
+                function safeadd (d, _) {
+                    var m = (65535 & d) + (65535 & _)
+                    return (d >> 16) + (_ >> 16) + (m >> 16) << 16 | 65535 & m
+                }
+                function bitrol (d, _) {
+                    return d << _ | d >>> 32 - _
+                }
+                function MD5Unicode(buffer){
+                    if (!(buffer instanceof Uint8Array)) {
+                        buffer = new TextEncoder().encode(typeof buffer==='string' ? buffer : JSON.stringify(buffer));
+                    }
+                    var binary = [];
+                    var bytes = new Uint8Array(buffer);
+                    for (var i = 0, il = bytes.byteLength; i < il; i++) {
+                        binary.push(String.fromCharCode(bytes[i]));
+                    }
+                    return MD5(binary.join(''));
+                }
+              
+                return MD5Unicode;
+            })()
+        },
+    };
+
+    utility(name){
+        if(typeof name !== 'string'){
+            console.log('Builder.utility(String)');
+            return false;
+        }
+        if(typeof this.#utilities[name] === 'undefined'){
+            console.log('Unknown Utility');
+            return false;
+        }
+        return new this.#utilities[name]();
+    }
+
+    Search = null;
+    Helper = null;
+
+    constructor(){
+        
+        // Create Utilities
+        this.Search = this.utility('search');
+        this.Helper = this.utility('helper');
+    }
+} 
+
 // Constants and Variables
 var builderCount = 0;
 
