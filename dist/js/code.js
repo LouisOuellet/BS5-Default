@@ -1,55 +1,75 @@
 $(document).ready(function(){
 
-    // Sample
+    // Builder
+    const sampleBuilder = new Builder();
 
-    let sample = '';
-    sample += '// Placeholder JavaScript code' + "\n";
-    sample += 'function doSomething() {' + "\n";
-    sample += '    // TODO: Implement functionality' + "\n";
-    sample += '    console.log("Placeholder code");' + "\n";
-    sample += '}' + "\n";
-    sample += '' + "\n";
-    sample += '// Sample usage' + "\n";
-    sample += 'doSomething();';
-    
-    const sampleObject = new Code(
-        '#example',
+    // Sample
+    let sampleCode = "";
+    sampleCode += "// Placeholder JavaScript code" + "\n";
+    sampleCode += "function doSomething() {" + "\n";
+    sampleCode += "    // TODO: Implement functionality" + "\n";
+    sampleCode += "    console.log('Placeholder code');" + "\n";
+    sampleCode += "}" + "\n";
+    sampleCode += "" + "\n";
+    sampleCode += "// Sample usage" + "\n";
+    sampleCode += "doSomething();";
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "code", //Component Name
+        "#example", //Selector or JQuery Object to appendTo
         {
-            class: {
-                object: "w-100",
+            class: { //Add Classes
+                component: "w-100", //Component Element
             },
-            language: 'javascript',
-            title: "Example",
-            clipboard:true,
-            fullscreen:true,
-            code:sample,
+            language: "javascript", //Set Language
+            title: "Example", //Set Title
+            clipboard:true, //Enable/Disable Clipboard
+            fullscreen:true, //Enable/Disable Fullscreen
+            code:sampleCode, //Set Code
         },
-        function(element,code){}
+        function(code,component){ //Callback
+        },
     );
 
-    // Code
-
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new Code(' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Sample' + "\n";
+    scriptCode += 'let sampleCode = "";' + "\n";
+    scriptCode += 'sampleCode += "// Placeholder JavaScript code" + "\\n";' + "\n";
+    scriptCode += 'sampleCode += "function doSomething() {" + "\\n";' + "\n";
+    scriptCode += 'sampleCode += "    // TODO: Implement functionality" + "\\n";' + "\n";
+    scriptCode += 'sampleCode += "    console.log(\'Placeholder code\');" + "\\n";' + "\n";
+    scriptCode += 'sampleCode += "}" + "\\n";' + "\n";
+    scriptCode += 'sampleCode += "" + "\\n";' + "\n";
+    scriptCode += 'sampleCode += "// Sample usage" + "\\n";' + "\n";
+    scriptCode += 'sampleCode += "doSomething();";' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "code", //Component Name' + "\n";
     scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
-    scriptCode += '            object: "w-100", //Code Element' + "\n";
+    scriptCode += '            component: "w-100", //Component Element' + "\n";
     scriptCode += '        },' + "\n";
-    scriptCode += '        language: "javascript", //Set Language of Code Block' + "\n";
-    scriptCode += '        title: "Example", //Set Title of Code Block' + "\n";
-    scriptCode += '        code:sample, //String Containing the code to display' + "\n";
-    scriptCode += '        clipboard:true, //Enable/Disable the clipboard' + "\n";
-    scriptCode += '        fullscreen:true, //Enable/Disable the fullscreen' + "\n";
-    scriptCode += '        highlight:true, //Enable/Disable the highlighting' + "\n";
-    scriptCode += '        collapse:true, //Enable/Disable the collapsible' + "\n";
-    scriptCode += '        collapsed:true, //Default state of the collapsible' + "\n";
+    scriptCode += '        language: "javascript", //Set Language' + "\n";
+    scriptCode += '        title: "Example", //Set Title' + "\n";
+    scriptCode += '        clipboard:true, //Enable/Disable Clipboard' + "\n";
+    scriptCode += '        fullscreen:true, //Enable/Disable Fullscreen' + "\n";
+    scriptCode += '        code:sampleCode, //Set Code' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(element,code){}  //Callback' + "\n";
+    scriptCode += '    function(code,component){ //Callback' + "\n";
+    scriptCode += '    },' + "\n";
     scriptCode += ');';
-    
-    const code = new Code(
-        '#code',
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -58,13 +78,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -73,6 +93,64 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
+    );
+});
+$(document).ready(function(){
+
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "code", //Component Name
+        "#example", //Selector or JQuery Object to appendTo
+        {
+            class: { //Add Classes
+                component: "w-100", //Component Element
+            },
+            language: "javascript", //Set Language
+            title: "Example", //Set Title
+            clipboard:true, //Enable/Disable Clipboard
+            fullscreen:true, //Enable/Disable Fullscreen
+            code:sampleCode, //Set Code
+        },
+        function(code,component){ //Callback
+        },
+    );
+
+    // Javascript Code
+    let scriptCode = '';
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
+        {
+            language: 'javascript',
+            title: 'Code',
+            clipboard:true,
+            fullscreen:true,
+            collapsed:true,
+            code:scriptCode,
+        },
+    );
+
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
+        {
+            language: 'markup',
+            title: 'Code',
+            clipboard:true,
+            fullscreen:true,
+            collapsed:true,
+            code:pretty,
+        },
     );
 });

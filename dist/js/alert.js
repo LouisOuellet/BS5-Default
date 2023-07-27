@@ -1,7 +1,11 @@
 $(document).ready(function(){
 
-    // Sample
-    const sampleObject = new Alert(
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "alert", //Component Name
         "#example", //Selector or JQuery Object to appendTo
         {
             class: { //Add Classes
@@ -13,12 +17,18 @@ $(document).ready(function(){
             title: "Alert!", //Set Title
             content: "Danger alert preview. This alert is dismissable. A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.", //Set Content
         },
-        function(alert){}, //Callback Function
+        function(alert,component){ //Callback
+        },
     );
 
-    // Code
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new Alert(' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "alert", //Component Name' + "\n";
     scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
@@ -30,11 +40,14 @@ $(document).ready(function(){
     scriptCode += '        title: "Alert!", //Set Title' + "\n";
     scriptCode += '        content: "Danger alert preview. This alert is dismissable. A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.", //Set Content' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(alert){}, //Callback Function' + "\n";
+    scriptCode += '    function(alert,component){ //Callback' + "\n";
+    scriptCode += '    },' + "\n";
     scriptCode += ');';
-    
-    const code = new Code(
-        '#code',
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -43,13 +56,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -58,6 +71,5 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
     );
 });

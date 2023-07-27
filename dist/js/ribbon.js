@@ -1,10 +1,15 @@
 $(document).ready(function(){
 
-    // Sample
-    const sampleObject = new Ribbon(
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "ribbon", //Component Name
         "#example", //Selector or JQuery Object to appendTo
         {
             class: { //Add Classes
+                component: null, //Component Element
                 wrapper: null, //Ribbon Wrapper Element
                 ribbon: "fs-4", //Ribbon Element
             },
@@ -13,15 +18,22 @@ $(document).ready(function(){
             icon: "bookmark", //Set Icon
             size: "xl", //Set Size
         },
-        function(ribbon){}, //Callback Function
+        function(ribbon,component){ //Callback
+        },
     );
 
-    // Code
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new Ribbon(' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "ribbon", //Component Name' + "\n";
     scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
+    scriptCode += '            component: null, //Component Element' + "\n";
     scriptCode += '            wrapper: null, //Ribbon Wrapper Element' + "\n";
     scriptCode += '            ribbon: "fs-4", //Ribbon Element' + "\n";
     scriptCode += '        },' + "\n";
@@ -30,11 +42,14 @@ $(document).ready(function(){
     scriptCode += '        icon: "bookmark", //Set Icon' + "\n";
     scriptCode += '        size: "xl", //Set Size' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(ribbon){}, //Callback Function' + "\n";
+    scriptCode += '    function(ribbon,component){ //Callback' + "\n";
+    scriptCode += '    },' + "\n";
     scriptCode += ');';
-    
-    const code = new Code(
-        '#code',
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -43,13 +58,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -58,6 +73,5 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
     );
 });

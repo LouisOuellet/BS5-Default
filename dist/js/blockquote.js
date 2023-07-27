@@ -1,7 +1,11 @@
 $(document).ready(function(){
 
-    // Sample
-    const sampleObject = new Blockquote(
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "blockquote", //Component Name
         "#example", //Selector or JQuery Object to appendTo
         {
             class: { //Add Classes
@@ -14,12 +18,18 @@ $(document).ready(function(){
             author: "Someone famous", //Set Author
             source: "Source Title", //Set Source
         },
-        function(blockquote){}, //Callback Function
+        function(blockquote,component){ //Callback
+        },
     );
 
-    // Code
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new Blockquote(' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "blockquote", //Component Name' + "\n";
     scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
@@ -32,11 +42,14 @@ $(document).ready(function(){
     scriptCode += '        author: "Someone famous", //Set Author' + "\n";
     scriptCode += '        source: "Source Title", //Set Source' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(blockquote){}, //Callback Function' + "\n";
+    scriptCode += '    function(blockquote,component){ //Callback' + "\n";
+    scriptCode += '    },' + "\n";
     scriptCode += ');';
-    
-    const code = new Code(
-        '#code',
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -45,13 +58,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -60,6 +73,5 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
     );
 });

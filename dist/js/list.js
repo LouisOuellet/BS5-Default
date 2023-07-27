@@ -1,12 +1,15 @@
 $(document).ready(function(){
 
-    // Sample
-    
-    const sampleObject = new List(
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "list", //Component Name
         "#example", //Selector or JQuery Object to appendTo
         {
             class: { //Add Classes
-                list: "card rounded w-100", //List Element
+                component: "card rounded w-100", //List Element
             },
             tools: { //Tools located at the top of the list
                 add: {
@@ -14,7 +17,7 @@ $(document).ready(function(){
                     label: null, //Label
                     color: "success", //Color
                     class: null, //Added Classes
-                    callback: function(tool){}, //Executed when the tool is created
+                    callback: function(tool,list){}, //Executed when the tool is created
                 },
             },
             actions: { //Actions located at the end of each list item
@@ -23,7 +26,7 @@ $(document).ready(function(){
                     label: null, //Label
                     color: "danger", //Color
                     class: null, //Added Classes
-                    callback: function(action){}, //Executed when the action is created
+                    callback: function(action,item,list){}, //Executed when the action is created
                 },
             },
             icon: null, //Default Icon for list items
@@ -35,27 +38,52 @@ $(document).ready(function(){
                 dblclick: null, //Executed when an item is clicked twice
             },
         },
-        function(list){ //Callback
-            list.item( //Add an item to the list //Note: This function can be called multiple times to add multiple items. It can also called outside of the callback function.
+        function(list,component){ //Callback
+            list.tool( //Add a tool to the list //Note: This function can be called multiple times to add multiple tools. It can also called outside of the callback function.
+                {
+                    icon: "plus-lg", //Icon
+                    label: null, //Label
+                    color: "success", //Color
+                    class: null, //Added Classes
+                    name: "add", //Name
+                    callback: function(tool,list){}, //Executed when this tool is created
+                },
+            )
+            list.action( //Add an action to the list item //Note: This function can be called multiple times to add multiple actions. It can also called outside of the callback function.
+                {
+                    icon: "trash", //Icon
+                    label: null, //Label
+                    color: "danger", //Color
+                    class: null, //Added Classes
+                    name: "delete", //Name
+                    callback: function(action,item,list){}, //Executed when this action is created
+                },
+            );
+            list.add( //Add an item to the list //Note: This function can be called multiple times to add multiple items. It can also called outside of the callback function.
                 {
                     icon: null, //Icon
                     field: "Lorem Ipsum", //Add Content to the list item
                     click: null, //Executed when this item is clicked
                     dblclick: null, //Executed when this item is clicked twice
                 },
-                function(item){}, //Executed when this item is created
+                function(item,list){}, //Executed when this item is created
             );
-        }, 
+            list.get(); //Get the list
+        },
     );
 
-    // Code
-
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new List(' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "list", //Component Name' + "\n";
     scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
-    scriptCode += '            list: "card rounded w-100", //List Element' + "\n";
+    scriptCode += '            component: "card rounded w-100", //List Element' + "\n";
     scriptCode += '        },' + "\n";
     scriptCode += '        tools: { //Tools located at the top of the list' + "\n";
     scriptCode += '            add: {' + "\n";
@@ -63,7 +91,7 @@ $(document).ready(function(){
     scriptCode += '                label: null, //Label' + "\n";
     scriptCode += '                color: "success", //Color' + "\n";
     scriptCode += '                class: null, //Added Classes' + "\n";
-    scriptCode += '                callback: function(tool){}, //Executed when the tool is created' + "\n";
+    scriptCode += '                callback: function(tool,list){}, //Executed when the tool is created' + "\n";
     scriptCode += '            },' + "\n";
     scriptCode += '        },' + "\n";
     scriptCode += '        actions: { //Actions located at the end of each list item' + "\n";
@@ -72,7 +100,7 @@ $(document).ready(function(){
     scriptCode += '                label: null, //Label' + "\n";
     scriptCode += '                color: "danger", //Color' + "\n";
     scriptCode += '                class: null, //Added Classes' + "\n";
-    scriptCode += '                callback: function(action){}, //Executed when the action is created' + "\n";
+    scriptCode += '                callback: function(action,item,list){}, //Executed when the action is created' + "\n";
     scriptCode += '            },' + "\n";
     scriptCode += '        },' + "\n";
     scriptCode += '        icon: null, //Default Icon for list items' + "\n";
@@ -84,21 +112,44 @@ $(document).ready(function(){
     scriptCode += '            dblclick: null, //Executed when an item is clicked twice' + "\n";
     scriptCode += '        },' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(list){ //Callback' + "\n";
-    scriptCode += '        list.item( //Add an item to the list //Note: This function can be called multiple times to add multiple items. It can also called outside of the callback function.' + "\n";
+    scriptCode += '    function(list,component){ //Callback' + "\n";
+    scriptCode += '        list.tool( //Add a tool to the list //Note: This function can be called multiple times to add multiple tools. It can also called outside of the callback function.' + "\n";
+    scriptCode += '            {' + "\n";
+    scriptCode += '                icon: "plus-lg", //Icon' + "\n";
+    scriptCode += '                label: null, //Label' + "\n";
+    scriptCode += '                color: "success", //Color' + "\n";
+    scriptCode += '                class: null, //Added Classes' + "\n";
+    scriptCode += '                name: "add", //Name' + "\n";
+    scriptCode += '                callback: function(tool,list){}, //Executed when this tool is created' + "\n";
+    scriptCode += '            },' + "\n";
+    scriptCode += '        )' + "\n";
+    scriptCode += '        list.action( //Add an action to the list item //Note: This function can be called multiple times to add multiple actions. It can also called outside of the callback function.' + "\n";
+    scriptCode += '            {' + "\n";
+    scriptCode += '                icon: "trash", //Icon' + "\n";
+    scriptCode += '                label: null, //Label' + "\n";
+    scriptCode += '                color: "danger", //Color' + "\n";
+    scriptCode += '                class: null, //Added Classes' + "\n";
+    scriptCode += '                name: "delete", //Name' + "\n";
+    scriptCode += '                callback: function(action,item,list){}, //Executed when this action is created' + "\n";
+    scriptCode += '            },' + "\n";
+    scriptCode += '        );' + "\n";
+    scriptCode += '        list.add( //Add an item to the list //Note: This function can be called multiple times to add multiple items. It can also called outside of the callback function.' + "\n";
     scriptCode += '            {' + "\n";
     scriptCode += '                icon: null, //Icon' + "\n";
     scriptCode += '                field: "Lorem Ipsum", //Add Content to the list item' + "\n";
     scriptCode += '                click: null, //Executed when this item is clicked' + "\n";
     scriptCode += '                dblclick: null, //Executed when this item is clicked twice' + "\n";
     scriptCode += '            },' + "\n";
-    scriptCode += '            function(item){}, //Executed when this item is created' + "\n";
+    scriptCode += '            function(item,list){}, //Executed when this item is created' + "\n";
     scriptCode += '        );' + "\n";
-    scriptCode += '    }, ' + "\n";
+    scriptCode += '        list.get(); //Get the list' + "\n";
+    scriptCode += '    },' + "\n";
     scriptCode += ');';
-    
-    const code = new Code(
-        '#code',
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -107,13 +158,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -122,6 +173,5 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
     );
 });

@@ -1,46 +1,55 @@
 $(document).ready(function(){
 
-    // Sample
-    
-    const sampleObject = new Avatar(
-        "louis@laswitchtech.com", //Email
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "avatar", //Component Name
+        "#example", //Selector or JQuery Object to appendTo
         {
             class: { //Add Classes
                 object: "rounded-circle", //Object Element
             },
+            email: "louis@laswitchtech.com", //Set Email
             extension: false, //Set Extension
             size: "512px", //Set Size
             default: "mp", //Set Default if not found
             force: false, //Set Force Default
             rating: false, //Set Rating
         },
-        function(avatar){}, //Callback
+        function(avatar,component){ //Callback
+        },
     );
-    // Append to #example
-    sampleObject.appendTo("#example");
 
-    // Code
-
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new Avatar(' + "\n";
-    scriptCode += '    "louis@laswitchtech.com", //Email' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "avatar", //Component Name' + "\n";
+    scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
     scriptCode += '            object: "rounded-circle", //Object Element' + "\n";
     scriptCode += '        },' + "\n";
+    scriptCode += '        email: "louis@laswitchtech.com", //Set Email' + "\n";
     scriptCode += '        extension: false, //Set Extension' + "\n";
     scriptCode += '        size: "512px", //Set Size' + "\n";
     scriptCode += '        default: "mp", //Set Default if not found' + "\n";
     scriptCode += '        force: false, //Set Force Default' + "\n";
     scriptCode += '        rating: false, //Set Rating' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(avatar){}, //Callback' + "\n";
-    scriptCode += ');' + "\n";
-    scriptCode += '// Append to #example' + "\n";
-    scriptCode += 'sampleObject.appendTo("#example");';
-    
-    const code = new Code(
-        '#code',
+    scriptCode += '    function(avatar,component){ //Callback' + "\n";
+    scriptCode += '    },' + "\n";
+    scriptCode += ');';
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -49,13 +58,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -64,6 +73,5 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
     );
 });

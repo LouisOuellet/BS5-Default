@@ -1,11 +1,12 @@
 $(document).ready(function(){
 
-    // Sample
+    // Builder
+    const sampleBuilder = new Builder();
 
-    let modalCode = null;
-    
-    const sampleObject = new Modal(
-        "#example", //Selector or JQuery Object to add click event to
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "modal", //Component Name
+        "#example", //Selector or JQuery Object to appendTo
         {
             class: { //Add Classes
                 modal: null, //Modal Element
@@ -48,8 +49,7 @@ $(document).ready(function(){
             center: false, //Enable/Disable Centered Modal
             size: "none", //Set Size
         },
-        function(element,modal){ // callback
-            modalCode = element;
+        function(modal,component){ //Callback
             modal.add( //Add an action to the modal //Note: This function can be called multiple times to add multiple action. It can also called outside of the callback function.
                 {
                     icon: null, //Set Icon
@@ -61,11 +61,16 @@ $(document).ready(function(){
         },
     );
 
-    // Code
-
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new Modal(' + "\n";
-    scriptCode += '    "#example", //Selector or JQuery Object to add click event to' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "modal", //Component Name' + "\n";
+    scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
     scriptCode += '            modal: null, //Modal Element' + "\n";
@@ -108,7 +113,7 @@ $(document).ready(function(){
     scriptCode += '        center: false, //Enable/Disable Centered Modal' + "\n";
     scriptCode += '        size: "none", //Set Size' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(element,modal){ // callback' + "\n";
+    scriptCode += '    function(modal,component){ //Callback' + "\n";
     scriptCode += '        modal.add( //Add an action to the modal //Note: This function can be called multiple times to add multiple action. It can also called outside of the callback function.' + "\n";
     scriptCode += '            {' + "\n";
     scriptCode += '                icon: null, //Set Icon' + "\n";
@@ -119,9 +124,11 @@ $(document).ready(function(){
     scriptCode += '        );' + "\n";
     scriptCode += '    },' + "\n";
     scriptCode += ');';
-    
-    const code = new Code(
-        '#code',
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -130,13 +137,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format(modalCode.prop('outerHTML'), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -145,6 +152,5 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
     );
 });
