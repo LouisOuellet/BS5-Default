@@ -1322,9 +1322,8 @@ class Builder {
 
                 // Check if Selector is Set
                 if(this._component && this._selector){
-        
-                    // Add Event
-                    console.log(this._selector)
+            
+                    // Add Event to Selector
                     this._selector.click(function(){
                         self.toggle();
                     });
@@ -1650,6 +1649,156 @@ class Builder {
         
             toggle(){
                 this._bootstrap.toggle();
+            }
+        },
+        offcanvas: class extends Component {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                    },
+                    callback: {
+                        show: null,
+                        shown: null,
+                        hide: null,
+                        hidden: null,
+                    },
+                    icon: null,
+                    title: null,
+                    body: null,
+                    dismissible: true,
+                    backdrop: true,
+                    scroll: true,
+                    color: null,
+                    side: null,
+                };
+            }
+            
+            _insert(){
+
+                // Set Self
+                const self = this;
+            
+                // Check if Selector is Set
+                if(this._component && this._selector){
+            
+                    // Add Event to Selector
+                    this._selector.click(function(){
+                        self.toggle();
+                    });
+                }
+            }
+
+            bootstrap(){
+                return this._bootstrap;
+            }
+
+            show(){
+                this._bootstrap.show();
+            }
+        
+            hide(){
+                this._bootstrap.hide();
+            }
+        
+            toggle(){
+                this._bootstrap.toggle();
+            }
+
+            _create(){
+
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'offcanvas' + this._id,
+                    'class': 'offcanvas',
+                    'tabindex': -1,
+                    'data-bs-scroll': this._properties.scroll,
+                    'data-bs-backdrop': this._properties.backdrop,
+                }).prependTo('body');
+                this._component.id = this._component.attr('id');
+
+                // Create Header
+                this._component.header = $(document.createElement('div')).addClass('offcanvas-header').appendTo(this._component);
+                this._component.header.title = $(document.createElement('h5')).addClass('offcanvas-title').appendTo(this._component.header);
+        
+                // Create Icon
+                this._component.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + this._properties.icon).appendTo(this._component.header.title);
+
+                // Create Title
+                this._component.title = $(document.createElement('span')).text(this._properties.title).appendTo(this._component.header.title);
+        
+                // Create Close Button
+                this._component.close = $(document.createElement('button')).attr({
+                    'class': 'btn-close',
+                    'type': 'button',
+                    'aria-label': 'Close',
+                    'data-bs-dismiss': 'offcanvas',
+                }).appendTo(this._component.header);
+        
+                // Create Body
+                this._component.body = $(document.createElement('div')).addClass('offcanvas-body').html(this._properties.body).appendTo(this._component);
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+
+                // Set Icon
+                if(this._properties.icon == null){
+                    this._component.icon.remove();
+                }
+                
+                // Set Color
+                if(this._properties.color){
+                    this._component.addClass('text-bg-' + this._properties.color);
+                }
+        
+                // Set Dismissible
+                if(!this._properties.dismissible){
+                    this._component.close.remove();
+                }
+
+                // Set Side
+                switch(this._properties.side){
+                    case"start":
+                    case"end":
+                    case"top":
+                    case"bottom":
+                        this._component.addClass('offcanvas-' + this._properties.side);
+                        break;
+                    default:
+                        this._component.addClass('offcanvas-end');
+                        break;
+                }
+
+                // Initialize Bootstrap Offcanvas
+                this._bootstrap = new bootstrap.Offcanvas(this._component);
+
+                // Set Callbacks
+                if(typeof this._properties.callback.show === 'function'){
+                    this._component.on('show.bs.offcanvas', function(){
+                        self._properties.callback.show(self,self._component);
+                    });
+                }
+                if(typeof this._properties.callback.shown === 'function'){
+                    this._component.on('shown.bs.offcanvas', function(){
+                        self._properties.callback.shown(self,self._component);
+                    });
+                }
+                if(typeof this._properties.callback.hide === 'function'){
+                    this._component.on('hide.bs.offcanvas', function(){
+                        self._properties.callback.hide(self,self._component);
+                    });
+                }
+                if(typeof this._properties.callback.hidden === 'function'){
+                    this._component.on('hidden.bs.offcanvas', function(){
+                        self._properties.callback.hidden(self,self._component);
+                    });
+                }
             }
         },
         dropdown: class extends Component {
@@ -3065,6 +3214,1114 @@ class Builder {
                 }
             }
         },
+        timeline: class extends Component {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        timeline: null,
+                        item: null,
+                        icon: null,
+                        object: null,
+                        filters: null,
+                        component: null,
+                    },
+                    order: 'DESC',
+                    showNow: true,
+                    showStart: true,
+                    properties: {
+                        icon: 'circle',
+                        color: 'secondary',
+                        type: '',
+                        datetime: null,
+                        order: null,
+                        label: true,
+                        id:null,
+                        class: {
+                            item: null,
+                            icon: null,
+                            object: null,
+                        },
+                    },
+                };
+            }
+
+            _create(){
+
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'timeline' + this._id,
+                });
+                this._component.id = this._component.attr('id');
+
+                // Create Filters
+                this._component.filters = $(document.createElement('div')).attr({
+                    'id': this._component.id + 'filters',
+                    'class': 'btn-group',
+                    'role': 'group',
+                    'aria-label': 'Filters',
+                    'data-filters': '',
+                }).appendTo(this._component);
+        
+                // Add Filter 'All'
+                this._component.filters.all = $(document.createElement('button')).attr({
+                    'class': 'btn btn-primary text-capitalize',
+                    'type': 'button',
+                    'data-type': null,
+                    'data-label': 'All',
+                }).html('All').appendTo(this._component.filters);
+                this._component.filters.all.click(function(){
+                    self._component.filters.attr('data-filters','');
+                    self.filter();
+                });
+
+                // Create Timeline
+                this._component.timeline = $(document.createElement('div')).addClass('timeline').appendTo(this._component);
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Set Filters Class
+                if(this._properties.class.filters){
+                    this._component.filters.addClass(this._properties.class.filters);
+                }
+        
+                // Set Timeline Class
+                if(this._properties.class.timeline){
+                    this._component.timeline.addClass(this._properties.class.timeline);
+                }
+
+                // Clear Timeline
+                this.clear();
+
+                // Add Search to Timeline
+                this._builder.Search.add(this._component.timeline);
+            }
+
+            clear(){
+
+                // Set Self
+                const self = this;
+
+                // Remove Children
+                this._component.timeline.children().remove();
+        
+                // Show Start
+                if(this._properties.showStart){
+                    this.add({order:'0000000000000',icon:'clock-history',label: false},function(object){
+                        object.item.remove();
+                        object.removeAttr('data-search').removeAttr('data-type');
+                    });
+                }
+        
+                // Show Now
+                if(this._properties.showNow){
+                    this.add({order:'9999999999999',color:'success',icon:'clock',label: false},function(object){
+                        object.item.remove();
+                        object.removeAttr('data-search').removeAttr('data-type');
+                    });
+                }
+        
+                // Return Object
+                return this;
+            }
+
+            sort(order = null){
+        
+                // Set Order
+                if(order == null){
+                    order = this._properties.order;
+                }
+        
+                // Sanitize Order
+                if(order != 'ASC' && order != 'DESC'){
+                    order = 'DESC';
+                }
+        
+                // Retrieve Objects
+                let objects = this._component.timeline.children('div').detach().get();
+        
+                // Sort Objects
+                objects.sort(function(a, b){
+                    if(order == 'ASC'){
+                        return new Date($(a).data('order')) - new Date($(b).data('order'));
+                    } else {
+                        return new Date($(b).data('order')) - new Date($(a).data('order'));
+                    }
+                });
+        
+                // Append Objects
+                this._component.timeline.append(objects)
+        
+                // Return Object
+                return this;
+            }
+
+            filter(){
+                this._component.filters.find('button').removeClass('btn-primary').addClass('btn-light');
+                let current = this._component.filters.attr('data-filters').split(',');
+                if(this._component.filters.attr('data-filters') != ''){
+                    this._component.timeline.find('[data-type]').hide();
+                    for(const [key, filter] of Object.entries(current)){
+                        this._component.filters.find('button[data-type="' + filter + '"]').addClass('btn-primary').removeClass('btn-light');
+                        this._component.timeline.find('[data-type="' + filter + '"]').show();
+                    }
+                } else {
+                    this._component.timeline.find('[data-type]').show();
+                    this._component.filters.find('button[data-label="All"]').addClass('btn-primary').removeClass('btn-light');
+                }
+            }
+
+            addFilter(type = '', string = null){
+        
+                // Set Self
+                const self = this;
+        
+                // Set Label
+                var label = string;
+                if(label == null && type != ''){
+                    label = type;
+                }
+        
+                // Check if Filter Exists
+                if(label != null && this._component.filters.children('[data-label="' + label + '"]').length <= 0){
+        
+                    // Create Filter
+                    var filter = $(document.createElement('button')).attr({
+                        'class': 'btn btn-light text-capitalize',
+                        'type': 'button',
+                        'data-type': type,
+                        'data-label': label,
+                    }).html(label).appendTo(this._component.filters);
+        
+                    // Add Filter Event
+                    filter.click(function(){
+        
+                        // Get Current Filters
+                        var current = self._component.filters.attr('data-filters').split(',')
+                        if(self._builder.Helper.inArray(type,current)){
+                            current = current.filter(function(value){
+                                return value != type;
+                            });
+                        } else {
+                            current.push(type);
+                        }
+                        let filterString = current.toString();
+                        if(filterString.charAt(0) == ','){
+                            filterString = filterString.substring(1);
+                        }
+                        self._component.filters.attr('data-filters',filterString);
+                        self.filter();
+                    });
+                }
+            }
+
+            label(timestamp, color = 'primary'){
+        
+                // Sanitize Timestamp
+                let datetime = new Date(timestamp);
+        
+                // Set Order
+                let order = datetime.setHours(0,0,0,0);
+        
+                // Check if Label Exists
+                if(this._component.timeline.find('div.time-label[data-order="'+order+'"]').length > 0){
+        
+                    // Return Object
+                    return this;
+                }
+        
+                // Create Label
+                var label = $(document.createElement('div')).attr({
+                    'class': 'time-label',
+                    'data-order': order,
+                }).addClass('time-label').attr('data-order',order).prependTo(this._component.timeline);
+                label.time = $(document.createElement('span')).attr({
+                    'class': 'text-bg-'+color,
+                    'title': datetime.toLocaleString('en-US'),
+                    'data-bs-toggle': 'tooltip',
+                    'data-bs-placement': 'right',
+                }).html(datetime.toLocaleDateString('en-US',{day: 'numeric', month: 'long', year: 'numeric'})).appendTo(label);
+        
+                // Return Object
+                return this;
+            }
+
+            add(options = {}, callback = null){
+        
+                // Check if options is a Function
+                if(options instanceof Function){ callback = options; options = {}; }
+        
+                // Create Properties Options
+                let properties = {};
+                for(const [key, value] of Object.entries(this._properties.properties)){
+                    if(typeof properties[key] === 'undefined'){
+                        switch(key){
+                            case"datetime":
+                                properties[key] = Date.parse(new Date());
+                                break;
+                            case"class":
+                                properties[key] = {};
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Set Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"class":
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+
+                // Set ID
+                let id = this.count();
+        
+                // Create Timeline
+                var object = $(document.createElement('div')).attr({
+                    'id': this._component.id + 'object' + id,
+                    'class': 'timeline-object',
+                }).appendTo(this._component.timeline);
+                object.id = object.attr('id');
+        
+                // Set Properties
+                object.properties = properties;
+        
+                // Set object Class
+                if(this._properties.class.object){
+                    object.addClass(this._properties.class.object);
+                }
+                if(properties.class.object){
+                    object.addClass(properties.class.itobjectem);
+                }
+        
+                // Set DateTime
+                if(properties.datetime == null){
+                    properties.datetime = new Date();
+                }
+                var datetime = new Date(properties.datetime);
+        
+                // Set Order
+                var order = Date.parse(datetime);
+                if(properties.order != null){
+                    order = properties.order;
+                }
+                object.attr('data-order',order);
+        
+                // Set Type
+                if(properties.type != null){
+                    object.attr('data-type',properties.type);
+                }
+        
+                // Add Filter
+                if(properties.type != null){
+                    this.addFilter(properties.type);
+                }
+        
+                // Set Icon
+                object.icon = $(document.createElement('i')).addClass('bi bi-' + properties.icon + ' text-bg-'+properties.color).appendTo(object);
+                if(properties.class.icon){
+                    object.icon.addClass(properties.class.icon);
+                }
+        
+                // Set item
+                object.item = $(document.createElement('div')).addClass('timeline-item').appendTo(object);
+                if(this._properties.class.item){
+                    object.item.addClass(this._properties.class.item);
+                }
+                if(properties.class.item){
+                    object.item.addClass(properties.class.item);
+                }
+        
+                // Set Tools
+                object.tools = $(document.createElement('div')).addClass('tools').appendTo(object.item);
+        
+                // Set Time
+                var time = $(document.createElement('span')).appendTo(object.tools);
+                time.icon = $(document.createElement('i')).addClass('bi bi-clock me-1').appendTo(time);
+                time.ago = $(document.createElement('time')).attr({
+                    'class': 'timeago',
+                    'title': datetime.toLocaleString(),
+                    'datetime': datetime.toLocaleString(),
+                    'data-bs-toggle': 'tooltip',
+                    'data-bs-placement': 'top',
+                    'data-bs-title': datetime.toLocaleString(),
+                }).appendTo(time);
+                time.ago.timeago();
+                time.ago.bootstrap = new bootstrap.Tooltip(time.ago);
+                object.time = time;
+        
+                // Add Label
+                if(properties.label){
+                    this.label(order)
+                }
+        
+                // Execute Callback
+                if(typeof callback === 'function'){
+                    callback(object,this);
+                }
+        
+                // Sort
+                this.sort();
+        
+                // Set Search
+                this._builder.Search.set(object);
+        
+                // Return Object
+                return this;
+            }
+        },
+        feed: class extends Component {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                        feed: null,
+                        post: null,
+                    },
+                    properties: {
+                        username: null,
+                        title: null,
+                        content: null,
+                        datetime: null,
+                        class: {
+                            post: null,
+                        },
+                    },
+                    controls:{},
+                };
+            }
+
+            _create(){
+
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'feed' + this._id,
+                    'class': 'feed',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Set Feed Class
+                if(this._properties.class.feed){
+                    this._component.addClass(this._properties.class.feed);
+                }
+
+                // Add Search
+                this._builder.Search.add(this._component);
+            }
+    
+            clear(){
+        
+                // Clear Feed's Children
+                this._component.children().remove();
+        
+                // Return Object
+                return this;
+            }
+
+            sort(order = null){
+        
+                // Set Order
+                if(order == null){
+                    order = this._properties.order;
+                }
+        
+                // Sanitize Order
+                if(order != 'ASC' && order != 'DESC'){
+                    order = 'DESC';
+                }
+        
+                // Retrieve Objects
+                let objects = this._component.children('div').detach().get();
+        
+                // Sort Objects
+                objects.sort(function(a, b){
+                    if(order == 'ASC'){
+                        return new Date($(a).data('order')) - new Date($(b).data('order'));
+                    } else {
+                        return new Date($(b).data('order')) - new Date($(a).data('order'));
+                    }
+                });
+        
+                // Append Objects
+                this._component.append(objects)
+        
+                // Return Object
+                return this;
+            }
+
+            add(options = {}, callback = null){
+        
+                // Set Self
+                const self = this
+        
+                // Check if Options is a Function
+                if(options instanceof Function){ callback = options; options = {}; }
+        
+                // Create properties Options
+                let properties = {};
+                for(const [key, value] of Object.entries(this._properties.properties)){
+                    if(typeof properties[key] === 'undefined'){
+                        switch(key){
+                            case"datetime":
+                                properties[key] = Date.parse(new Date());
+                                break;
+                            case"class":
+                                properties[key] = {};
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Set Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"class":
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+
+                // Set ID
+                let id = this.count();
+        
+                // Create Post
+                var post = $(document.createElement('div')).attr({
+                    'id': this._component.id + 'post' + id,
+                    'class': 'post',
+                }).appendTo(this._component);
+                post.id = post.attr('id');
+                post.properties = properties;
+        
+                // Set Post Class
+                if(this._properties.class.post){
+                    post.addClass(this._properties.class.post);
+                }
+        
+                // Set DateTime
+                var datetime = new Date(properties.datetime);
+        
+                // Set Order
+                var order = Date.parse(datetime);
+                if(properties.order != null){
+                    order = properties.order;
+                }
+                post.attr('data-order',order);
+        
+                // Create Title Block
+                post.title = $(document.createElement('div')).addClass('title-block').appendTo(post);
+                post.title.header = $(document.createElement('h2')).addClass('title').appendTo(post.title);
+        
+                // Set Title
+                if(properties.title != null){
+                    post.title.header.text(properties.title);
+                }
+        
+                // Create User Block
+                post.user = $(document.createElement('div')).addClass('user-block user-select-none').appendTo(post);
+                post.user.avatar = $(document.createElement('img')).addClass('img-circle rounded-circle img-bordered-sm').attr('alt','Avatar').appendTo(post.user);
+                post.user.username = $(document.createElement('span')).addClass('username mt-2').appendTo(post.user);
+                post.user.link = $(document.createElement('a')).addClass('text-decoration-none').appendTo(post.user.username);
+                post.user.date = $(document.createElement('span')).addClass('description mt-1').appendTo(post.user);
+                post.user.date.icon = $(document.createElement('i')).addClass('bi-clock me-1').appendTo(post.user.date);
+                post.user.date.timeago = $(document.createElement('time')).attr({
+                    'class': 'timeago',
+                    'title': datetime.toLocaleString(),
+                    'datetime': datetime.toLocaleString(),
+                    'data-bs-toggle': 'tooltip',
+                    'data-bs-placement': 'top',
+                    'data-bs-title': datetime.toLocaleString(),
+                }).html(datetime.toLocaleString()).appendTo(post.user.date).timeago();
+                post.user.date.timeago.bootstrap = new bootstrap.Tooltip(post.user.date.timeago);
+        
+                // Set User Avatar
+                if(properties.username != null){
+                    post.user.link.attr('href','/users/details?id=' + properties.username).html(properties.username);
+                    post.user.avatar.attr('src',this._builder.Helper.gravatar(properties.username));
+                }
+        
+                // Create Content Block
+                post.content = $(document.createElement('p')).addClass('content').appendTo(post);
+        
+                // Set Content
+                if(properties.content != null){
+                    post.content.html(properties.content);
+                }
+        
+                // Create Controls Block
+                post.controls = $(document.createElement('p')).addClass('controls user-select-none').appendTo(post);
+        
+                // Add Controls
+                for(const [name, control] of Object.entries(self._properties.controls)){
+        
+                    // Create Control
+                    var object = $(document.createElement('a')).addClass('text-decoration-none text-sm cursor-pointer me-2').appendTo(post.controls);
+                    object.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(object);
+                    object.label = $(document.createElement('span')).appendTo(object);
+        
+                    // Set Icon
+                    if(control.icon){
+                        object.icon.addClass('bi-' + control.icon);
+                    }
+        
+                    // Set Label
+                    if(control.label){
+                        object.label.html(control.label);
+                    }
+        
+                    // Set Callback
+                    if(control.callback && control.callback instanceof Function){
+                        control.callback(object,post,self);
+                    }
+                }
+        
+                // Execute Callback
+                if(typeof callback === 'function'){
+                    callback(post,this);
+                }
+        
+                // Sort
+                this.sort();
+        
+                // Set Search
+                this._builder.Search.set(post)
+        
+                // Return Object
+                return this;
+            }
+        },
+        table: class extends Component {
+            
+            #buttons = {
+                columnsVisibility:{
+                    label:{
+                        extend: 'colvis',
+                        text: '<i class="bi-layout-sidebar-inset me-2"></i>Columns',
+                    },
+                    icon:{
+                        extend: 'colvis',
+                        text: '<i class="bi-layout-sidebar-inset"></i>',
+                    },
+                },
+                selectTools:{
+                    label:{
+                        extend: 'collection',
+                        text: '<i class="bi-check2-square me-2"></i>Select',
+                        buttons: [
+                            {
+                                extend: 'selectAll',
+                                text: '<i class="bi-check2-all me-2"></i>All',
+                            },
+                            {
+                                extend: 'selectNone',
+                                text: '<i class="bi-x-square me-2"></i>None',
+                            },
+                        ],
+                    },
+                    icon:{
+                        extend: 'collection',
+                        text: '<i class="bi-check2-square"></i>',
+                        buttons: [
+                            {
+                                extend: 'selectAll',
+                                text: '<i class="bi-check2-all me-2"></i>All',
+                            },
+                            {
+                                extend: 'selectNone',
+                                text: '<i class="bi-x-square me-2"></i>None',
+                            },
+                        ],
+                    },
+                },
+                advancedSearch:{
+                    label:{
+                        extend: 'collection',
+                        text: '<i class="bi-search me-2"></i>Advanced Search',
+                        action:function(e, dt, node, config){
+                            const SearchBuilder = new bootstrap.Collapse(node.closest('div.dataTables_wrapper').find('#SearchBuilder.collapse'))
+                            SearchBuilder.toggle()
+                        },
+                    },
+                    icon:{
+                        extend: 'collection',
+                        text: '<i class="bi-search"></i>',
+                        action:function(e, dt, node, config){
+                            const SearchBuilder = new bootstrap.Collapse(node.closest('div.dataTables_wrapper').find('#SearchBuilder.collapse'))
+                            SearchBuilder.toggle()
+                        },
+                    },
+                },
+                exportTools:{
+                    label:{
+                        extend: 'collection',
+                        text: '<i class="bi-arrow-bar-down me-2"></i>Export',
+                        buttons: [
+                            {
+                                extend: 'copy',
+                                text: '<i class="bi-clipboard me-2"></i>Clipboard',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<i class="bi-filetype-xlsx me-2"></i>Excel',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                            {
+                                extend: 'csv',
+                                text: '<i class="bi-filetype-csv me-2"></i>CSV',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                            {
+                                extend: 'pdf',
+                                text: '<i class="bi-filetype-pdf me-2"></i>PDF',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                        ],
+                    },
+                    icon:{
+                        extend: 'collection',
+                        text: '<i class="bi-arrow-bar-down"></i>',
+                        buttons: [
+                            {
+                                extend: 'copy',
+                                text: '<i class="bi-clipboard me-2"></i>Clipboard',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<i class="bi-filetype-xlsx me-2"></i>Excel',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                            {
+                                extend: 'csv',
+                                text: '<i class="bi-filetype-csv me-2"></i>CSV',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                            {
+                                extend: 'pdf',
+                                text: '<i class="bi-filetype-pdf me-2"></i>PDF',
+                                exportOptions: {
+                        columns: ':visible:not(:last-child)',
+                    },
+                            },
+                        ],
+                    },
+                }
+            }
+
+            #button(name,label = false){
+
+                // Set Self
+                const self = this;
+
+                // Set Key
+                let key = 'icon';
+
+                // Check if label is true
+                if(label){
+                    key = 'label';
+                }
+
+                // Check if Button Exists
+                if(typeof this._properties.buttons[name] === "undefined"){
+                    return null;
+                }
+
+                // Check if Button and Label exist
+                if(typeof this._properties.buttons[name][key] === "undefined"){
+                    return null;
+                }
+
+                // Return Button
+                return this._properties.buttons[name][key];
+            }
+            #datatable = null
+
+            _init(){
+                this._properties = {
+                    class: {
+                        object: null,
+                        buttons: null,
+                        searchBuilder: null,
+                        table: null,
+                        footer: null,
+                    },
+                    card:false,
+                    advancedSearch:true,
+                    exportTools:true,
+                    columnsVisibility:true,
+                    selectTools:false,
+                    showButtons:true,
+                    showButtonsLabel:true,
+                    pagination:true,
+                    information:true,
+                    lengthMenu:true,
+                    buttons: [],
+                    columnDefs: [],
+                    actions:null,
+                    dblclick: null,
+                    title: null,
+                    icon: null,
+                    datatable: {
+                        autoWidth: true,
+                        lengthChange: true,
+                        ordering: true,
+                        paging: true,
+                        searching: true,
+                        dom: '<"d-flex flex-column justify-content-start align-items-start mb-2"B<"#SearchBuilder.collapse w-100 py-2 pt-3"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><t><"d-flex justify-content-between align-items-center"lip>',
+                        lengthMenu: [ 10, 25, 50, 100 ],
+                        order: [[0, 'asc']],
+                        pageLength: 10,
+                        pagingType: 'simple_numbers',
+                        renderer: 'bootstrap',
+                        columnDefs: [],
+                        initComplete: function(settings, json) {},
+                        createdRow: function (row, data, index) {},
+                        language:{
+                            "decimal":        "",
+                            "emptyTable":     "No data available in table",
+                            "info":           "_START_ to _END_ of _TOTAL_",
+                            "infoEmpty":      "0 to 0 of 0",
+                            "infoFiltered":   "(filtered)",
+                            "infoPostFix":    "",
+                            "thousands":      ",",
+                            "lengthMenu":     "_MENU_",
+                            "loadingRecords": "Loading...",
+                            "processing":     "",
+                            "search":         "Search:",
+                            "zeroRecords":    "No matching records found",
+                            "paginate": {
+                                "first":      "First",
+                                "last":       "Last",
+                                "next":       "Next",
+                                "previous":   "Previous"
+                            },
+                            "aria": {
+                                "sortAscending":  ": activate to sort column ascending",
+                                "sortDescending": ": activate to sort column descending"
+                            },
+                            "searchBuilder": {
+                                "add": "Add Condition",
+                                "button": {
+                                    0: "Search Builder",
+                                    "_": "Search Builder (%d)",
+                                },
+                                "clearAll": "Clear All",
+                                "condition": "Condition",
+                                "conditions": {
+                                    "array": {
+                                        "contains": "Contains",
+                                        "empty": "Empty",
+                                        "equals": "Equals",
+                                        "not": "Not",
+                                        "notEmpty": "Not Empty",
+                                        "without": "Without"
+                                    },
+                                    "date": {
+                                        "after": "After",
+                                        "before": "Before",
+                                        "between": "Between",
+                                        "empty": "Empty",
+                                        "equals": "Equals",
+                                        "not": "Not",
+                                        "notBetween": "Not Between",
+                                        "notEmpty": "Not Empty"
+                                    },
+                                    "number": {
+                                        "between": "Between",
+                                        "empty": "Empty",
+                                        "equals": "Equals",
+                                        "gt": "Greater Than",
+                                        "gte": "Greater Than Equal To",
+                                        "lt": "Less Than",
+                                        "lte": "Less Than Equal To",
+                                        "not": "Not",
+                                        "notBetween": "Not Between",
+                                        "notEmpty": "Not Empty",
+                                    },
+                                    "string": {
+                                        "contains": "Contains",
+                                        "empty": "Empty",
+                                        "endsWith": "Ends With",
+                                        "equals": "Equals",
+                                        "not": "Not",
+                                        "notContains": "Does Not Contain",
+                                        "notEmpty": "Not Empty",
+                                        "notEndsWith": "Does Not End With",
+                                        "notStartsWith": "Does Not Start With",
+                                        "startsWith": "Starts With",
+                                    },
+                                },
+                                "data": "Data",
+                                "delete": "&times",
+                                "deleteTitle": "Delete filtering rule",
+                                "left": "<",
+                                "leftTitle": "Outdent criteria",
+                                "logicAnd": "And",
+                                "logicOr": "Or",
+                                "right": ">",
+                                "rightTitle": "Indent criteria",
+                                "title": {
+                                    0: "",
+                                    "_": "",
+                                },
+                                "value": "Value",
+                                "valueJoiner": "and",
+                            },
+                        },
+                        colReorder: false,
+                        fixedColumns: false,
+                        select: false,
+                        buttons: [],
+                        responsive: true,
+                    },
+                };
+            }
+
+            _create(){
+
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'table' + this._id,
+                    'class': '',
+                });
+                this._component.id = this._component.attr('id');
+
+                // Create Table
+                this._component.table = $(document.createElement('table')).addClass('table table-striped table-hover m-0 w-100 user-select-none').appendTo(this._component);
+
+                // Create Dropdown
+                if(typeof this._properties.actions === 'object'){
+                    this._component.actions = this._builder.component(
+                        'dropdown',
+                        {
+                            icon: "three-dots-vertical",
+                            class: {
+                                object: "dropstart",
+                                button: "p-0 px-2",
+                            },
+                        },
+                        function(dropdown){
+                            if(self._properties.actions){
+                                for(const [name, action] of Object.entries(self._properties.actions)){
+                                    dropdown.item(
+                                        action,
+                                        function(item){
+                                            item.btn.attr('data-action',name);
+                                        }
+                                    );
+                                }
+                            }
+                        },
+                    );
+                    this._properties.datatable.columnDefs.push(
+                        {
+                            target: this._properties.datatable.columnDefs.length,
+                            visible: true,
+                            responsivePriority: 1,
+                            title: "Action",
+                            data: null,
+                            width: '80px',
+                            defaultContent: this._component.actions.outerHTML(),
+                        }
+                    );
+                }
+
+                // Add Select Tools
+                if(this._properties.selectTools){
+                    this._properties.datatable.select = this._properties.selectTools
+                    this._properties.datatable.buttons.push(self.#button('selectTools',this._properties.showButtonsLabel));
+                }
+        
+                // Add Export Tools
+                if(this._properties.exportTools){
+                    this._properties.datatable.buttons.push(self.#button('exportTools',this._properties.showButtonsLabel));
+                }
+        
+                // Add Columns Visibility
+                if(this._properties.columnsVisibility){
+                    this._properties.datatable.buttons.push(self.#button('columnsVisibility',this._properties.showButtonsLabel));
+                }
+        
+                // Add Advanced Search
+                if(this._properties.advancedSearch){
+                    this._properties.datatable.buttons.push(self.#button('advancedSearch',this._properties.showButtonsLabel));
+                }
+
+                // drawCallback
+                this._properties.datatable.drawCallback = function(){
+        
+                    setTimeout(function() {
+                        // Tooltips
+                        $('[data-bs-toggle="tooltip"]').tooltip();
+        
+                        // Timeago
+                        $('.timeago').timeago();
+                    }, 0);
+                    
+                    if(typeof self.#datatable !== 'undefined'){
+        
+                        // Double Click Event
+                        if(typeof self._properties.dblclick === 'function'){
+                            self._component.table.find('tr').off().dblclick(
+                                function(event){
+                                    let node = $(this)
+                                    let data = self.#datatable.row(node).data();
+                                    self._properties.dblclick(event, self.#datatable, node, data);
+                                },
+                            );
+                        }
+        
+                        // Action Button Events
+                        self._component.table.find('button.dropdown-item[data-action]').each(function(){
+                            let node = $(this);
+                            let li = node.parents('li');
+                            let action = node.attr('data-action');
+                            let row = node.parents('tr');
+                            let data = self.#datatable.row(row).data();
+                            node.off().click(function(event){
+                                if(typeof self._properties.actions[action].action === 'function'){
+                                    self._properties.actions[action].action(event, self, node, row, data);
+                                }
+                            })
+                            if(typeof self._properties.actions[action].visible === 'function'){
+                                if(!self._properties.actions[action].visible(li, self, node, row, data)){
+                                    li.hide();
+                                } else {
+                                    li.show();
+                                }
+                            }
+                            if(typeof self._properties.actions[action].visible === 'boolean'){
+                                if(!self._properties.actions[action].visible){
+                                    li.hide();
+                                } else {
+                                    li.show();
+                                }
+                            }
+                        });
+                    }
+                }
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+
+                // Add Classes
+                this._properties.datatable.dom = '<"d-flex flex-column justify-content-start align-items-start mb-2';
+                if(this._properties.class.buttons){
+                    this._properties.datatable.dom += ' ' + this._properties.class.buttons;
+                }
+                this._properties.datatable.dom += '"B<"#SearchBuilder.collapse w-100';
+                if(this._properties.class.searchBuilder){
+                    this._properties.datatable.dom += ' ' + this._properties.class.searchBuilder;
+                }
+                this._properties.datatable.dom += '"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><"mt-4';
+                if(this._properties.class.table){
+                    this._properties.datatable.dom += ' ' + this._properties.class.table;
+                }
+                this._properties.datatable.dom += '"t><"d-flex justify-content-between align-items-center';
+                if(this._properties.class.footer){
+                    this._properties.datatable.dom += ' ' + this._properties.class.footer;
+                }
+                this._properties.datatable.dom += '"lip>';
+
+                // Initialize Datatable
+                this.#datatable = this._component.table.DataTable(this._properties.datatable);
+
+                // Add Search
+                this._builder.Search.get().on('input propertychange',function(){
+                    self.#datatable.search($(this).val()).draw();
+                });
+            }
+
+            add(data){
+                this.#datatable.row.add(data).draw();
+            }
+        
+            update(row, data){
+                this.#datatable.row(row).data(data).draw();
+            }
+        
+            delete(row){
+                this.#datatable.row(row).remove().draw();
+            }
+        },
         template: class extends Component {
 
             _init(){
@@ -3089,308 +4346,35 @@ class Builder {
                 }
             }
         },
-        offcanvas: class extends Component {
-
-            _init(){
-                this._properties = {
-                    class: {
-                        component: null,
-                    },
-                    callback: {
-                        show: null,
-                        shown: null,
-                        hide: null,
-                        hidden: null,
-                    },
-                    icon: null,
-                    title: null,
-                    body: null,
-                    dismissible: true,
-                    backdrop: true,
-                    scroll: true,
-                    color: null,
-                    side: null,
-                };
-            }
-
-            _create(){
-
-                // Set Self
-                const self = this;
-        
-                // Create Component
-                this._component = $(document.createElement('div')).attr({
-                    'id': 'component' + this._id,
-                    'class': '',
-                });
-                this._component.id = this._component.attr('id');
-        
-                // Set Component Class
-                if(this._properties.class.component){
-                    this._component.addClass(this._properties.class.component);
-                }
-            }
-        },
     }
 }
 
-// // Offcanvas
-// class Offcanvas {
+// // Carousel
+// class Carousel {
 
 //     #object = null;
-//     #bootstrap = null;
-    // #options = {
-    //     class: {
-    //         object: null,
-    //     },
-    //     callback: {
-    //         show: null,
-    //         shown: null,
-    //         hide: null,
-    //         hidden: null,
-    //     },
-    //     icon: null,
-    //     title: null,
-    //     body: null,
-    //     dismissible: true,
-    //     backdrop: true,
-    //     scroll: true,
-    //     color: null,
-    //     side: null,
-    // };
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('div')).attr('id','offcanvas' + builderCount).addClass('offcanvas').attr({"tabindex":-1,"data-bs-scroll": this.#options.scroll,"data-bs-backdrop": this.#options.backdrop}).prependTo('body');
-//         this.#object.id = this.#object.attr('id');
-
-//         // Create Header
-//         this.#object.header = $(document.createElement('div')).addClass('offcanvas-header').appendTo(this.#object);
-//         this.#object.header.title = $(document.createElement('h5')).addClass('offcanvas-title').appendTo(this.#object.header);
-
-//         // Create Icon
-//         this.#object.icon = $(document.createElement('i')).addClass('bi me-2').appendTo(this.#object.header.title);
-
-//         // Create Title
-//         this.#object.title = $(document.createElement('span')).appendTo(this.#object.header.title);
-
-//         // Create Close Button
-//         this.#object.close = $(document.createElement('button')).attr('type','button').addClass('btn-close').attr('data-bs-dismiss','offcanvas').attr('aria-label','Close').appendTo(this.#object.header);
-
-//         // Create Body
-//         this.#object.body = $(document.createElement('div')).addClass('offcanvas-body').appendTo(this.#object);
-
-//         // Set Icon
-//         if(this.#options.icon){
-//             this.#object.icon.addClass('bi-' + this.#options.icon);
-//         } else {
-//             this.#object.icon.addClass('d-none');
-//         }
-
-//         // Set Title
-//         if(this.#options.title){
-//             this.#object.title.text(this.#options.title);
-//         }
-
-//         // Set Body
-//         if(this.#options.body){
-//             this.#object.body.html(this.#options.body);
-//         }
-
-//         // Set Color
-//         if(this.#options.color){
-//             this.#object.addClass('text-bg-' + this.#options.color);
-//         }
-
-//         // Set Dismissible
-//         if(!this.#options.dismissible){
-//             this.#object.close.addClass('d-none');
-//         }
-
-//         // Set Side
-//         switch(this.#options.side){
-//             case"start":
-//             case"end":
-//             case"top":
-//             case"bottom":
-//                 this.#object.addClass('offcanvas-' + this.#options.side);
-//                 break;
-//             default:
-//                 this.#object.addClass('offcanvas-end');
-//                 break;
-//         }
-
-//         // Set Object Class
-//         if(this.#options.class.object){
-//             this.#object.addClass(this.#options.class.object);
-//         }
-
-//         // Initialize Bootstrap Offcanvas
-//         this.#bootstrap = new bootstrap.Offcanvas(this.#object);
-
-//         // Set Callbacks
-//         if(typeof this.#options.callback.show === 'function'){
-//             this.#object.on('show.bs.offcanvas', function(){
-//                 self.#options.callback.show(self,self.#object);
-//             });
-//         }
-//         if(typeof this.#options.callback.shown === 'function'){
-//             this.#object.on('shown.bs.offcanvas', function(){
-//                 self.#options.callback.shown(self,self.#object);
-//             });
-//         }
-//         if(typeof this.#options.callback.hide === 'function'){
-//             this.#object.on('hide.bs.offcanvas', function(){
-//                 self.#options.callback.hide(self,self.#object);
-//             });
-//         }
-//         if(typeof this.#options.callback.hidden === 'function'){
-//             this.#object.on('hidden.bs.offcanvas', function(){
-//                 self.#options.callback.hidden(self,self.#object);
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Convert string selector to jQuery object
-//             if (typeof selector === 'string') {
-//                 selector = $(selector);
-//             }
-
-//             // Add Click Event to Selector
-//             selector.click(function(){
-//                 self.show();
-//             });
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"callback":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     show(){
-//         this.#bootstrap.show();
-//     }
-    
-//     hide(){
-//         this.#bootstrap.hide();
-//     }
-    
-//     toggle(){
-//         this.#bootstrap.toggle();
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-
-// // Timeline
-// class Timeline {
-
-//     #container = null;
-//     #timeline = null;
-//     #filters = null;
 //     #options = {
 //         class: {
-//             timeline: null,
-//             item: null,
-//             icon: null,
-//             object: null,
-//             filters: null,
-//             container: null,
+//             carousel: null,
+//             slide: null,
+//             inner: null,
+//             indicators: null,
 //         },
-//         order: 'DESC',
-//         showNow: true,
-//         showStart: true,
+//         fade: false,
+//         touch: true,
+//         autoplay: false,
+//         indicators: false,
+//         controls: true,
 //         properties: {
-//             icon: 'circle',
-// 			color: 'secondary',
-// 			type: '',
-// 			datetime: null,
-// 			order: null,
-// 			label: true,
-// 			id:null,
-// 			class: {
-//                 item: null,
-//                 icon: null,
-//                 object: null,
-// 			},
+//             class: {
+//                 slide: null,
+//                 image: null,
+//                 caption: null,
+//             },
+//             interval: null,
+//             caption: null,
+//             source: null,
+//             alt: null,
 //         },
 //     };
 
@@ -3425,49 +4409,66 @@ class Builder {
 //         // Increment Count
 //         builderCount++;
 
-//         // Create Container
-// 		this.#container = $(document.createElement('div')).attr('id','timeline' + builderCount);
+//         // Create Object
+// 		this.#object = $(document.createElement('div')).addClass('carousel slide').attr('id','carousel' + builderCount);
+//         this.#object.id = this.#object.attr('id');
 
-//         // Set ID
-// 		this.#container.id = this.#container.attr('id');
+//         // Create Indicators
+//         if(this.#options.indicators){
+//             this.#object.indicators = $(document.createElement('div')).addClass('carousel-indicators').appendTo(this.#object);
+//         }
 
-//         // Add Classes to Container
-//         if(this.#options.class.container){
-// 			this.#container.addClass(this.#options.class.container);
-// 		}
+//         // Create Inner
+//         this.#object.inner = $(document.createElement('div')).addClass('carousel-inner').appendTo(this.#object);
 
-//         // Create Filters
-// 		this.#filters = $(document.createElement('div')).addClass('btn-group').attr('data-filters','').attr('role','group').attr('aria-label','Filters').appendTo(this.#container);
+//         // Create Controls
+//         this.#object.controls = {};
+//         this.#object.controls.previous = $(document.createElement('button')).addClass('carousel-control-prev').attr('type','button').attr('data-bs-target','#' + this.#object.id).attr('data-bs-slide','prev').appendTo(this.#object);
+//         this.#object.controls.previous.icon = $(document.createElement('span')).addClass('carousel-control-prev-icon').attr('aria-hidden','true').appendTo(this.#object.controls.previous);
+//         this.#object.controls.previous.label = $(document.createElement('span')).addClass('visually-hidden').text('Previous').appendTo(this.#object.controls.previous);
+//         this.#object.controls.next = $(document.createElement('button')).addClass('carousel-control-next').attr('type','button').attr('data-bs-target','#' + this.#object.id).attr('data-bs-slide','next').appendTo(this.#object);
+//         this.#object.controls.next.icon = $(document.createElement('span')).addClass('carousel-control-next-icon').attr('aria-hidden','true').appendTo(this.#object.controls.next);
+//         this.#object.controls.next.label = $(document.createElement('span')).addClass('visually-hidden').text('Next').appendTo(this.#object.controls.next);
 
-//         // Add Classes to Filters
-//         if(this.#options.class.filters){
-// 			this.#filters.addClass(this.#options.class.filters);
-// 		}
+//         // Set Fade
+//         if(this.#options.fade){
+//             this.#object.addClass('carousel-fade');
+//         }
 
-//         // Add All Filter
-// 		this.#filters.all = $(document.createElement('button')).addClass('btn btn-primary text-capitalize').html('all').attr('data-type',null).attr('data-label','all').attr('type','button').appendTo(this.#filters)
-// 		this.#filters.all.click(function(){
-// 			self.#filters.attr('data-filters','');
-// 			self.filter();
-// 		});
+//         // Set Touch
+//         if(!this.#options.touch){
+//             this.#object.attr('data-bs-touch','false');
+//         }
 
-//         // Create Timeline
-// 		this.#timeline = $(document.createElement('div')).addClass('timeline').appendTo(this.#container);
+//         // Set Auto Play
+//         if(this.#options.autoplay){
+//             this.#object.attr('data-bs-ride',this.#options.autoplay);
+//         }
 
-//         // Add Classes to Timeline
-//         if(this.#options.class.timeline){
-// 			this.#timeline.addClass(this.#options.class.timeline);
-// 		}
+//         // Set Controls
+//         if(!this.#options.controls){
+//             this.#object.controls.previous.addClass('d-none');
+//             this.#object.controls.next.addClass('d-none');
+//         }
 
-//         // Clear Timeline
-// 		this.clear();
+//         // Set Carousel Class
+//         if(this.#options.class.carousel){
+//             this.#object.addClass(this.#options.class.carousel);
+//         }
 
-//         // Add Search to Timeline
-// 		Search.add(this.#timeline);
+//         // Set Inner Class
+//         if(this.#options.class.inner){
+//             this.#object.inner.addClass(this.#options.class.inner);
+//         }
+
+//         // Set Indicators Class
+//         if(this.#options.class.indicators){
+//             this.#object.indicators.addClass(this.#options.class.indicators);
+//         }
 
 //         // Execute Callback
 //         if(typeof callback === 'function'){
-//             callback(this);
+//             callback(this,this.#object);
 //         }
 
 //         // Check if Selector is Set
@@ -3484,22 +4485,1285 @@ class Builder {
 //         for(const [key, value] of Object.entries(options)){
 //             if(typeof this.#options[key] !== 'undefined'){
 //                 switch(key){
-//                     case"defaults":
-//                         for(const [k, v] of Object.entries(value)){
-//                             if(typeof this.#options[key][k] !== 'undefined'){
-//                                 switch(k){
-//                                     case"class":
-//                                         for(const [section, classes] of Object.entries(v)){
-//                                             if(this.#options[key][k][section] != null){
-//                                                 this.#options[key][k][section] += ' ' + classes;
-//                                             } else {
-//                                                 this.#options[key][k][section] = classes;
-//                                             }
-//                                         }
-//                                         break;
-//                                     default:
-//                                         this.#options[key][k] = v;
-//                                         break;
+//                     case"properties":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     add(param1 = null, param2 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         let properties = {};
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
+//                 properties[key] = value;
+//             }
+//         }
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof properties[key] !== 'undefined'){
+//                 switch(key){
+//                     case"callback":
+//                         if(typeof properties[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof properties[key][k] !== 'undefined'){
+//                                     properties[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
+//                             } else {
+//                                 properties[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         properties[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Create Slide
+//         let slide = $(document.createElement('div')).addClass('carousel-item').appendTo(this.#object.inner);
+
+//         // Create Image
+//         slide.image = $(document.createElement('img')).addClass('d-block w-100').attr('src',properties.source).attr('alt',properties.alt).appendTo(slide);
+
+//         // Create Caption
+//         slide.caption = $(document.createElement('div')).addClass('carousel-caption d-none d-md-block').appendTo(slide);
+
+//         // Create Indicator
+//         if(this.#options.indicators){
+//             slide.indicator = $(document.createElement('button')).attr('type','button').attr('data-bs-target','#' + this.#object.id).attr('data-bs-slide-to',this.#object.inner.children().length - 1).appendTo(this.#object.indicators);
+//         }
+
+//         // Set Interval
+//         if(properties.interval){
+//             slide.attr('data-bs-interval',properties.interval);
+//         }
+
+//         // Set Caption
+//         if(properties.caption){
+//             slide.caption.removeClass('d-none').html(properties.caption);
+//         } else {
+//             slide.caption.remove();
+//         }
+
+//         // Set Slide Class
+//         if(this.#options.class.slide){
+//             slide.addClass(this.#options.class.slide);
+//         }
+//         if(properties.class.slide){
+//             slide.addClass(this.#options.class.slide);
+//         }
+
+//         // Set Image Class
+//         if(properties.class.image){
+//             slide.image.addClass(this.#options.class.image);
+//         }
+
+//         // Set Caption Class
+//         if(properties.class.caption){
+//             slide.caption.addClass(this.#options.class.caption);
+//         }
+
+//         // Set Active
+//         if(this.#object.inner.children().length === 1){
+//             slide.addClass('active');
+//             if(this.#options.indicators){
+//                 slide.indicator.addClass('active');
+//             }
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(slide, this);
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     appendTo(object){
+        
+//         // Append Object To
+//         this.#object.appendTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prependTo(object){
+        
+//         // Prepend Object To
+//         this.#object.prependTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     append(object){
+        
+//         // Append Object
+//         this.#object.append(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prepend(object){
+        
+//         // Prepend Object
+//         this.#object.prepend(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+// }
+
+// // Stepper
+// class Stepper {
+
+//     #object = null;
+//     #options = {
+//         class: {
+//             stepper: null,
+//             controls: null,
+//             steps: null,
+//             pagination: null,
+//         },
+//         color: "primary",
+//         callback: {},
+//         properties: {
+//             class: {},
+//             callback: {
+//                 hide: null,
+//                 hidden: null,
+//                 show: null,
+//                 shown: null,
+//             },
+//             icon: null,
+//         },
+//     };
+//     #count = 0;
+//     #current = 1;
+//     #steps = {};
+
+// 	constructor(builder, param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         // Inject Builder
+//         this.#builder = builder;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string' || param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Create Object
+// 		this.#object = $(document.createElement('form')).attr('id','stepper' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Create Controls
+//         this.#object.controls = $(document.createElement('div')).appendTo(this.#object);
+//         this.#object.controls.position = $(document.createElement('div')).addClass('position-relative m-4').attr('id',this.#object.id + 'controls').appendTo(this.#object.controls);
+//         this.#object.progress = $(document.createElement('div')).addClass('progress').attr({'role':'progressbar', 'aria-label':'Progress', 'aria-valuemin':'0', 'aria-valuemax':'100'}).css('height','4px').appendTo(this.#object.controls.position);
+//         this.#object.progress.bar = $(document.createElement('div')).addClass('progress-bar progress-bar-striped progress-bar-animated').css({'width':'0%','transition':'all 500ms ease'}).appendTo(this.#object.progress);
+//         this.#object.controls.position.absolute = $(document.createElement('div')).addClass('position-absolute w-100 top-0 start-50 translate-middle').appendTo(this.#object.controls.position);
+//         this.#object.controls.list = $(document.createElement('div')).addClass('d-flex justify-content-between').attr('id',this.#object.id + 'controls').appendTo(this.#object.controls.position.absolute);
+//         this.#object.controls.id = this.#object.controls.list.attr('id');
+
+//         // Create Steps
+//         this.#object.steps = $(document.createElement('div')).appendTo(this.#object);
+//         this.#object.steps.accordion = $(document.createElement('div')).addClass('accordion').attr('id',this.#object.id + 'steps').appendTo(this.#object.steps);
+//         this.#object.steps.id = this.#object.steps.accordion.attr('id');
+
+//         // Create Pagination
+//         this.#object.pagination = $(document.createElement('div')).appendTo(this.#object);
+//         this.#object.pagination.list = $(document.createElement('div')).addClass('d-block text-center').attr('id',this.#object.id + 'pagination').appendTo(this.#object.pagination);
+//         this.#object.pagination.previous = $(document.createElement('button')).addClass('btn btn-primary float-start').attr({'type':'button', 'data-bs-toggle':'collapse'}).appendTo(this.#object.pagination.list);
+//         this.#object.pagination.previous.icon = $(document.createElement('i')).addClass('bi bi-chevron-left').appendTo(this.#object.pagination.previous);
+//         this.#object.pagination.previous.text = $(document.createElement('span')).addClass('ms-1').text('Previous').appendTo(this.#object.pagination.previous);
+//         this.#object.pagination.next = $(document.createElement('button')).addClass('btn btn-primary float-end').attr({'type':'button', 'data-bs-toggle':'collapse'}).appendTo(this.#object.pagination.list);
+//         this.#object.pagination.next.text = $(document.createElement('span')).addClass('ms-1').text('Next').appendTo(this.#object.pagination.next);
+//         this.#object.pagination.next.icon = $(document.createElement('i')).addClass('bi bi-chevron-right').appendTo(this.#object.pagination.next);
+
+//         // Set Stepper Class
+//         if(this.#options.class.stepper){
+//             this.#object.addClass(this.#options.class.stepper);
+//         }
+
+//         // Set Controls Class
+//         if(this.#options.class.controls){
+//             this.#object.controls.addClass(this.#options.class.controls);
+//         }
+
+//         // Set Steps Class
+//         if(this.#options.class.steps){
+//             this.#object.steps.addClass(this.#options.class.steps);
+//         }
+
+//         // Set Pagination Class
+//         if(this.#options.class.pagination){
+//             this.#object.pagination.addClass(this.#options.class.pagination);
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+
+//         // Check if Selector is Set
+//         if(selector != null){
+
+//             // Append to Selector
+//             this.appendTo(selector);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"callback":
+//                     case"properties":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     add(param1 = null, param2 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         let properties = {};
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
+//                 properties[key] = value;
+//             }
+//         }
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof properties[key] !== 'undefined'){
+//                 switch(key){
+//                     case"callback":
+//                         if(typeof properties[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof properties[key][k] !== 'undefined'){
+//                                     properties[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
+//                             } else {
+//                                 properties[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         properties[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Increment Count
+//         this.#count++;
+
+//         // Create Step Control
+//         let control = $(document.createElement('button')).addClass('btn btn-sm btn-secondary rounded-circle align-middle text-center fw-bold').text(this.#count).attr({'id':this.#object.controls.id + this.#count,'type':'button','data-bs-toggle':'collapse','data-bs-target':'#' + this.#object.steps.id + this.#count,'aria-controls':this.#object.steps.id + this.#count,'aria-expanded':'false'}).css({'width':'3rem','height':'3rem','transition':'all 500ms ease'}).appendTo(this.#object.controls.list);
+//         control.id = control.attr('id');
+//         control.properties = properties;
+
+//         // Create Step Content
+//         let content = $(document.createElement('div')).addClass('fade collapse').attr('id',this.#object.steps.id + this.#count).attr('data-bs-parent','#' + this.#object.steps.id).appendTo(this.#object.steps.accordion);
+//         content.id = content.attr('id');
+//         content.properties = properties;
+//         content.bootstrap = new bootstrap.Collapse(content,{toggle:false});
+
+//         // Set Icon
+//         if(properties.icon){
+//             control.icon = $(document.createElement('i')).addClass('fs-3 bi bi-' + properties.icon).appendTo(control);
+//             control.html(control.icon);
+//         }
+
+//         const step = {content:content,control:control,properties:properties,id:this.#count};
+
+//         // Save Step
+//         this.#steps[this.#count] = step;
+
+//         // Set Step Content Events
+//         content.on('hide.bs.collapse', function (event) {
+
+//             // Execute Callback
+//             if(typeof properties.callback.hide === 'function'){
+//                 properties.callback.hide(event,step,self);
+//             }
+//         });
+//         content.on('hidden.bs.collapse', function (event) {
+
+//             // Execute Callback
+//             if(typeof properties.callback.hidden === 'function'){
+//                 properties.callback.hidden(event,step,self);
+//             }
+//         });
+//         content.on('show.bs.collapse', function (event) {
+
+//             // Set Current Step
+//             self.#current = step.id;
+            
+//             // Check if Step is First
+//             if(step.id === 1){
+//                 self.#object.pagination.previous.attr('disabled',true).attr('data-bs-target','');
+//             } else {
+//                 self.#object.pagination.previous.attr('disabled',false).attr('data-bs-target','#' + self.#object.steps.id + (step.id - 1));
+//             }
+
+//             // Check if Step is Last
+//             if(step.id === self.#count){
+//                 self.#object.pagination.next.attr('disabled',true).attr('data-bs-target','');
+//             } else {
+//                 self.#object.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self.#object.steps.id + (step.id + 1));
+//             }
+
+//             // Set Steps
+//             for (let id = 1; id <= self.#count; id++) {
+//                 if(id <= step.id){
+//                     self.#steps[id].control.removeClass('btn-secondary').addClass('btn-primary');
+//                 } else {
+//                     self.#steps[id].control.removeClass('btn-primary').addClass('btn-secondary');
+//                 }
+//                 if(id !== step.id){
+//                     self.#steps[id].content.bootstrap.hide();
+//                     self.#steps[id].control.attr('aria-expanded',false);
+//                 } else {
+//                     self.#steps[id].control.attr('aria-expanded',true);
+//                 }
+//             }
+
+//             // Set Progress Bar
+//             let width = 0 + '%';
+//             if(self.#count > 1){
+//                 width = (((step.id - 1) / (self.#count - 1)) * 100) + '%';
+//             }
+//             self.#object.progress.bar.css('width',width);
+
+//             // Execute Callback
+//             if(typeof properties.callback.show === 'function'){
+//                 properties.callback.show(event,step,self);
+//             }
+//         });
+//         content.on('shown.bs.collapse', function (event) {
+
+//             // Execute Callback
+//             if(typeof properties.callback.shown === 'function'){
+//                 properties.callback.shown(event,step,self);
+//             }
+//         });
+
+//         // Check if Step is First
+//         if(step.id === 1){
+//             content.bootstrap.show();
+//         }
+
+//         // Check if Stepper contains a single step
+//         if(this.#count > 1 && this.#object.pagination.next.attr('disabled') === 'disabled'){
+//             this.#object.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self.#object.steps.id + '2');
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(step,this);
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     appendTo(object){
+        
+//         // Append Object To
+//         this.#object.appendTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prependTo(object){
+        
+//         // Prepend Object To
+//         this.#object.prependTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     append(object){
+        
+//         // Append Object
+//         this.#object.append(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prepend(object){
+        
+//         // Prepend Object
+//         this.#object.prepend(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+// }
+
+// // Calendar
+// class Calendar {
+
+//     #object = null;
+//     #selector = null;
+//     #count = 0;
+//     #options = {
+//         themeSystem: 'bootstrap5',
+//         headerToolbar: {
+//             left: 'prev,next today',
+//             center: 'title',
+//             right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay'
+//         },
+//         height: 'auto',
+//         initialDate: null,
+//         initialView: 'dayGridMonth',
+//         selectable: false,
+//         editable: false,
+//         eventDragMinDistance: 0,
+//         class: {
+//             calendar: null,
+//             header: null,
+//         },
+//         callback: {
+//             dateClick: function(info) {},
+//             select: function(info) {},
+//             eventClick: function(info) {},
+//             eventMouseEnter: function(info) {},
+//             eventMouseLeave: function(info) {},
+//             eventDrop: function(info) {},
+//             eventResize: function(info) {},
+//             eventDidMount: function(info) {},
+//         },
+//         events: [],
+//         properties: {
+//             start: null,
+//             end: null,
+//             allDay: false,
+//             isBackground: false,
+//             color: null,
+//             icon: null,
+//             title: null,
+//             description: null,
+//             popover: true,
+//             callback: {
+//                 click: function(info) {},
+//                 mouseEnter: function(info) {},
+//                 mouseLeave: function(info) {},
+//                 drop: function(info) {},
+//                 resize: function(info) {},
+//             },
+//         },
+//     };
+//     #events = {};
+
+// 	constructor(builder, param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         // Inject Builder
+//         this.#builder = builder;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string' || param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Create Object
+// 		this.#object = $(document.createElement('div')).attr('id','calendar' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Set wrapper Class
+//         if(this.#options.class.wrapper){
+//             this.#object.addClass(this.#options.class.wrapper);
+//         }
+
+//         // Check if Selector is Set
+//         if(selector != null){
+
+//             if(typeof selector === 'string'){
+//                 selector = $(selector);
+//             }
+
+//             this.#selector = selector;
+
+//             // Append to Selector
+//             this.appendTo(selector);
+//         } else {
+
+//             // Return Error
+//             return false;
+//         }
+
+//         // Set intialDate
+//         if(this.#options.initialDate === null){
+//             this.#options.initialDate = new Date();
+//         }
+
+//         // Set Options
+//         this.#object.options = {
+//             themeSystem: this.#options.themeSystem,
+//             headerToolbar: this.#options.headerToolbar,
+//             initialDate: this.#options.initialDate,
+//             initialView: this.#options.initialView,
+//             selectable: this.#options.selectable,
+//             editable: this.#options.editable,
+//             height: this.#options.height,
+//             eventDragMinDistance: this.#options.eventDragMinDistance,
+//             dateClick: function(info) { self.#dateClick(info); },
+//             select: function(info) { self.#select(info); },
+//             eventClick: function(info) { self.#eventClick(info); },
+//             eventMouseEnter: function(info) { self.#eventMouseEnter(info); },
+//             eventMouseLeave: function(info) { self.#eventMouseLeave(info); },
+//             eventDrop: function(info) { self.#eventDrop(info); },
+//             eventResize: function(info) { self.#eventResize(info); },
+//             eventDidMount: function(info) { self.#eventDidMount(info); },
+//             eventContent: function(arg) { return self.#eventContent(arg); },
+//         };
+
+//         // Create Calendar
+//         this.#object.fullCalendar = new FullCalendar.Calendar(this.#object[0], this.#object.options);
+
+//         // Initialize Calendar
+//         this.render();
+
+//         // Set header Class
+//         if(this.#options.class.header){
+//             this.#object.find('.fc-header-toolbar').addClass(this.#options.class.header);
+//         }
+
+//         // Add Events
+//         for(const [key, value] of Object.entries(this.#options.events)){
+//             this.add(value);
+//         }
+
+//         // Add Event to Calendar on Sidebar Toggle
+//         $('#sidebarToggle').click(function(){
+//             this.#object.fullCalendar.render();
+//         });
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"headerToolbar":
+//                     case"callback":
+//                     case"properties":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     add(param1 = null, param2 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         let properties = {};
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
+//                 properties[key] = value;
+//             }
+//         }
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof properties[key] !== 'undefined'){
+//                 switch(key){
+//                     case"callback":
+//                         if(typeof properties[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof properties[key][k] !== 'undefined'){
+//                                     properties[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
+//                             } else {
+//                                 properties[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         properties[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Increment Count
+//         this.#count++;
+
+//         // Set ID
+//         const EventID = this.#count;
+
+//         // Set Event
+//         var event = {
+//             title: properties.title,
+//             start: properties.start,
+//             end: properties.end,
+//             allDay: properties.allDay,
+//             id: EventID,
+//         };
+
+//         if(properties.color){
+//             event.classNames = 'text-bg-' + properties.color + ' border-' + properties.color;
+//         }
+
+//         if(properties.icon){
+//             event.extendedProps = {icon: properties.icon};
+//         }
+
+//         if(properties.isBackground){
+//             event.display = 'background';
+//         }
+
+//         // Set Event
+//         this.#events[EventID] = {
+//             id: EventID,
+//             event: event,
+//             properties: properties,
+//             callback: properties.callback,
+//         };
+
+//         // Add Event to Calendar
+//         var calendarEvent = this.#object.fullCalendar.addEvent(event);
+
+//         // Set Calendar Event
+//         this.#events[EventID].calEvent = calendarEvent;
+//     }
+
+//     render(){
+
+//         // Set Self
+//         const self = this;
+
+//         // Get all ancestors of the calendar element
+//         var ancestors = this.#selector.parents();
+        
+//         // Filter out only the collapsible ancestors
+//         var collapsibles = ancestors.filter(function() {
+//             return $(this).hasClass('collapse');
+//         });
+        
+//         // Listen for the shown.bs.collapse event on each collapsible ancestor
+//         collapsibles.on('shown.bs.collapse', function () {
+//             // Call the updateSize method after the collapsible is shown
+//             self.#object.fullCalendar.updateSize();
+//         });
+        
+//         // Render Calendar
+//         this.#object.fullCalendar.render();
+
+//         setTimeout(function() {
+//             // Call the updateSize method after the timeout
+//             self.#object.fullCalendar.updateSize();
+//         }, 100);
+//     }
+
+//     #dateClick(info){
+
+//         // Execute Callback
+//         if(typeof this.#options.callback.dateClick === 'function'){
+//             this.#options.callback.dateClick(info,this);
+//         }
+//     }
+
+//     #select(info){
+
+//         // Execute Callback
+//         if(typeof this.#options.callback.select === 'function'){
+//             this.#options.callback.select(info,this);
+//         }
+//     }
+
+//     #eventContent(arg) {
+//         let arrayOfDomNodes = [];
+
+//         let spacerElement = document.createElement('span');
+//         spacerElement.classList.add('ms-1');
+//         arrayOfDomNodes.push(spacerElement);
+
+//         if (arg.event.extendedProps.icon) {
+//             let iconElement = document.createElement('i');
+//             iconElement.classList.add('me-1','bi', 'bi-' + arg.event.extendedProps.icon);
+//             arrayOfDomNodes.push(iconElement);
+//         }
+
+//         let titleElement = document.createElement('span');
+//         titleElement.innerText = arg.event.title;
+//         arrayOfDomNodes.push(titleElement);
+
+//         return { domNodes: arrayOfDomNodes };
+//     }
+
+//     #eventClick(info){
+//         const EventID = info.event._def.publicId;
+//         const EventName = {calendar: 'eventClick', event: 'click'};
+
+//         // Check if Event Exists
+//         if(typeof this.#events[EventID] !== 'undefined'){
+
+//             const Event = this.#events[EventID];
+
+//             // Execute Calendar Callback
+//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
+//                 this.#options.callback[EventName.calendar](Event,info,this);
+//             }
+
+//             // Execute Event Callback
+//             if(typeof Event.callback[EventName.event] === 'function'){
+//                 Event.callback[EventName.event](Event,info,this);
+//             }
+//         }
+//     }
+
+//     #eventMouseEnter(info){
+//         const EventID = info.event._def.publicId;
+//         const EventName = {calendar: 'eventMouseEnter', event: 'mouseEnter'};
+
+//         // Check if Event Exists
+//         if(typeof this.#events[EventID] !== 'undefined'){
+
+//             const Event = this.#events[EventID];
+
+//             // Execute Calendar Callback
+//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
+//                 this.#options.callback[EventName.calendar](Event,info,this);
+//             }
+
+//             // Execute Event Callback
+//             if(typeof Event.callback[EventName.event] === 'function'){
+//                 Event.callback[EventName.event](Event,info,this);
+//             }
+//         }
+//     }
+
+//     #eventMouseLeave(info){
+//         const EventID = info.event._def.publicId;
+//         const EventName = {calendar: 'eventMouseLeave', event: 'mouseLeave'};
+
+//         // Check if Event Exists
+//         if(typeof this.#events[EventID] !== 'undefined'){
+
+//             const Event = this.#events[EventID];
+
+//             // Execute Calendar Callback
+//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
+//                 this.#options.callback[EventName.calendar](Event,info,this);
+//             }
+
+//             // Execute Event Callback
+//             if(typeof Event.callback[EventName.event] === 'function'){
+//                 Event.callback[EventName.event](Event,info,this);
+//             }
+//         }
+//     }
+
+//     #eventDrop(info){
+//         const EventID = info.event._def.publicId;
+//         const EventName = {calendar: 'eventDrop', event: 'drop'};
+
+//         // Check if Event Exists
+//         if(typeof this.#events[EventID] !== 'undefined'){
+
+//             const Event = this.#events[EventID];
+
+//             // Execute Calendar Callback
+//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
+//                 this.#options.callback[EventName.calendar](Event,info,this);
+//             }
+
+//             // Execute Event Callback
+//             if(typeof Event.callback[EventName.event] === 'function'){
+//                 Event.callback[EventName.event](Event,info,this);
+//             }
+//         }
+//     }
+
+//     #eventResize(info){
+//         const EventID = info.event._def.publicId;
+//         const EventName = {calendar: 'eventResize', event: 'resize'};
+
+//         // Check if Event Exists
+//         if(typeof this.#events[EventID] !== 'undefined'){
+
+//             const Event = this.#events[EventID];
+
+//             // Execute Calendar Callback
+//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
+//                 this.#options.callback[EventName.calendar](Event,info,this);
+//             }
+
+//             // Execute Event Callback
+//             if(typeof Event.callback[EventName.event] === 'function'){
+//                 Event.callback[EventName.event](Event,info,this);
+//             }
+//         }
+//     }
+
+//     #eventDidMount(info){
+//         const EventID = info.event._def.publicId;
+//         const EventName = {calendar: 'eventDidMount', event: 'didMount'};
+
+//         // Check if Event Exists
+//         if(typeof this.#events[EventID] !== 'undefined'){
+
+//             const Event = this.#events[EventID];
+
+//             // Create Popover
+//             if(Event.properties.popover){
+//                 // Create focus trigger
+//                 $(info.el).hover(function() {
+//                     $(this).trigger('focus');
+//                 });
+
+//                 // Create Popover
+//                 var title = $(document.createElement('span')).text(Event.properties.title);
+//                 if(Event.properties.icon){
+//                     title.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + Event.properties.icon).prependTo(title);
+//                 }
+//                 info.el.setAttribute('data-bs-toggle','popover');
+//                 info.el.setAttribute('data-bs-trigger','focus');
+//                 info.el.setAttribute('data-bs-html','true');
+//                 info.el.setAttribute('data-bs-title',title.html());
+//                 info.el.setAttribute('data-bs-content',Event.properties.description);
+//                 const popover = bootstrap.Popover.getOrCreateInstance(info.el);
+//             }
+
+//             // Execute Calendar Callback
+//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
+//                 this.#options.callback[EventName.calendar](Event,info,this);
+//             }
+
+//             // Execute Event Callback
+//             if(typeof Event.callback[EventName.event] === 'function'){
+//                 Event.callback[EventName.event](Event,info,this);
+//             }
+//         }
+//     }
+
+//     appendTo(object){
+        
+//         // Append Object To
+//         this.#object.appendTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prependTo(object){
+        
+//         // Prepend Object To
+//         this.#object.prependTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     append(object){
+        
+//         // Append Object
+//         this.#object.append(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prepend(object){
+        
+//         // Prepend Object
+//         this.#object.prepend(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+
+//     outerHTML(){
+
+//         // Return Object
+//         return this.#object[0].outerHTML;
+//     }
+
+//     show(){
+
+//         // Show Object
+//         this.#object.show();
+
+//         // Return Object
+//         return this;
+//     }
+
+//     hide(){
+
+//         // Hide Object
+//         this.#object.hide();
+
+//         // Return Object
+//         return this;
+//     }
+// }
+
+// // IDE
+// class IDE {
+
+//     #object = null;
+//     #editor = null;
+//     #options = {
+//         class: {
+//             ide: null,
+//             numbers: null,
+//             input: null,
+//         },
+//         callback: {
+//             input: null,
+//         },
+//     };
+//     #builder = null
+
+// 	constructor(builder, param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         // Inject Builder
+//         this.#builder = builder;
+
+//         // Inject Builder
+//         this.#builder = builder;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string' || param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Create Object
+// 		this.#object = $(document.createElement('div')).addClass('ide').attr('id','IDE' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Add IDE Lines
+//         this.#object.lines = $(document.createElement('div')).addClass('ide-lines').appendTo(this.#object);
+
+//         // Add IDE Input
+//         this.#editor = $(document.createElement('textarea')).addClass('ide-input').appendTo(this.#object);
+
+//         // Add IDE Events
+//         this.#editor
+//             .keydown(function(e) {
+//                 if(e.keyCode === 9) {
+//                     e.preventDefault();
+
+//                     var start = this.selectionStart;
+//                     var end = this.selectionEnd;
+
+//                     this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
+//                     this.selectionStart = this.selectionEnd = start + 1;
+//                 }
+//             })
+//             .on('input propertychange', function() {
+//                 var lines = $(this).val().split('\n').length;
+//                 var lineNumbers = '';
+//                 for (var i = 1; i <= lines; i++) {
+//                     lineNumbers += i + '\n';
+//                 }
+//                 self.#object.lines.text(lineNumbers);
+//             })
+//             .trigger('propertychange')
+
+//         // Set IDE Class
+//         if(this.#options.class.ide){
+//             this.#object.addClass(this.#options.class.ide);
+//         }
+
+//         // Set Line Numbers Class
+//         if(this.#options.class.numbers){
+//             this.#object.lines.addClass(this.#options.class.numbers);
+//         }
+
+//         // Set Input Class
+//         if(this.#options.class.input){
+//             this.#editor.addClass(this.#options.class.input);
+//         }
+
+//         // Execute Callback Input
+//         if(typeof this.#options.callback.input === 'function'){
+//             this.#editor.on('input propertychange', function() {
+//                 self.#options.callback.input(this,self);
+//             });
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+
+//         // Check if Selector is Set
+//         if(selector != null){
+
+//             // Append to Selector
+//             this.appendTo(selector);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"properties":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
 //                                 }
 //                             }
 //                         }
@@ -3527,7 +5791,7 @@ class Builder {
 //     appendTo(object){
         
 //         // Append Object To
-//         this.#container.appendTo(object);
+//         this.#object.appendTo(object);
 
 //         // Return Object
 //         return this;
@@ -3536,7 +5800,7 @@ class Builder {
 //     prependTo(object){
         
 //         // Prepend Object To
-//         this.#container.prependTo(object);
+//         this.#object.prependTo(object);
 
 //         // Return Object
 //         return this;
@@ -3545,7 +5809,7 @@ class Builder {
 //     append(object){
         
 //         // Append Object
-//         this.#container.append(object);
+//         this.#object.append(object);
 
 //         // Return Object
 //         return this;
@@ -3554,7 +5818,7 @@ class Builder {
 //     prepend(object){
         
 //         // Prepend Object
-//         this.#container.prepend(object);
+//         this.#object.prepend(object);
 
 //         // Return Object
 //         return this;
@@ -3562,292 +5826,1832 @@ class Builder {
 
 //     html(){
 
-//         // Return Container HTML
-//         return this.#container.html();
+//         // Return Object
+//         return this.#object.html();
 //     }
 
 //     text(){
 
-//         // Return Container Text
-//         return this.#container.text();
+//         // Return Object
+//         return this.#object.text();
 //     }
 
-// 	clear(){
+//     outerHTML(){
 
-//         // Remove Children
-// 		this.#timeline.children().remove();
+//         // Return Object
+//         return this.#object[0].outerHTML;
+//     }
 
-//         // Show Start
-//         if(this.#options.showStart){
-//             this.create({order:'0000000000000',icon:'clock-history',label: false},function(object){
-//                 object.item.remove();
-//                 object.removeAttr('data-search').removeAttr('data-type');
-//             });
-//         }
+//     show(){
 
-//         // Show Now
-//         if(this.#options.showNow){
-//             this.create({order:'9999999999999',color:'success',icon:'clock',label: false},function(object){
-//                 object.item.remove();
-//                 object.removeAttr('data-search').removeAttr('data-type');
-//             });
-//         }
+//         // Show Object
+//         this.#object.show();
 
 //         // Return Object
 //         return this;
-// 	}
+//     }
 
-// 	sort(order = null){
+//     hide(){
 
-//         // Set Order
-//         if(order == null){
-//             order = this.#options.order;
-//         }
-
-//         // Sanitize Order
-//         if(order != 'ASC' && order != 'DESC'){
-//             order = 'DESC';
-//         }
-
-//         // Retrieve Objects
-// 		let objects = this.#timeline.children('div').detach().get();
-
-//         // Sort Objects
-// 		objects.sort(function(a, b){
-// 			if(order == 'ASC'){
-// 				return new Date($(a).data('order')) - new Date($(b).data('order'));
-// 			} else {
-// 				return new Date($(b).data('order')) - new Date($(a).data('order'));
-// 			}
-// 		});
-
-//         // Append Objects
-// 		this.#timeline.append(objects)
+//         // Hide Object
+//         this.#object.hide();
 
 //         // Return Object
 //         return this;
-// 	}
-
-//     filter(){
-//         this.#filters.find('button').removeClass('btn-primary').addClass('btn-light');
-//         let current = this.#filters.attr('data-filters').split(',');
-//         if(this.#filters.attr('data-filters') != ''){
-//             this.#timeline.find('[data-type]').hide();
-//             for(const [key, filter] of Object.entries(current)){
-//                 this.#filters.find('button[data-type="' + filter + '"]').addClass('btn-primary').removeClass('btn-light');
-//                 this.#timeline.find('[data-type="' + filter + '"]').show();
-//             }
-//         } else {
-//             this.#timeline.find('[data-type]').show();
-//             this.#filters.find('button[data-label="all"]').addClass('btn-primary').removeClass('btn-light');
-//         }
 //     }
 
-//     addFilter(type = '', string = null){
+//     sync(){
+//         this.#editor.trigger('propertychange');
+//     }
+
+//     val(value = null){
+
+//         if(value){
+
+//             // Set Input Value
+//             this.#editor.val(value).trigger('propertychange');
+
+//             // Return Object
+//             return this;
+//         }
+
+//         // Return Input Value
+//         return this.#editor.val();
+//     }
+
+//     toHTML(){
+
+//         // Return Input Value as HTML
+//         return Helper.markdownToHTML(this.val());
+//     }
+
+//     toMarkdown(){
+
+//         // Return Input Value as Markdown
+//         return Helper.htmlToMarkdown(this.val());
+//     }
+// }
+
+// // MCE
+// class MCE {
+
+//     #object = null;
+//     #editor = null;
+//     #options = {
+//         class: {
+//             mce: null,
+//         },
+//         callback: {
+//             input: null,
+//         },
+//     };
+
+// 	constructor(builder, param1 = null, param2 = null, param3 = null){
 
 //         // Set Self
 //         const self = this;
 
-//         // Set Label
-//         var label = string;
-//         if(label == null && type != ''){
-//         	label = type;
-//         }
+//         // Inject Builder
+//         this.#builder = builder;
 
-//         // Check if Filter Exists
-//         if(label != null && this.#filters.children('[data-label="' + label + '"]').length <= 0){
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
 
-//             // Create Filter
-//             var filter = $(document.createElement('button')).addClass('btn btn-light text-capitalize').html(label).attr('data-type',type).attr('data-label',label).attr('type','button').appendTo(this.#filters);
-
-//             // Add Filter Event
-//             filter.click(function(){
-
-//                 // Get Current Filters
-//                 var current = self.#filters.attr('data-filters').split(',')
-//                 if(Helper.inArray(type,current)){
-//                     current = current.filter(function(value){
-//                         return value != type;
-//                     });
-//                 } else {
-//                     current.push(type);
-//                 }
-//                 let filterString = current.toString();
-//                 if(filterString.charAt(0) == ','){
-//                     filterString = filterString.substring(1);
-//                 }
-//                 self.#filters.attr('data-filters',filterString);
-//                 self.filter();
-//             });
-//         }
-//     }
-
-// 	label(timestamp, color = 'primary'){
-
-//         // Sanitize Timestamp
-// 		let datetime = new Date(timestamp);
-
-//         // Set Order
-// 		let order = datetime.setHours(0,0,0,0);
-
-//         // Check if Label Exists
-// 		if(this.#timeline.find('div.time-label[data-order="'+order+'"]').length > 0){
-
-//             // Return Object
-// 			return this;
-// 		}
-
-//         // Create Label
-// 		var label = $(document.createElement('div')).addClass('time-label').attr('data-order',order).prependTo(this.#timeline);
-// 		label.time = $(document.createElement('span')).addClass('text-bg-'+color).html(datetime.toLocaleDateString('en-US',{day: 'numeric', month: 'long', year: 'numeric'})).attr('title',datetime.toLocaleString('en-US')).attr('data-bs-placement','right').appendTo(label);
-
-//         // Return Object
-//         return this;
-// 	}
-
-// 	create(options = {}, callback = null){
-
-//         // Check if options is a Function
-// 		if(options instanceof Function){ callback = options; options = {}; }
-
-//         // Create Defaults Options
-//         let defaults = {};
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof defaults[key] === 'undefined'){
-//                 switch(key){
-//                     case"datetime":
-//                         defaults[key] = Date.parse(new Date());
-//                         break;
-//                     case"class":
-//                         defaults[key] = {};
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(defaults[key][section] != null){
-//                                 defaults[key][section] += ' ' + classes;
-//                             } else {
-//                                 defaults[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         defaults[key] = value;
-//                         break;
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string' || param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
 //                 }
 //             }
-//         }
+//         });
 
-//         // Set Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof defaults[key] !== 'undefined'){
-//                 switch(key){
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(defaults[key][section] != null){
-//                                 defaults[key][section] += ' ' + classes;
-//                             } else {
-//                                 defaults[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         defaults[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
+//         // Configure Options
+//         this.config(options);
 
 //         // Increment Count
 //         builderCount++;
 
-//         // Create Timeline
-// 		var object = $(document.createElement('div')).attr('id','timelineObject' + builderCount).addClass('timeline-object').appendTo(this.#timeline);
+//         // Create Object
+// 		this.#object = $(document.createElement('div')).addClass('mce').attr('id','MCE' + builderCount);
+//         this.#object.id = this.#object.attr('id');
 
-//         // Set ID
-// 		if(defaults.id != null){
-// 			object.attr('data-id',defaults.id)
-// 		}
-// 		object.id = object.attr('id');
+//         // Add IDE Input
+//         this.#object.input = $(document.createElement('textarea')).appendTo(this.#object);
 
-//         // Set Options
-//         object.options = defaults;
+//         // Add MCE Events
+//         this.#object.input.tinymce({
+//             height: 400,
+//             width: '100%',
+//             menubar: false,
+//             plugins: [
+//                 'advlist','autolink',
+//                 'lists','link','image','charmap','preview','anchor','searchreplace','visualblocks',
+//                 'fullscreen','insertdatetime','media','table','help','wordcount'
+//             ],
+//             toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help',
+//             init_instance_callback: function (editor) {
+//                 self.#editor = editor;
+//                 var container = $(editor.getContainer());
+//                 container.find('.tox-statusbar').addClass("d-none");
 
-//         // Set object Class
-// 		if(this.#options.class.object){
-// 			object.addClass(this.#options.class.object);
-// 		}
-// 		if(defaults.class.object){
-// 			object.addClass(defaults.class.itobjectem);
-// 		}
+//                 // Execute Callback Input
+//                 if(typeof self.#options.callback.input === 'function'){
+//                     editor.on('input propertychange', function() {
+//                         self.#options.callback.input(editor,self);
+//                     });
+//                 }
+//             },
+//         });
 
-//         // Set DateTime
-//         if(defaults.datetime == null){
-//             defaults.datetime = new Date();
+//         // Set IDE Class
+//         if(this.#options.class.mce){
+//             this.#object.addClass(this.#options.class.mce);
 //         }
-//         var datetime = new Date(defaults.datetime);
 
-//         // Set Order
-// 		var order = Date.parse(datetime);
-//         if(defaults.order != null){
-//             order = defaults.order;
+//         // Execute Callback Input
+//         if(typeof this.#options.callback.input === 'function'){
+//             this.#object.input.on('input propertychange', function() {
+//                 self.#options.callback.input(this,self);
+//             });
 //         }
-// 		object.attr('data-order',order);
-
-//         // Set Type
-// 		if(defaults.type != null){
-// 			object.attr('data-type',defaults.type);
-// 		}
-
-//         // Add Filter
-//         if(defaults.type != null){
-//             this.addFilter(defaults.type);
-// 		}
-
-//         // Set Icon
-//         $(document.createElement('i'));
-// 		object.icon = $(document.createElement('i')).addClass('bi').addClass('bi-' + defaults.icon).addClass('text-bg-'+defaults.color).appendTo(object);
-// 		if(defaults.class.icon){
-// 			object.icon.addClass(defaults.class.icon);
-// 		}
-
-//         // Set item
-// 		object.item = $(document.createElement('div')).addClass('timeline-item').appendTo(object);
-// 		if(this.#options.class.item){
-// 			object.item.addClass(this.#options.class.item);
-// 		}
-// 		if(defaults.class.item){
-// 			object.item.addClass(defaults.class.item);
-// 		}
-
-//         // Set Tools
-//         object.tools = $(document.createElement('div')).addClass('tools').appendTo(object.item);
-
-//         // Set Time
-//         var time = $(document.createElement('span')).appendTo(object.tools);
-//         time.icon = $(document.createElement('i')).addClass('bi-clock me-1').appendTo(time);
-//         time.ago = $(document.createElement('time')).addClass('timeago').attr('data-bs-toggle','tooltip').attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).attr('data-bs-placement','top').appendTo(time);
-//         time.ago.timeago();
-//         time.ago.bootstrap = new bootstrap.Tooltip(time.ago);
-//         object.time = time;
-
-//         // Add Label
-// 		if(defaults.label){
-// 			this.label(order)
-// 		}
 
 //         // Execute Callback
-// 		if(typeof callback === 'function'){
-// 			callback(object,this);
-// 		}
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
 
-//         // Sort
-//         this.sort();
+//         // Check if Selector is Set
+//         if(selector != null){
 
-//         // Set Search
-// 		Search.set(object);
+//             // Append to Selector
+//             this.appendTo(selector);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"properties":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
 
 //         // Return Object
-// 		return this;
-// 	}
+//         return this;
+//     }
+
+//     appendTo(object){
+        
+//         // Append Object To
+//         this.#object.appendTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prependTo(object){
+        
+//         // Prepend Object To
+//         this.#object.prependTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     append(object){
+        
+//         // Append Object
+//         this.#object.append(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prepend(object){
+        
+//         // Prepend Object
+//         this.#object.prepend(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+
+//     outerHTML(){
+
+//         // Return Object
+//         return this.#object[0].outerHTML;
+//     }
+
+//     show(){
+
+//         // Show Object
+//         this.#object.show();
+
+//         // Return Object
+//         return this;
+//     }
+
+//     hide(){
+
+//         // Hide Object
+//         this.#object.hide();
+
+//         // Return Object
+//         return this;
+//     }
+
+//     val(value = null){
+
+//         // Set Self
+//         const self = this;
+
+//         if(value){
+
+//             // Set Input Value
+//             if(this.#editor){
+//                 this.#editor.setContent(value);
+//                 // Execute Callback Input
+//                 if(typeof this.#options.callback.input === 'function'){
+//                     this.#options.callback.input(this.#editor,this);
+//                 }
+//             } else {
+//                 var interval = setInterval(function() {
+//                     if(self.#editor){
+//                         clearInterval(interval);
+//                         self.#editor.setContent(value);
+//                         // Execute Callback Input
+//                         if(typeof self.#options.callback.input === 'function'){
+//                             self.#options.callback.input(self.#editor,self);
+//                         }
+//                     }
+//                 }, 100);
+//             }
+
+//             // Return Object
+//             return this;
+//         }
+
+//         // Return Input Value
+//         return this.#editor.getContent();
+//     }
+
+//     toHTML(){
+
+//         // Return Input Value as HTML
+//         return Helper.markdownToHTML(this.val());
+//     }
+
+//     toMarkdown(){
+
+//         // Return Input Value as Markdown
+//         return Helper.htmlToMarkdown(this.val());
+//     }
 // }
+
+// // Template
+// class Template {
+
+//     #object = null;
+//     #options = {
+//         class: {
+//             object: null,
+//         },
+//     };
+
+// 	constructor(param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string' || param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Create Object
+// 		this.#object = $(document.createElement('div')).attr('id','object' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Set Object Class
+//         if(this.#options.class.object){
+//             this.#object.addClass(this.#options.class.object);
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+
+//         // Check if Selector is Set
+//         if(selector != null){
+
+//             // Append to Selector
+//             this.appendTo(selector);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"properties":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     appendTo(object){
+        
+//         // Append Object To
+//         this.#object.appendTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prependTo(object){
+        
+//         // Prepend Object To
+//         this.#object.prependTo(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     append(object){
+        
+//         // Append Object
+//         this.#object.append(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     prepend(object){
+        
+//         // Prepend Object
+//         this.#object.prepend(object);
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+
+//     outerHTML(){
+
+//         // Return Object
+//         return this.#object[0].outerHTML;
+//     }
+
+//     show(){
+
+//         // Show Object
+//         this.#object.show();
+
+//         // Return Object
+//         return this;
+//     }
+
+//     hide(){
+
+//         // Hide Object
+//         this.#object.hide();
+
+//         // Return Object
+//         return this;
+//     }
+// }
+
+// // Toast
+// class Toast {
+
+//     #object = null;
+//     #options = {
+//         class: {
+//             object: null,
+//         },
+//         callback: {
+//             click: null,
+//         },
+//         position: 'bottom-end',
+//         properties: {
+//             class: {
+//                 item: null,
+//             },
+//             callback: {
+//                 click: null,
+//             },
+//             color: null,
+//             icon: null,
+//             title: null,
+//             body: null,
+//             datetime: null,
+//             delay: 5000,
+//             autohide: true,
+//             animation: true,
+//             dismissible: true,
+//         },
+//     };
+
+// 	constructor(param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string') {
+//                     selector = $(param);
+//                 } else if (param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Save Selector as Object
+//         this.#object = selector;
+
+//         // Set ID
+//         this.#object.attr('id','toast' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Configure as Toast Container
+//         this.#object.addClass('toast-container position-fixed p-3');
+
+//         // Set Position
+//         if(this.#options.position){
+//             switch(this.#options.position){
+//                 case"top-start":
+//                     this.#object.addClass('top-0 start-0');
+//                     break;
+//                 case"top-center":
+//                     this.#object.addClass('top-0 start-50 translate-middle-x');
+//                     break;
+//                 case"top-end":
+//                     this.#object.addClass('top-0 end-0');
+//                     break;
+//                 case"bottom-start":
+//                     this.#object.addClass('bottom-0 start-0');
+//                     break;
+//                 case"bottom-center":
+//                     this.#object.addClass('bottom-0 start-50 translate-middle-x');
+//                     break;
+//                 case"bottom-end":
+//                     this.#object.addClass('bottom-0 end-0');
+//                     break;
+//             }
+//         }
+
+//         // Set Object Class
+//         if(this.#options.class.object){
+//             this.#object.addClass(this.#options.class.object);
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"properties":
+//                     case"callback":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     add(param1 = null, param2 = null){
+
+//         // Set Self
+//         const self = this;
+        
+//         let options = {};
+//         let callback = null;
+
+//         let properties = {};
+
+//         // Set selector, options, and callback
+//         [param1, param2].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
+//                 properties[key] = value;
+//             }
+//         }
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof properties[key] !== 'undefined'){
+//                 switch(key){
+//                     case"callback":
+//                         if(typeof properties[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof properties[key][k] !== 'undefined'){
+//                                     properties[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
+//                             } else {
+//                                 properties[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         properties[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Create Toast
+//         let toast = $(document.createElement('div')).addClass('toast show').attr({"role":"alert","aria-live":"assertive","aria-atomic":"true"}).prependTo(this.#object);
+
+//         // Create Toast Header
+//         toast.header = $(document.createElement('div')).addClass('toast-header').appendTo(toast);
+//         toast.header.icon = $(document.createElement('i')).addClass('bi bi-bell me-1').appendTo(toast.header);
+//         toast.header.title = $(document.createElement('strong')).addClass('me-auto').appendTo(toast.header);
+//         toast.header.time = $(document.createElement('small')).addClass('text-muted').appendTo(toast.header);
+//         toast.header.time.ago = $(document.createElement('timeago')).addClass('timeago ').attr('data-bs-toggle','tooltip').appendTo(toast.header.time);
+//         toast.header.close = $(document.createElement('button')).addClass('btn-close d-none').attr({"type":"button","data-bs-dismiss":"toast","aria-label":"Close"}).appendTo(toast.header);
+
+//         // Create Toast Body
+//         toast.body = $(document.createElement('div')).addClass('toast-body').appendTo(toast);
+
+//         // Configure Color
+//         if(properties.color){
+//             toast.addClass('text-bg-' + properties.color);
+//         }
+
+//         // Configure Icon
+//         if(properties.icon){
+//             toast.header.icon.addClass('bi-' + properties.icon);
+//         } else {
+//             toast.header.icon.addClass('d-none');
+//         }
+
+//         // Configure Title
+//         if(properties.title){
+//             toast.header.title.html(properties.title);
+//         } else {
+//             toast.header.addClass('d-none');
+//         }
+
+//         // Configure Body
+//         if(properties.body){
+//             toast.body.html(properties.body);
+//         } else {
+//             toast.body.addClass('d-none');
+//             toast.header.addClass('border-0');
+//         }
+
+//         // Configure Date Time
+//         let datetime = null;
+//         if(properties.datetime !== null){
+//             datetime = new Date(properties.datetime);
+//         } else {
+//             datetime = new Date();
+//         }
+//         toast.header.time.ago.attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
+//         toast.header.time.ago.bootstrap = new bootstrap.Tooltip(toast.header.time.ago);
+
+//         // Configure Animation
+//         if(properties.animation){
+//             toast.addClass('fade');
+//         }
+
+//         // Configure Autohide
+//         if(properties.autohide){
+//             toast.timer = setTimeout(function(){
+//                 toast.addClass('opacity-0').delay(500).queue(function(){
+//                     toast.removeClass('show opacity-0').addClass('hide').dequeue();
+//                 });
+//             }, properties.delay);
+//         }
+
+//         // Configure Dismissible
+//         if(properties.dismissible){
+//             toast.header.close.removeClass('d-none');
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(toast,this);
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+// }
+// // Task
+// class Task {
+
+//     #object = null;
+//     #options = {
+//         class: {
+//             object: null,
+//         },
+//         callback: {
+//             click: null,
+//             viewAll: null,
+//         },
+//         icon: "list-task",
+//         color: "primary",
+//         properties: {
+//             class: {
+//                 item: null,
+//             },
+//             label: null,
+//             progress: {
+//                 size: null,
+//                 color: "primary",
+//                 striped: true,
+//                 animated: true,
+//                 scale: 100,
+//                 label: "",
+//             },
+//         },
+//     };
+
+// 	constructor(param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string') {
+//                     selector = $(param);
+//                 } else if (param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Save Selector as Object
+//         this.#object = selector;
+
+//         // Set ID
+//         this.#object.attr('id','task' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Configure as Dropdown
+//         this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
+
+//         // Create Button
+//         this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+//         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
+//         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
+
+//         // Create Menu
+//         this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
+
+//         // Create Header
+//         this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
+//         this.#object.menu.header.title.label = $(document.createElement('span')).text('Tasks').appendTo(this.#object.menu.header.title);
+//         this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
+
+//         // Create Seperators
+//         this.#object.menu.seperator = {};
+//         this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
+
+//         // Create Items List
+//         this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
+
+//         // Create Footer
+//         this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
+//         this.#object.menu.footer.btn.label = $(document.createElement('small')).text('View All').appendTo(this.#object.menu.footer.btn);
+
+//         // Set Object Class
+//         if(this.#options.class.object){
+//             this.#object.addClass(this.#options.class.object);
+//         }
+
+//         // Set Icon
+//         if(this.#options.icon){
+//             this.#object.btn.icon.addClass('bi-' + this.#options.icon);
+//         }
+
+//         // Set Color
+//         if(this.#options.color){
+//             this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
+//             this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
+//         }
+
+//         // Add Callback
+//         if(typeof this.#options.callback.viewAll === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 this.#options.callback.viewAll();
+//             });
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"properties":
+//                     case"callback":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     count(){
+
+//         // Count the number of new notifications
+//         let count = this.#object.find('.dropdown-item.task').length;
+
+//         // Set Count
+//         this.#object.menu.header.title.count.text(count);
+
+//         // Show Badge
+//         if(count > 0){
+//             this.#object.menu.header.title.count.removeClass('d-none');
+//             this.#object.btn.badge.removeClass('d-none');
+//             this.#object.btn.addClass('animate-pulse');
+//         } else {
+//             this.#object.menu.header.title.count.addClass('d-none');
+//             this.#object.btn.badge.addClass('d-none');
+//             this.#object.btn.addClass('animate-pulse');
+//         }
+
+//         // Return Count
+//         return count;
+//     }
+
+//     add(param1 = null, param2 = null){
+
+//         // Set Self
+//         const self = this;
+        
+//         let options = {};
+//         let callback = null;
+
+//         let properties = {};
+
+//         // Set selector, options, and callback
+//         [param1, param2].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
+//                 properties[key] = value;
+//             }
+//         }
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof properties[key] !== 'undefined'){
+//                 switch(key){
+//                     case"progress":
+//                         if(typeof properties[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof properties[key][k] !== 'undefined'){
+//                                     properties[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
+//                             } else {
+//                                 properties[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         properties[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Create Item
+//         let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
+
+//         // Create Button
+//         item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex flex-column py-2 task').attr('type','button').appendTo(item);
+
+//         // Add Label
+//         item.btn.label = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
+//         item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
+//         item.btn.label.scale = $(document.createElement('small')).addClass('text-muted float-end').appendTo(item.btn.label);
+
+//         // Add Progress Bar
+//         item.btn.progress = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
+
+//         // Add Seperator
+//         item.seperator = $(document.createElement('li')).insertAfter(item);
+//         item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
+
+//         // Add Change Callback to Progress Properties
+//         properties.progress.callback = {};
+//         properties.progress.callback.change = function(progress){
+
+//             // Set Scale
+//             item.btn.label.scale.text(progress.get() + '%');
+//         };
+
+//         // Configure Progress Bar
+//         item.btn.progress.bar = new Progress(
+//             item.btn.progress,
+//             properties.progress,
+//             function(progress){},
+//         );
+
+//         // Add Set Function
+//         item.set = function(value){
+//             item.btn.progress.bar.set(value);
+//         };
+
+//         // Configure Label
+//         if(properties.label !== null){
+//             item.btn.label.text.text(properties.label);
+//         }
+
+//         // Set Item Class
+//         if(properties.class.item){
+//             item.addClass(properties.class.item);
+//         }
+
+//         // Add Callback
+//         if(typeof this.#options.callback.click === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 self.#options.callback.click(item,self,self.#object);
+//             });
+//         }
+
+//         // Add Callback
+//         if(typeof properties.click === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 properties.click(item,self,self.#object);
+//             });
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(item,this);
+//         }
+
+//         // Set Count
+//         this.count();
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+// }
+
+// // Message
+// class Message {
+
+//     #object = null;
+//     #options = {
+//         class: {
+//             object: null,
+//         },
+//         callback: {
+//             click: null,
+//             viewAll: null,
+//             onRead: null,
+//         },
+//         icon: "envelope",
+//         color: "info",
+//         onReadDelay: 500,
+//         properties: {
+//             class: {
+//                 item: null,
+//             },
+//             click: null,
+//             onRead: null,
+//             datetime: null,
+//             label: null,
+//             email: null,
+//             name: null,
+//             isRead: false,
+//         },
+//     };
+
+// 	constructor(param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string') {
+//                     selector = $(param);
+//                 } else if (param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Save Selector as Object
+//         this.#object = selector;
+
+//         // Set ID
+//         this.#object.attr('id','message' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Configure as Dropdown
+//         this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
+
+//         // Create Button
+//         this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+//         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
+//         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
+
+//         // Create Menu
+//         this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
+
+//         // Create Header
+//         this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
+//         this.#object.menu.header.title.label = $(document.createElement('span')).text('Messages').appendTo(this.#object.menu.header.title);
+//         this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
+
+//         // Create Seperators
+//         this.#object.menu.seperator = {};
+//         this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
+
+//         // Create Items List
+//         this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
+
+//         // Create Footer
+//         this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
+//         this.#object.menu.footer.btn.label = $(document.createElement('small')).text('View All').appendTo(this.#object.menu.footer.btn);
+
+//         // Set Object Class
+//         if(this.#options.class.object){
+//             this.#object.addClass(this.#options.class.object);
+//         }
+
+//         // Set Icon
+//         if(this.#options.icon){
+//             this.#object.btn.icon.addClass('bi-' + this.#options.icon);
+//         }
+
+//         // Set Color
+//         if(this.#options.color){
+//             this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
+//             this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
+//         }
+
+//         // Add Callback
+//         if(typeof this.#options.callback.viewAll === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 this.#options.callback.viewAll();
+//             });
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"properties":
+//                     case"callback":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     count(){
+
+//         // Count the number of new notifications
+//         let count = this.#object.find('[data-isRead="false"]').length;
+
+//         // Set Count
+//         this.#object.menu.header.title.count.text(count);
+
+//         // Show Badge
+//         if(count > 0){
+//             this.#object.menu.header.title.count.removeClass('d-none');
+//             this.#object.btn.badge.removeClass('d-none');
+//             this.#object.btn.addClass('animate-bounce');
+//         } else {
+//             this.#object.menu.header.title.count.addClass('d-none');
+//             this.#object.btn.badge.addClass('d-none');
+//             this.#object.btn.removeClass('animate-bounce');
+//         }
+
+//         // Return Count
+//         return count;
+//     }
+
+//     add(param1 = null, param2 = null){
+
+//         // Set Self
+//         const self = this;
+        
+//         let options = {};
+//         let callback = null;
+
+//         let properties = {};
+
+//         // Set selector, options, and callback
+//         [param1, param2].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
+//                 properties[key] = value;
+//             }
+//         }
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof properties[key] !== 'undefined'){
+//                 switch(key){
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
+//                             } else {
+//                                 properties[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         properties[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Create Item
+//         let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
+
+//         // Create Button
+//         item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex align-items-center py-2').attr('type','button').appendTo(item);
+
+//         // Add Icon
+//         item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
+//         item.btn.icon.frame = $(document.createElement('div')).addClass('d-flex align-items-center justify-content-center rounded-circle text-bg-primary').css({"width":"48px","height":"48px"}).appendTo(item.btn.icon);
+
+//         // Add Label
+//         item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
+//         item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
+//         item.btn.label.meta = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
+//         item.btn.label.name = $(document.createElement('span')).appendTo(item.btn.label.meta);
+//         item.btn.label.timeago = $(document.createElement('timeago')).addClass('timeago ms-2').attr('data-bs-toggle','tooltip').appendTo(item.btn.label.meta);
+
+//         // Add Seperator
+//         item.seperator = $(document.createElement('li')).insertAfter(item);
+//         item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
+
+//         // Configure Avatar
+//         item.btn.icon.frame.avatar = new Avatar(
+//             properties.email, //Email
+//             {
+//                 class: { //Add Classes
+//                     object: "rounded-circle", //Object Element
+//                 },
+//                 size: "48px", //Set Size
+//             },
+//             function(avatar){}, //Callback
+//         ).appendTo(item.btn.icon.frame);
+
+//         // Configure Label
+//         if(properties.label !== null){
+//             item.btn.label.text.text(properties.label);
+//         }
+
+//         // Configure Name
+//         if(properties.name !== null){
+//             item.btn.label.name.text(properties.name);
+//         }
+
+//         // Configure Date Time
+//         let datetime = null;
+//         if(properties.datetime !== null){
+//             datetime = new Date(properties.datetime);
+//         } else {
+//             datetime = new Date();
+//         }
+//         item.btn.label.timeago.attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
+//         item.btn.label.timeago.bootstrap = new bootstrap.Tooltip(item.btn.label.timeago);
+
+//         // Configure isRead
+//         item.attr('data-isRead',properties.isRead);
+//         if(!properties.isRead){
+//             item.addClass('blink-primary');
+//             item.btn.label.text.addClass('fw-bold');
+//         }
+
+//         // Set Item Class
+//         if(properties.class.item){
+//             item.addClass(properties.class.item);
+//         }
+
+//         // Add onRead Callback
+//         if(!properties.isRead){
+//             item.timer;
+//             item.hover(function() {
+//                 item.timer = setTimeout(function() {
+//                     item.attr('data-isRead', 'true').removeClass('blink-primary');
+//                     item.btn.label.text.removeClass('fw-bold');
+//                     self.count();
+//                     if(typeof properties.onRead === 'function'){
+//                         properties.onRead(item,self,self.#object);
+//                     }
+//                 }, self.#options.onReadDelay);
+//             }, function() {
+//                 clearTimeout(item.timer);
+//             });
+//         }
+
+//         // Add Callback
+//         if(typeof this.#options.callback.click === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 self.#options.callback.click(item,self,self.#object);
+//             });
+//         }
+
+//         // Add Callback
+//         if(typeof properties.click === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 properties.click(item,self,self.#object);
+//             });
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(item,this);
+//         }
+
+//         // Set Count
+//         this.count();
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+// }
+
+// // Notification
+// class Notification {
+
+//     #object = null;
+//     #options = {
+//         class: {
+//             object: null,
+//         },
+//         callback: {
+//             click: null,
+//             readAll: null,
+//         },
+//         icon: "bell",
+//         color: "danger",
+//         onReadDelay: 500,
+//         properties: {
+//             class: {
+//                 item: null,
+//             },
+//             click: null,
+//             onRead: null,
+//             icon: "bell",
+//             color: "primary",
+//             datetime: null,
+//             label: null,
+//             isRead: false,
+//         },
+//     };
+
+// 	constructor(param1 = null, param2 = null, param3 = null){
+
+//         // Set Self
+//         const self = this;
+
+//         let selector = null;
+//         let options = {};
+//         let callback = null;
+
+//         // Set selector, options, and callback
+//         [param1, param2, param3].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'string') {
+//                     selector = $(param);
+//                 } else if (param instanceof jQuery) {
+//                     selector = param;
+//                 } else if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         this.config(options);
+
+//         // Increment Count
+//         builderCount++;
+
+//         // Save Selector as Object
+//         this.#object = selector;
+
+//         // Set ID
+//         this.#object.attr('id','notification' + builderCount);
+//         this.#object.id = this.#object.attr('id');
+
+//         // Configure as Dropdown
+//         this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
+
+//         // Create Button
+//         this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
+//         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
+//         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
+
+//         // Create Menu
+//         this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
+
+//         // Create Header
+//         this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
+//         this.#object.menu.header.title.label = $(document.createElement('span')).text('Notifications').appendTo(this.#object.menu.header.title);
+//         this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
+
+//         // Create Seperators
+//         this.#object.menu.seperator = {};
+//         this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
+
+//         // Create Items List
+//         this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
+
+//         // Create Footer
+//         this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
+//         this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
+//         this.#object.menu.footer.btn.label = $(document.createElement('small')).text('Mark All as Read').appendTo(this.#object.menu.footer.btn);
+
+//         // Set Object Class
+//         if(this.#options.class.object){
+//             this.#object.addClass(this.#options.class.object);
+//         }
+
+//         // Set Icon
+//         if(this.#options.icon){
+//             this.#object.btn.icon.addClass('bi-' + this.#options.icon);
+//         }
+
+//         // Set Color
+//         if(this.#options.color){
+//             this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
+//             this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
+//         }
+
+//         // Add Callback
+//         this.#object.menu.footer.btn.on('click',function(){
+//             self.readAll();
+//         });
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(this,this.#object);
+//         }
+//     }
+
+//     config(options = {}){
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof this.#options[key] !== 'undefined'){
+//                 switch(key){
+//                     case"properties":
+//                     case"callback":
+//                         if(typeof this.#options[key] !== 'undefined'){
+//                             for(const [k, v] of Object.entries(value)){
+//                                 if(typeof this.#options[key][k] !== 'undefined'){
+//                                     this.#options[key][k] = v;
+//                                 }
+//                             }
+//                         }
+//                         break;
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(this.#options[key][section] != null){
+//                                 this.#options[key][section] += ' ' + classes;
+//                             } else {
+//                                 this.#options[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         this.#options[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     count(){
+
+//         // Count the number of new notifications
+//         let count = this.#object.find('[data-isRead="false"]').length;
+
+//         // Set Count
+//         this.#object.menu.header.title.count.text(count);
+
+//         // Show Badge
+//         if(count > 0){
+//             this.#object.menu.header.title.count.removeClass('d-none');
+//             this.#object.btn.badge.removeClass('d-none');
+//             this.#object.btn.addClass('animate-wobble');
+//         } else {
+//             this.#object.menu.header.title.count.addClass('d-none');
+//             this.#object.btn.badge.addClass('d-none');
+//             this.#object.btn.removeClass('animate-wobble');
+//         }
+
+//         // Return Count
+//         return count;
+//     }
+
+//     readAll(){
+
+//         // Get all unread notifications
+//         let items = this.#object.find('[data-isRead="false"]');
+
+//         // Set all notifications as read
+//         items.attr('data-isRead', 'true').removeClass('blink-primary');
+//         items.find('span.text-wrap').removeClass('fw-bold');
+
+//         // Count the number of new notifications
+//         this.count();
+
+//         // Execute Callback
+//         if(typeof this.#options.callback.readAll === 'function'){
+//             this.#options.callback.readAll(self,self.#object);
+//         }
+
+//         // Return Object
+//         return this;
+//     }
+
+//     add(param1 = null, param2 = null){
+
+//         // Set Self
+//         const self = this;
+        
+//         let options = {};
+//         let callback = null;
+
+//         let properties = {};
+
+//         // Set selector, options, and callback
+//         [param1, param2].forEach(param => {
+//             if(param !== null){
+//                 if (typeof param === 'object') {
+//                     options = param;
+//                 } else if (typeof param === 'function') {
+//                     callback = param;
+//                 }
+//             }
+//         });
+
+//         // Configure Options
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
+//                 properties[key] = value;
+//             }
+//         }
+//         for(const [key, value] of Object.entries(options)){
+//             if(typeof properties[key] !== 'undefined'){
+//                 switch(key){
+//                     case"class":
+//                         for(const [section, classes] of Object.entries(value)){
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
+//                             } else {
+//                                 properties[key][section] = classes;
+//                             }
+//                         }
+//                         break;
+//                     default:
+//                         properties[key] = value;
+//                         break;
+//                 }
+//             }
+//         }
+
+//         // Create Item
+//         let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
+
+//         // Create Button
+//         item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex align-items-center py-2').attr('type','button').appendTo(item);
+
+//         // Add Icon
+//         item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
+//         item.btn.icon.frame = $(document.createElement('div')).addClass('d-flex align-items-center justify-content-center rounded-circle').css({"width":"48px","height":"48px"}).appendTo(item.btn.icon);
+//         item.btn.icon.frame.icon = $(document.createElement('i')).addClass('bi').appendTo(item.btn.icon.frame);
+
+//         // Add Label
+//         item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
+//         item.btn.label.time = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
+//         item.btn.label.time.timeago = $(document.createElement('timeago')).addClass('timeago').attr('data-bs-toggle','tooltip').appendTo(item.btn.label.time);
+//         item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
+
+//         // Add Seperator
+//         item.seperator = $(document.createElement('li')).insertAfter(item);
+//         item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
+
+//         // Configure Color
+//         if(properties.color !== null){
+//             item.btn.icon.frame.addClass('text-bg-' + properties.color);
+//         } else {
+//             item.btn.icon.frame.addClass('text-bg-primary');
+//         }
+
+//         // Configure Icon
+//         if(properties.icon !== null){
+//             item.btn.icon.frame.icon.addClass('bi-' + properties.icon);
+//         } else {
+//             item.btn.icon.frame.icon.addClass('bi-bell');
+//         }
+
+//         // Configure Date Time
+//         let datetime = null;
+//         if(properties.datetime !== null){
+//             datetime = new Date(properties.datetime);
+//         } else {
+//             datetime = new Date();
+//         }
+//         item.btn.label.time.timeago.attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
+//         item.btn.label.time.timeago.bootstrap = new bootstrap.Tooltip(item.btn.label.time.timeago);
+
+//         // Configure Label
+//         if(properties.label !== null){
+//             item.btn.label.text.text(properties.label);
+//         }
+
+//         // Configure isRead
+//         item.attr('data-isRead',properties.isRead);
+//         if(!properties.isRead){
+//             item.addClass('blink-primary');
+//             item.btn.label.text.addClass('fw-bold');
+//         }
+
+//         // Set Item Class
+//         if(properties.class.item){
+//             item.addClass(properties.class.item);
+//         }
+
+//         // Add onRead Callback
+//         if(!properties.isRead){
+//             item.timer;
+//             item.hover(function() {
+//                 item.timer = setTimeout(function() {
+//                     item.attr('data-isRead', 'true').removeClass('blink-primary');
+//                     item.btn.label.text.removeClass('fw-bold');
+//                     self.count();
+//                     if(typeof properties.onRead === 'function'){
+//                         properties.onRead(item,self,self.#object);
+//                     }
+//                 }, self.#options.onReadDelay);
+//             }, function() {
+//                 clearTimeout(item.timer);
+//             });
+//         }
+
+//         // Add Callback
+//         if(typeof this.#options.callback.click === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 self.#options.callback.click(item,self,self.#object);
+//             });
+//         }
+
+//         // Add Callback
+//         if(typeof properties.click === 'function'){
+//             this.#object.menu.footer.btn.on('click',function(){
+//                 properties.click(item,self,self.#object);
+//             });
+//         }
+
+//         // Execute Callback
+//         if(typeof callback === 'function'){
+//             callback(item,this);
+//         }
+
+//         // Set Count
+//         this.count();
+
+//         // Return Object
+//         return this;
+//     }
+
+//     html(){
+
+//         // Return Object
+//         return this.#object.html();
+//     }
+
+//     text(){
+
+//         // Return Object
+//         return this.#object.text();
+//     }
+// }
+
+
 
 // // Invoice
 // class Invoice {
@@ -4382,23 +8186,23 @@ class Builder {
 //             }
 //         });
 
-//         // Create Defaults Options
-//         let defaults = {};
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof defaults[key] === 'undefined'){
+//         // Create properties Options
+//         let properties = {};
+//         for(const [key, value] of Object.entries(this.#options.properties)){
+//             if(typeof properties[key] === 'undefined'){
 //                 switch(key){
 //                     case"class":
-//                         defaults[key] = {};
+//                         properties[key] = {};
 //                         for(const [section, classes] of Object.entries(value)){
-//                             if(defaults[key][section] != null){
-//                                 defaults[key][section] += ' ' + classes;
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
 //                             } else {
-//                                 defaults[key][section] = classes;
+//                                 properties[key][section] = classes;
 //                             }
 //                         }
 //                         break;
 //                     default:
-//                         defaults[key] = value;
+//                         properties[key] = value;
 //                         break;
 //                 }
 //             }
@@ -4406,19 +8210,19 @@ class Builder {
 
 //         // Set Options
 //         for(const [key, value] of Object.entries(options)){
-//             if(typeof defaults[key] !== 'undefined'){
+//             if(typeof properties[key] !== 'undefined'){
 //                 switch(key){
 //                     case"class":
 //                         for(const [section, classes] of Object.entries(value)){
-//                             if(defaults[key][section] != null){
-//                                 defaults[key][section] += ' ' + classes;
+//                             if(properties[key][section] != null){
+//                                 properties[key][section] += ' ' + classes;
 //                             } else {
-//                                 defaults[key][section] = classes;
+//                                 properties[key][section] = classes;
 //                             }
 //                         }
 //                         break;
 //                     default:
-//                         defaults[key] = value;
+//                         properties[key] = value;
 //                         break;
 //                 }
 //             }
@@ -4432,7 +8236,7 @@ class Builder {
 // 		object.id = object.attr('id');
 
 //         // Save Options
-//         object.options = defaults;
+//         object.options = properties;
 
 //         // Set Object Class
 //         if(object.options.class.object){
@@ -4537,4342 +8341,6 @@ class Builder {
         
 //         // Prepend Object
 //         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-
-// // Feed
-// class Feed {
-
-//     #feed = null;
-//     #options = {
-//         class: {
-//             feed: null,
-//             post: null,
-//         },
-//         properties: {
-//             username: null,
-//             title: null,
-//             content: null,
-//             datetime: null,
-//             class: {
-//                 post: null,
-//             },
-//         },
-//         controls:{},
-//     };
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Feed
-// 		this.#feed = $(document.createElement('div')).attr('id','feed' + builderCount).addClass('feed');
-//         this.#feed.id = this.#feed.attr('id');
-
-//         // Set Feed Class
-//         if(this.#options.class.feed){
-//             this.#feed.addClass(this.#options.class.feed);
-//         }
-
-//         // Add Search
-//         Search.add(this.#feed);
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                         for(const [k, v] of Object.entries(value)){
-//                             if(typeof this.#options[key][k] !== 'undefined'){
-//                                 switch(k){
-//                                     case"class":
-//                                         for(const [section, classes] of Object.entries(v)){
-//                                             if(this.#options[key][k][section] != null){
-//                                                 this.#options[key][k][section] += ' ' + classes;
-//                                             } else {
-//                                                 this.#options[key][k][section] = classes;
-//                                             }
-//                                         }
-//                                         break;
-//                                     default:
-//                                         this.#options[key][k] = v;
-//                                         break;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#feed.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#feed.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#feed.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#feed.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#feed.html();
-//     }
-
-//     outerHTML(){
-
-//         // Return Object
-//         return this.#feed.outerHTML();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#feed.text();
-//     }
-    
-//     clear(){
-
-//         // Clear Feed's Children
-//         this.#feed.children().remove();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     show(){
-
-//         // Show Feed
-//         this.#feed.show();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     hide(){
-
-//         // Hide Feed
-//         this.#feed.hide();
-
-//         // Return Object
-//         return this;
-//     }
-
-// 	sort(order = null){
-
-//         // Set Order
-//         if(order == null){
-//             order = this.#options.order;
-//         }
-
-//         // Sanitize Order
-//         if(order != 'ASC' && order != 'DESC'){
-//             order = 'DESC';
-//         }
-
-//         // Retrieve Objects
-// 		let objects = this.#feed.children('div').detach().get();
-
-//         // Sort Objects
-// 		objects.sort(function(a, b){
-// 			if(order == 'ASC'){
-// 				return new Date($(a).data('order')) - new Date($(b).data('order'));
-// 			} else {
-// 				return new Date($(b).data('order')) - new Date($(a).data('order'));
-// 			}
-// 		});
-
-//         // Append Objects
-// 		this.#feed.append(objects)
-
-//         // Return Object
-//         return this;
-// 	}
-
-//     post(options = {}, callback = null){
-
-//         // Set Self
-//         const self = this
-
-//         // Check if Options is a Function
-//         if(options instanceof Function){ callback = options; options = {}; }
-
-//         // Create Defaults Options
-//         let defaults = {};
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof defaults[key] === 'undefined'){
-//                 switch(key){
-//                     case"datetime":
-//                         defaults[key] = Date.parse(new Date());
-//                         break;
-//                     case"class":
-//                         defaults[key] = {};
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(defaults[key][section] != null){
-//                                 defaults[key][section] += ' ' + classes;
-//                             } else {
-//                                 defaults[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         defaults[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Set Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof defaults[key] !== 'undefined'){
-//                 switch(key){
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(defaults[key][section] != null){
-//                                 defaults[key][section] += ' ' + classes;
-//                             } else {
-//                                 defaults[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         defaults[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Post
-// 		var post = $(document.createElement('div')).attr('id','post' + builderCount).addClass('post').appendTo(this.#feed);
-
-//         // Set ID
-// 		post.id = post.attr('id');
-
-//         // Set Options
-//         post.options = defaults;
-
-//         // Set Post Class
-//         if(this.#options.class.post){
-//             post.addClass(this.#options.class.post);
-//         }
-
-//         // Set DateTime
-//         var datetime = new Date(defaults.datetime);
-
-//         // Set Order
-// 		var order = Date.parse(datetime);
-//         if(defaults.order != null){
-//             order = defaults.order;
-//         }
-// 		post.attr('data-order',order);
-
-//         // Create Title Block
-//         post.title = $(document.createElement('div')).addClass('title-block').appendTo(post);
-//         post.title.header = $(document.createElement('h2')).addClass('title').appendTo(post.title);
-
-//         // Set Title
-//         if(defaults.title != null){
-//             post.title.header.text(defaults.title);
-//         }
-
-//         // Create User Block
-//         post.user = $(document.createElement('div')).addClass('user-block user-select-none').appendTo(post);
-//         post.user.avatar = $(document.createElement('img')).addClass('img-circle rounded-circle img-bordered-sm').attr('alt','Avatar').appendTo(post.user);
-//         post.user.username = $(document.createElement('span')).addClass('username mt-2').appendTo(post.user);
-//         post.user.link = $(document.createElement('a')).addClass('text-decoration-none').appendTo(post.user.username);
-//         post.user.date = $(document.createElement('span')).addClass('description mt-1').appendTo(post.user);
-//         post.user.date.icon = $(document.createElement('i')).addClass('bi-clock me-1').appendTo(post.user.date);
-//         post.user.date.timeago = $(document.createElement('time')).attr('data-bs-toggle','tooltip').attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('data-bs-placement','top').attr('datetime',datetime.toLocaleString()).html(datetime.toLocaleString()).appendTo(post.user.date).timeago();
-//         post.user.date.timeago.bootstrap = new bootstrap.Tooltip(post.user.date.timeago);
-
-//         // Set User Avatar
-//         if(defaults.username != null){
-//             var Avatar = new Gravatar(defaults.username);
-//             post.user.link.attr('href','/users/details?id=' + defaults.username).html(defaults.username);
-//             post.user.avatar.attr('src',Avatar.url());
-//         }
-
-//         // Create Content Block
-//         post.content = $(document.createElement('p')).addClass('content').appendTo(post);
-
-//         // Set Content
-//         if(defaults.content != null){
-//             post.content.html(defaults.content);
-//         }
-
-//         // Create Controls Block
-//         post.controls = $(document.createElement('p')).addClass('controls user-select-none').appendTo(post);
-
-//         // Add Controls
-//         for(const [name, control] of Object.entries(self.#options.controls)){
-
-//             // Create Control
-//             var object = $(document.createElement('a')).addClass('text-decoration-none text-sm cursor-pointer me-2').appendTo(post.controls);
-//             object.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(object);
-//             object.label = $(document.createElement('span')).appendTo(object);
-
-//             // Set Icon
-//             if(control.icon){
-//                 object.icon.addClass('bi-' + control.icon);
-//             }
-
-//             // Set Label
-//             if(control.label){
-//                 object.label.html(control.label);
-//             }
-
-//             // Set Callback
-//             if(control.callback && control.callback instanceof Function){
-//                 control.callback(object,post,self);
-//             }
-//         }
-
-//         // Execute Callback
-// 		if(typeof callback === 'function'){
-// 			callback(post,this);
-// 		}
-
-//         // Sort
-//         this.sort();
-
-//         // Set Search
-//         Search.set(post)
-
-//         // Return Object
-// 		return this;
-//     }
-// }
-
-// // Table
-// class Table {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             object: null,
-//             buttons: null,
-//             searchBuilder: null,
-//             table: null,
-//             footer: null,
-//         },
-//         card:false,
-//         advancedSearch:true,
-//         exportTools:true,
-//         columnsVisibility:true,
-//         selectTools:false,
-//         showButtons:true,
-//         showButtonsLabel:true,
-//         pagination:true,
-//         information:true,
-//         lengthMenu:true,
-//         buttons: [],
-//         columnDefs: [],
-//         actions:null,
-//         dblclick: null,
-//         title: null,
-//         icon: null,
-//         // editor:false,
-//         datatable: {
-// 			//Features
-// 			autoWidth: true, //boolean //Enable or disable automatic column width calculation.
-// 			// deferRender: false, //boolean //This option allows DataTables to create the nodes only when they are needed for a draw.
-// 			// info: true, //boolean //Enable or disable information about the table including information about filtered data if that action is being performed.
-// 			lengthChange: true, //boolean //When pagination is enabled, this option will control the display of an option for the end user to change the number of records to be shown per page.
-// 			ordering: true, //boolean //Enable or disable ordering of columns.
-// 			paging: true, //boolean //Enable or disable table pagination
-// 			// processing: false, //boolean //Enable or disable the display of a 'processing' indicator when the table is being processed for server-side processing.
-// 			// scrollX: false, //boolean //Enable horizontal scrolling.
-// 			// scrollY: undefined, //string //Enable vertical scrolling. Vertical scrolling will constrain the DataTable to the given height, and enable scrolling for any data which overflows the current viewport.
-// 			searching: true, //boolean //This option allows the search abilities of DataTables to be enabled or disabled.
-// 			// serverSide: false, //boolean //Feature control DataTables' server-side processing mode.
-// 			// stateSave: false, //boolean //Enable or disable state saving.
-// 			//Data
-// 			// data: [], //array //Data to use as the display data for the table.
-// 			//Options
-// 			// deferLoading: null, //integer|array //Delay the loading of server-side data until second draw
-// 			// destroy: true, //boolean //Destroy any existing table matching the selector and replace with the new options.
-// 			// displayStart: 0, //integer //Initial paging start point
-// 			dom: '<"d-flex flex-column justify-content-start align-items-start mb-2"B<"#SearchBuilder.collapse w-100 py-2 pt-3"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><t><"d-flex justify-content-between align-items-center"lip>', //string //Define the table control elements to appear on the page and in what order
-// 			lengthMenu: [ 10, 25, 50, 100 ], //array //Change the options in the page length select list.
-// 			order: [[0, 'asc']], //array //Initial order (sort) to apply to the table
-// 			// orderCellsTop: false, //boolean //Control which cell the order event handler will be applied to in a column
-// 			// orderClasses: true, //boolean //Highlight the columns being ordered in the table's body
-// 			// orderFixed: undefined, //array|object //Ordering to always be applied to the table
-// 			// orderMulti: true, //boolean //Multiple column ordering ability control.
-// 			pageLength: 10, //integer //Change the initial page length (number of rows per page)
-// 			// numbers - Page number buttons only (1.10.8)
-// 			// simple - 'Previous' and 'Next' buttons only
-// 			// simple_numbers - 'Previous' and 'Next' buttons, plus page numbers
-// 			// full - 'First', 'Previous', 'Next' and 'Last' buttons
-// 			// full_numbers - 'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers
-// 			// first_last_numbers - 'First' and 'Last' buttons, plus page numbers
-// 			pagingType: 'simple_numbers', //string //Pagination button display options
-// 			renderer: 'bootstrap', //string|object //Display component renderer types
-// 			// retrieve: false, //boolean //Retrieve an existing DataTables instance
-// 			// rowId: 'DT_RowId', //string //Data property name that DataTables will use to set tr element DOM IDs
-// 			// scrollCollapse: false, //boolean //Allow the table to reduce in height when a limited number of rows are shown.
-// 			// search.caseInsensitive: true, //boolean //Control case-sensitive filtering option.
-// 			// search.regex: false, //boolean //Enable / disable escaping of regular expression characters in the search term.
-// 			// search.return: false, //boolean //Enable / disable DataTables' search on return
-// 			// search.search: null, //string //Set an initial filtering condition on the table.
-// 			// search.smart: true, //boolean //Enable / disable DataTables' smart filtering
-// 			// search: {}, //object //Set an initial filter in DataTables and / or filtering options.
-// 			// searchCols: [], //array //Define an initial search for individual columns.
-// 			// searchDelay: null, //integer //Set a throttle frequency for searching
-// 			// stateDuration: 7200, //integer //Saved state validity duration
-// 			// stripeClasses: [], //array //Set the zebra stripe class names for the rows in the table.
-// 			// tabIndex: 0, //integer //Tab index control for keyboard navigation
-// 			//Columns
-// 			columnDefs: [],
-//             initComplete: function(settings, json) {},
-//             createdRow: function (row, data, index) {},
-// 			//Internationalisation
-// 			language:{
-//                 "decimal":        "",
-//                 "emptyTable":     "No data available in table",
-//                 // "info":           "Showing _START_ to _END_ of _TOTAL_ entries",
-//                 // "infoEmpty":      "Showing 0 to 0 of 0 entries",
-//                 // "infoFiltered":   "(filtered from _MAX_ total entries)",
-//                 "info":           "_START_ to _END_ of _TOTAL_",
-//                 "infoEmpty":      "0 to 0 of 0",
-//                 "infoFiltered":   "(filtered)",
-//                 "infoPostFix":    "",
-//                 "thousands":      ",",
-//                 // "lengthMenu":     "Show _MENU_ entries",
-//                 "lengthMenu":     "_MENU_",
-//                 "loadingRecords": "Loading...",
-//                 "processing":     "",
-//                 "search":         "Search:",
-//                 "zeroRecords":    "No matching records found",
-//                 "paginate": {
-//                     "first":      "First",
-//                     "last":       "Last",
-//                     "next":       "Next",
-//                     "previous":   "Previous"
-//                 },
-//                 "aria": {
-//                     "sortAscending":  ": activate to sort column ascending",
-//                     "sortDescending": ": activate to sort column descending"
-//                 },
-//                 "searchBuilder": {
-//                     "add": "Add Condition",
-//                     "button": {
-//                         0: "Search Builder",
-//                         "_": "Search Builder (%d)",
-//                     },
-//                     "clearAll": "Clear All",
-//                     "condition": "Condition",
-//                     "conditions": {
-//                         "array": {
-//                             "contains": "Contains",
-//                             "empty": "Empty",
-//                             "equals": "Equals",
-//                             "not": "Not",
-//                             "notEmpty": "Not Empty",
-//                             "without": "Without"
-//                         },
-//                         "date": {
-//                             "after": "After",
-//                             "before": "Before",
-//                             "between": "Between",
-//                             "empty": "Empty",
-//                             "equals": "Equals",
-//                             "not": "Not",
-//                             "notBetween": "Not Between",
-//                             "notEmpty": "Not Empty"
-//                         },
-//                         "number": {
-//                             "between": "Between",
-//                             "empty": "Empty",
-//                             "equals": "Equals",
-//                             "gt": "Greater Than",
-//                             "gte": "Greater Than Equal To",
-//                             "lt": "Less Than",
-//                             "lte": "Less Than Equal To",
-//                             "not": "Not",
-//                             "notBetween": "Not Between",
-//                             "notEmpty": "Not Empty",
-//                         },
-//                         "string": {
-//                             "contains": "Contains",
-//                             "empty": "Empty",
-//                             "endsWith": "Ends With",
-//                             "equals": "Equals",
-//                             "not": "Not",
-//                             "notContains": "Does Not Contain",
-//                             "notEmpty": "Not Empty",
-//                             "notEndsWith": "Does Not End With",
-//                             "notStartsWith": "Does Not Start With",
-//                             "startsWith": "Starts With",
-//                         },
-//                     },
-//                     "data": "Data",
-//                     "delete": "&times",
-//                     "deleteTitle": "Delete filtering rule",
-//                     "left": "<",
-//                     "leftTitle": "Outdent criteria",
-//                     "logicAnd": "And",
-//                     "logicOr": "Or",
-//                     "right": ">",
-//                     "rightTitle": "Indent criteria",
-//                     // "title": {
-//                     // 	0: "Search Builder",
-//                     // 	"_": "Search Builder (%d)",
-//                     // },
-//                     "title": {
-//                         0: "",
-//                         "_": "",
-//                     },
-//                     "value": "Value",
-//                     "valueJoiner": "and",
-//                 },
-//             },
-// 			// ColReorder
-// 			colReorder: false,
-// 			// FixedColumns
-// 			fixedColumns: false,
-// 			// Select
-// 			select: false,
-// 			//Buttons
-// 			buttons: [],
-// 			//Responsive
-// 			responsive: true,
-// 		},
-//     };
-//     #buttons = {
-//         columnsVisibility:{
-//             label:{
-//                 extend: 'colvis',
-//                 text: '<i class="bi-layout-sidebar-inset me-2"></i>Columns',
-//             },
-//             icon:{
-//                 extend: 'colvis',
-//                 text: '<i class="bi-layout-sidebar-inset"></i>',
-//             },
-//         },
-//         selectTools:{
-//             label:{
-//                 extend: 'collection',
-//                 text: '<i class="bi-check2-square me-2"></i>Select',
-//                 buttons: [
-//                     {
-//                         extend: 'selectAll',
-//                         text: '<i class="bi-check2-all me-2"></i>All',
-//                     },
-//                     {
-//                         extend: 'selectNone',
-//                         text: '<i class="bi-x-square me-2"></i>None',
-//                     },
-//                     // 'selected', // Enabled only when one or more items are selected
-//                     // 'selectedSingle', // Enabled only when a single item is selected
-//                     // 'selectRows', // Select rows
-//                     // 'selectColumns', // Select columns
-//                     // 'selectCells', // Select cells
-//                 ],
-//             },
-//             icon:{
-//                 extend: 'collection',
-//                 text: '<i class="bi-check2-square"></i>',
-//                 buttons: [
-//                     {
-//                         extend: 'selectAll',
-//                         text: '<i class="bi-check2-all me-2"></i>All',
-//                     },
-//                     {
-//                         extend: 'selectNone',
-//                         text: '<i class="bi-x-square me-2"></i>None',
-//                     },
-//                     // 'selected', // Enabled only when one or more items are selected
-//                     // 'selectedSingle', // Enabled only when a single item is selected
-//                     // 'selectRows', // Select rows
-//                     // 'selectColumns', // Select columns
-//                     // 'selectCells', // Select cells
-//                 ],
-//             },
-//         },
-//         advancedSearch:{
-//             label:{
-//                 extend: 'collection',
-//                 text: '<i class="bi-search me-2"></i>Advanced Search',
-//                 action:function(e, dt, node, config){
-//                     const SearchBuilder = new bootstrap.Collapse(node.closest('div.dataTables_wrapper').find('#SearchBuilder.collapse'))
-//                     SearchBuilder.toggle()
-//                 },
-//             },
-//             icon:{
-//                 extend: 'collection',
-//                 text: '<i class="bi-search"></i>',
-//                 action:function(e, dt, node, config){
-//                     const SearchBuilder = new bootstrap.Collapse(node.closest('div.dataTables_wrapper').find('#SearchBuilder.collapse'))
-//                     SearchBuilder.toggle()
-//                 },
-//             },
-//         },
-//         exportTools:{
-//             label:{
-//                 extend: 'collection',
-//                 text: '<i class="bi-arrow-bar-down me-2"></i>Export',
-//                 buttons: [
-//                     {
-//                         extend: 'copy',
-//                         text: '<i class="bi-clipboard me-2"></i>Clipboard',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                     {
-//                         extend: 'excel',
-//                         text: '<i class="bi-filetype-xlsx me-2"></i>Excel',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                     {
-//                         extend: 'csv',
-//                         text: '<i class="bi-filetype-csv me-2"></i>CSV',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                     {
-//                         extend: 'pdf',
-//                         text: '<i class="bi-filetype-pdf me-2"></i>PDF',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                 ],
-//             },
-//             icon:{
-//                 extend: 'collection',
-//                 text: '<i class="bi-arrow-bar-down"></i>',
-//                 buttons: [
-//                     {
-//                         extend: 'copy',
-//                         text: '<i class="bi-clipboard me-2"></i>Clipboard',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                     {
-//                         extend: 'excel',
-//                         text: '<i class="bi-filetype-xlsx me-2"></i>Excel',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                     {
-//                         extend: 'csv',
-//                         text: '<i class="bi-filetype-csv me-2"></i>CSV',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                     {
-//                         extend: 'pdf',
-//                         text: '<i class="bi-filetype-pdf me-2"></i>PDF',
-//                         exportOptions: {
-//                 columns: ':visible:not(:last-child)',
-//             },
-//                     },
-//                 ],
-//             },
-//         }
-//     }
-//     #datatable = null
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('div')).attr('id','table' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Set Object Class
-//         if(this.#options.class.object){
-//             this.#object.addClass(this.#options.class.object);
-//         }
-
-//         // Add Table
-//         this.#object.table = $(document.createElement('table')).addClass('table table-striped table-hover m-0 w-100 user-select-none').appendTo(this.#object);
-
-//         // Add Dropdown
-//         if(typeof this.#options.actions === 'object'){
-//             this.#object.actions = new Dropdown(
-//                 {
-//                     icon: "three-dots-vertical",
-//                     class: {
-//                         object: "dropstart",
-//                         button: "p-0 px-2",
-//                     },
-//                 },
-//                 function(dropdown){
-//                     if(self.#options.actions){
-//                         for(const [name, action] of Object.entries(self.#options.actions)){
-//                             dropdown.item(
-//                                 action,
-//                                 function(item){
-//                                     item.btn.attr('data-action',name);
-//                                 }
-//                             );
-//                         }
-//                     }
-//                 },
-//             );
-//             this.#options.datatable.columnDefs.push(
-//                 {
-//                     target: this.#options.datatable.columnDefs.length,
-//                     visible: true,
-//                     responsivePriority: 1,
-//                     title: "Action",
-//                     data: null,
-//                     width: '80px',
-//                     defaultContent: this.#object.actions.outerHTML(),
-//                 }
-//             );
-//         }
-
-//         // Add Select Tools
-//         if(this.#options.selectTools){
-//             this.#options.datatable.select = this.#options.selectTools
-//             if(this.#options.showButtonsLabel){
-//                 this.#options.datatable.buttons.push(self.#buttons.selectTools.label);
-//             } else {
-//                 this.#options.datatable.buttons.push(self.#buttons.selectTools.icon);
-//             }
-//         }
-
-//         // Add Export Tools
-//         if(this.#options.exportTools){
-//             if(this.#options.showButtonsLabel){
-//                 this.#options.datatable.buttons.push(self.#buttons.exportTools.label);
-//             } else {
-//                 this.#options.datatable.buttons.push(self.#buttons.exportTools.icon);
-//             }
-//         }
-
-//         // Add Columns Visibility
-//         if(this.#options.columnsVisibility){
-//             if(this.#options.showButtonsLabel){
-//                 this.#options.datatable.buttons.push(self.#buttons.columnsVisibility.label);
-//             } else {
-//                 this.#options.datatable.buttons.push(self.#buttons.columnsVisibility.icon);
-//             }
-//         }
-
-//         // Add Advanced Search
-//         if(this.#options.advancedSearch){
-//             if(this.#options.showButtonsLabel){
-//                 this.#options.datatable.buttons.push(self.#buttons.advancedSearch.label);
-//             } else {
-//                 this.#options.datatable.buttons.push(self.#buttons.advancedSearch.icon);
-//             }
-//         }
-
-//         // drawCallback
-//         this.#options.datatable.drawCallback = function(){
-
-//             setTimeout(function() {
-//                 // Tooltips
-//                 $('[data-bs-toggle="tooltip"]').tooltip();
-
-//                 // Timeago
-//                 $('.timeago').timeago();
-//             }, 100);
-            
-//             if(typeof self.#datatable !== 'undefined'){
-
-//                 // Double Click Event
-//                 if(typeof self.#options.dblclick === 'function'){
-//                     self.#object.table.find('tr').off().dblclick(
-//                         function(event){
-//                             let node = $(this)
-//                             let data = self.#datatable.row(node).data();
-//                             self.#options.dblclick(event, self.#datatable, node, data);
-//                         },
-//                     );
-//                 }
-
-//                 // Action Button Events
-//                 self.#object.table.find('button.dropdown-item[data-action]').each(function(){
-//                     let node = $(this);
-//                     let li = node.parents('li');
-//                     let action = node.attr('data-action');
-//                     let row = node.parents('tr');
-//                     let data = self.#datatable.row(row).data();
-//                     node.off().click(function(event){
-//                         if(typeof self.#options.actions[action].action === 'function'){
-//                             self.#options.actions[action].action(event, self, node, row, data);
-//                         }
-//                     })
-//                     if(typeof self.#options.actions[action].visible === 'function'){
-//                         if(!self.#options.actions[action].visible(li, self, node, row, data)){
-//                             li.hide();
-//                         } else {
-//                             li.show();
-//                         }
-//                     }
-//                     if(typeof self.#options.actions[action].visible === 'boolean'){
-//                         if(!self.#options.actions[action].visible){
-//                             li.hide();
-//                         } else {
-//                             li.show();
-//                         }
-//                     }
-//                 });
-//             }
-//         }
-
-//         // Add Classes
-//         this.#options.datatable.dom = '<"d-flex flex-column justify-content-start align-items-start mb-2';
-//         if(this.#options.class.buttons){
-//             this.#options.datatable.dom += ' ' + this.#options.class.buttons;
-//         }
-//         this.#options.datatable.dom += '"B<"#SearchBuilder.collapse w-100';
-//         if(this.#options.class.searchBuilder){
-//             this.#options.datatable.dom += ' ' + this.#options.class.searchBuilder;
-//         }
-//         this.#options.datatable.dom += '"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><"mt-4';
-//         if(this.#options.class.table){
-//             this.#options.datatable.dom += ' ' + this.#options.class.table;
-//         }
-//         this.#options.datatable.dom += '"t><"d-flex justify-content-between align-items-center';
-//         if(this.#options.class.footer){
-//             this.#options.datatable.dom += ' ' + this.#options.class.footer;
-//         }
-//         this.#options.datatable.dom += '"lip>';
-
-//         // Initialize Datatable
-//         this.#datatable = this.#object.table.DataTable(this.#options.datatable);
-
-//         // Add Search
-//         Search.get().keyup(function(){
-//             self.#datatable.search($(this).val()).draw();
-//         });
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#datatable,this.#object);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"datatable":
-//                         for(const [k, v] of Object.entries(value)){
-//                             if(typeof this.#options[key][k] !== 'undefined'){
-//                                 this.#options[key][k] = v;
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     add(data){
-//         this.#datatable.row.add(data).draw();
-//     }
-
-//     update(row, data){
-//         this.#datatable.row(row).data(data).draw();
-//     }
-
-//     delete(row){
-//         this.#datatable.row(row).remove().draw();
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#object.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#object.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#object.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-
-// // Carousel
-// class Carousel {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             carousel: null,
-//             slide: null,
-//             inner: null,
-//             indicators: null,
-//         },
-//         fade: false,
-//         touch: true,
-//         autoplay: false,
-//         indicators: false,
-//         controls: true,
-//         properties: {
-//             class: {
-//                 slide: null,
-//                 image: null,
-//                 caption: null,
-//             },
-//             interval: null,
-//             caption: null,
-//             source: null,
-//             alt: null,
-//         },
-//     };
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('div')).addClass('carousel slide').attr('id','carousel' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Create Indicators
-//         if(this.#options.indicators){
-//             this.#object.indicators = $(document.createElement('div')).addClass('carousel-indicators').appendTo(this.#object);
-//         }
-
-//         // Create Inner
-//         this.#object.inner = $(document.createElement('div')).addClass('carousel-inner').appendTo(this.#object);
-
-//         // Create Controls
-//         this.#object.controls = {};
-//         this.#object.controls.previous = $(document.createElement('button')).addClass('carousel-control-prev').attr('type','button').attr('data-bs-target','#' + this.#object.id).attr('data-bs-slide','prev').appendTo(this.#object);
-//         this.#object.controls.previous.icon = $(document.createElement('span')).addClass('carousel-control-prev-icon').attr('aria-hidden','true').appendTo(this.#object.controls.previous);
-//         this.#object.controls.previous.label = $(document.createElement('span')).addClass('visually-hidden').text('Previous').appendTo(this.#object.controls.previous);
-//         this.#object.controls.next = $(document.createElement('button')).addClass('carousel-control-next').attr('type','button').attr('data-bs-target','#' + this.#object.id).attr('data-bs-slide','next').appendTo(this.#object);
-//         this.#object.controls.next.icon = $(document.createElement('span')).addClass('carousel-control-next-icon').attr('aria-hidden','true').appendTo(this.#object.controls.next);
-//         this.#object.controls.next.label = $(document.createElement('span')).addClass('visually-hidden').text('Next').appendTo(this.#object.controls.next);
-
-//         // Set Fade
-//         if(this.#options.fade){
-//             this.#object.addClass('carousel-fade');
-//         }
-
-//         // Set Touch
-//         if(!this.#options.touch){
-//             this.#object.attr('data-bs-touch','false');
-//         }
-
-//         // Set Auto Play
-//         if(this.#options.autoplay){
-//             this.#object.attr('data-bs-ride',this.#options.autoplay);
-//         }
-
-//         // Set Controls
-//         if(!this.#options.controls){
-//             this.#object.controls.previous.addClass('d-none');
-//             this.#object.controls.next.addClass('d-none');
-//         }
-
-//         // Set Carousel Class
-//         if(this.#options.class.carousel){
-//             this.#object.addClass(this.#options.class.carousel);
-//         }
-
-//         // Set Inner Class
-//         if(this.#options.class.inner){
-//             this.#object.inner.addClass(this.#options.class.inner);
-//         }
-
-//         // Set Indicators Class
-//         if(this.#options.class.indicators){
-//             this.#object.indicators.addClass(this.#options.class.indicators);
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     add(param1 = null, param2 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         let properties = {};
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof properties[key] === 'undefined'){
-//                 properties[key] = value;
-//             }
-//         }
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof properties[key] !== 'undefined'){
-//                 switch(key){
-//                     case"callback":
-//                         if(typeof properties[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof properties[key][k] !== 'undefined'){
-//                                     properties[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(properties[key][section] != null){
-//                                 properties[key][section] += ' ' + classes;
-//                             } else {
-//                                 properties[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         properties[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Create Slide
-//         let slide = $(document.createElement('div')).addClass('carousel-item').appendTo(this.#object.inner);
-
-//         // Create Image
-//         slide.image = $(document.createElement('img')).addClass('d-block w-100').attr('src',properties.source).attr('alt',properties.alt).appendTo(slide);
-
-//         // Create Caption
-//         slide.caption = $(document.createElement('div')).addClass('carousel-caption d-none d-md-block').appendTo(slide);
-
-//         // Create Indicator
-//         if(this.#options.indicators){
-//             slide.indicator = $(document.createElement('button')).attr('type','button').attr('data-bs-target','#' + this.#object.id).attr('data-bs-slide-to',this.#object.inner.children().length - 1).appendTo(this.#object.indicators);
-//         }
-
-//         // Set Interval
-//         if(properties.interval){
-//             slide.attr('data-bs-interval',properties.interval);
-//         }
-
-//         // Set Caption
-//         if(properties.caption){
-//             slide.caption.removeClass('d-none').html(properties.caption);
-//         } else {
-//             slide.caption.remove();
-//         }
-
-//         // Set Slide Class
-//         if(this.#options.class.slide){
-//             slide.addClass(this.#options.class.slide);
-//         }
-//         if(properties.class.slide){
-//             slide.addClass(this.#options.class.slide);
-//         }
-
-//         // Set Image Class
-//         if(properties.class.image){
-//             slide.image.addClass(this.#options.class.image);
-//         }
-
-//         // Set Caption Class
-//         if(properties.class.caption){
-//             slide.caption.addClass(this.#options.class.caption);
-//         }
-
-//         // Set Active
-//         if(this.#object.inner.children().length === 1){
-//             slide.addClass('active');
-//             if(this.#options.indicators){
-//                 slide.indicator.addClass('active');
-//             }
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(slide, this);
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#object.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#object.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#object.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-
-// // Stepper
-// class Stepper {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             stepper: null,
-//             controls: null,
-//             steps: null,
-//             pagination: null,
-//         },
-//         color: "primary",
-//         callback: {},
-//         properties: {
-//             class: {},
-//             callback: {
-//                 hide: null,
-//                 hidden: null,
-//                 show: null,
-//                 shown: null,
-//             },
-//             icon: null,
-//         },
-//     };
-//     #count = 0;
-//     #current = 1;
-//     #steps = {};
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('form')).attr('id','stepper' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Create Controls
-//         this.#object.controls = $(document.createElement('div')).appendTo(this.#object);
-//         this.#object.controls.position = $(document.createElement('div')).addClass('position-relative m-4').attr('id',this.#object.id + 'controls').appendTo(this.#object.controls);
-//         this.#object.progress = $(document.createElement('div')).addClass('progress').attr({'role':'progressbar', 'aria-label':'Progress', 'aria-valuemin':'0', 'aria-valuemax':'100'}).css('height','4px').appendTo(this.#object.controls.position);
-//         this.#object.progress.bar = $(document.createElement('div')).addClass('progress-bar progress-bar-striped progress-bar-animated').css({'width':'0%','transition':'all 500ms ease'}).appendTo(this.#object.progress);
-//         this.#object.controls.position.absolute = $(document.createElement('div')).addClass('position-absolute w-100 top-0 start-50 translate-middle').appendTo(this.#object.controls.position);
-//         this.#object.controls.list = $(document.createElement('div')).addClass('d-flex justify-content-between').attr('id',this.#object.id + 'controls').appendTo(this.#object.controls.position.absolute);
-//         this.#object.controls.id = this.#object.controls.list.attr('id');
-
-//         // Create Steps
-//         this.#object.steps = $(document.createElement('div')).appendTo(this.#object);
-//         this.#object.steps.accordion = $(document.createElement('div')).addClass('accordion').attr('id',this.#object.id + 'steps').appendTo(this.#object.steps);
-//         this.#object.steps.id = this.#object.steps.accordion.attr('id');
-
-//         // Create Pagination
-//         this.#object.pagination = $(document.createElement('div')).appendTo(this.#object);
-//         this.#object.pagination.list = $(document.createElement('div')).addClass('d-block text-center').attr('id',this.#object.id + 'pagination').appendTo(this.#object.pagination);
-//         this.#object.pagination.previous = $(document.createElement('button')).addClass('btn btn-primary float-start').attr({'type':'button', 'data-bs-toggle':'collapse'}).appendTo(this.#object.pagination.list);
-//         this.#object.pagination.previous.icon = $(document.createElement('i')).addClass('bi bi-chevron-left').appendTo(this.#object.pagination.previous);
-//         this.#object.pagination.previous.text = $(document.createElement('span')).addClass('ms-1').text('Previous').appendTo(this.#object.pagination.previous);
-//         this.#object.pagination.next = $(document.createElement('button')).addClass('btn btn-primary float-end').attr({'type':'button', 'data-bs-toggle':'collapse'}).appendTo(this.#object.pagination.list);
-//         this.#object.pagination.next.text = $(document.createElement('span')).addClass('ms-1').text('Next').appendTo(this.#object.pagination.next);
-//         this.#object.pagination.next.icon = $(document.createElement('i')).addClass('bi bi-chevron-right').appendTo(this.#object.pagination.next);
-
-//         // Set Stepper Class
-//         if(this.#options.class.stepper){
-//             this.#object.addClass(this.#options.class.stepper);
-//         }
-
-//         // Set Controls Class
-//         if(this.#options.class.controls){
-//             this.#object.controls.addClass(this.#options.class.controls);
-//         }
-
-//         // Set Steps Class
-//         if(this.#options.class.steps){
-//             this.#object.steps.addClass(this.#options.class.steps);
-//         }
-
-//         // Set Pagination Class
-//         if(this.#options.class.pagination){
-//             this.#object.pagination.addClass(this.#options.class.pagination);
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"callback":
-//                     case"defaults":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     add(param1 = null, param2 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         let properties = {};
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof properties[key] === 'undefined'){
-//                 properties[key] = value;
-//             }
-//         }
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof properties[key] !== 'undefined'){
-//                 switch(key){
-//                     case"callback":
-//                         if(typeof properties[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof properties[key][k] !== 'undefined'){
-//                                     properties[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(properties[key][section] != null){
-//                                 properties[key][section] += ' ' + classes;
-//                             } else {
-//                                 properties[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         properties[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Increment Count
-//         this.#count++;
-
-//         // Create Step Control
-//         let control = $(document.createElement('button')).addClass('btn btn-sm btn-secondary rounded-circle align-middle text-center fw-bold').text(this.#count).attr({'id':this.#object.controls.id + this.#count,'type':'button','data-bs-toggle':'collapse','data-bs-target':'#' + this.#object.steps.id + this.#count,'aria-controls':this.#object.steps.id + this.#count,'aria-expanded':'false'}).css({'width':'3rem','height':'3rem','transition':'all 500ms ease'}).appendTo(this.#object.controls.list);
-//         control.id = control.attr('id');
-//         control.properties = properties;
-
-//         // Create Step Content
-//         let content = $(document.createElement('div')).addClass('fade collapse').attr('id',this.#object.steps.id + this.#count).attr('data-bs-parent','#' + this.#object.steps.id).appendTo(this.#object.steps.accordion);
-//         content.id = content.attr('id');
-//         content.properties = properties;
-//         content.bootstrap = new bootstrap.Collapse(content,{toggle:false});
-
-//         // Set Icon
-//         if(properties.icon){
-//             control.icon = $(document.createElement('i')).addClass('fs-3 bi bi-' + properties.icon).appendTo(control);
-//             control.html(control.icon);
-//         }
-
-//         const step = {content:content,control:control,properties:properties,id:this.#count};
-
-//         // Save Step
-//         this.#steps[this.#count] = step;
-
-//         // Set Step Content Events
-//         content.on('hide.bs.collapse', function (event) {
-
-//             // Execute Callback
-//             if(typeof properties.callback.hide === 'function'){
-//                 properties.callback.hide(event,step,self);
-//             }
-//         });
-//         content.on('hidden.bs.collapse', function (event) {
-
-//             // Execute Callback
-//             if(typeof properties.callback.hidden === 'function'){
-//                 properties.callback.hidden(event,step,self);
-//             }
-//         });
-//         content.on('show.bs.collapse', function (event) {
-
-//             // Set Current Step
-//             self.#current = step.id;
-            
-//             // Check if Step is First
-//             if(step.id === 1){
-//                 self.#object.pagination.previous.attr('disabled',true).attr('data-bs-target','');
-//             } else {
-//                 self.#object.pagination.previous.attr('disabled',false).attr('data-bs-target','#' + self.#object.steps.id + (step.id - 1));
-//             }
-
-//             // Check if Step is Last
-//             if(step.id === self.#count){
-//                 self.#object.pagination.next.attr('disabled',true).attr('data-bs-target','');
-//             } else {
-//                 self.#object.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self.#object.steps.id + (step.id + 1));
-//             }
-
-//             // Set Steps
-//             for (let id = 1; id <= self.#count; id++) {
-//                 if(id <= step.id){
-//                     self.#steps[id].control.removeClass('btn-secondary').addClass('btn-primary');
-//                 } else {
-//                     self.#steps[id].control.removeClass('btn-primary').addClass('btn-secondary');
-//                 }
-//                 if(id !== step.id){
-//                     self.#steps[id].content.bootstrap.hide();
-//                     self.#steps[id].control.attr('aria-expanded',false);
-//                 } else {
-//                     self.#steps[id].control.attr('aria-expanded',true);
-//                 }
-//             }
-
-//             // Set Progress Bar
-//             let width = 0 + '%';
-//             if(self.#count > 1){
-//                 width = (((step.id - 1) / (self.#count - 1)) * 100) + '%';
-//             }
-//             self.#object.progress.bar.css('width',width);
-
-//             // Execute Callback
-//             if(typeof properties.callback.show === 'function'){
-//                 properties.callback.show(event,step,self);
-//             }
-//         });
-//         content.on('shown.bs.collapse', function (event) {
-
-//             // Execute Callback
-//             if(typeof properties.callback.shown === 'function'){
-//                 properties.callback.shown(event,step,self);
-//             }
-//         });
-
-//         // Check if Step is First
-//         if(step.id === 1){
-//             content.bootstrap.show();
-//         }
-
-//         // Check if Stepper contains a single step
-//         if(this.#count > 1 && this.#object.pagination.next.attr('disabled') === 'disabled'){
-//             this.#object.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self.#object.steps.id + '2');
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(step,this);
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#object.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#object.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#object.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-
-// // Calendar
-// class Calendar {
-
-//     #object = null;
-//     #selector = null;
-//     #count = 0;
-//     #options = {
-//         themeSystem: 'bootstrap5',
-//         headerToolbar: {
-//             left: 'prev,next today',
-//             center: 'title',
-//             right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay'
-//         },
-//         height: 'auto',
-//         initialDate: null,
-//         initialView: 'dayGridMonth',
-//         selectable: false,
-//         editable: false,
-//         eventDragMinDistance: 0,
-//         class: {
-//             calendar: null,
-//             header: null,
-//         },
-//         callback: {
-//             dateClick: function(info) {},
-//             select: function(info) {},
-//             eventClick: function(info) {},
-//             eventMouseEnter: function(info) {},
-//             eventMouseLeave: function(info) {},
-//             eventDrop: function(info) {},
-//             eventResize: function(info) {},
-//             eventDidMount: function(info) {},
-//         },
-//         events: [],
-//         properties: {
-//             start: null,
-//             end: null,
-//             allDay: false,
-//             isBackground: false,
-//             color: null,
-//             icon: null,
-//             title: null,
-//             description: null,
-//             popover: true,
-//             callback: {
-//                 click: function(info) {},
-//                 mouseEnter: function(info) {},
-//                 mouseLeave: function(info) {},
-//                 drop: function(info) {},
-//                 resize: function(info) {},
-//             },
-//         },
-//     };
-//     #events = {};
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('div')).attr('id','calendar' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Set wrapper Class
-//         if(this.#options.class.wrapper){
-//             this.#object.addClass(this.#options.class.wrapper);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             if(typeof selector === 'string'){
-//                 selector = $(selector);
-//             }
-
-//             this.#selector = selector;
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         } else {
-
-//             // Return Error
-//             return false;
-//         }
-
-//         // Set intialDate
-//         if(this.#options.initialDate === null){
-//             this.#options.initialDate = new Date();
-//         }
-
-//         // Set Options
-//         this.#object.options = {
-//             themeSystem: this.#options.themeSystem,
-//             headerToolbar: this.#options.headerToolbar,
-//             initialDate: this.#options.initialDate,
-//             initialView: this.#options.initialView,
-//             selectable: this.#options.selectable,
-//             editable: this.#options.editable,
-//             height: this.#options.height,
-//             eventDragMinDistance: this.#options.eventDragMinDistance,
-//             dateClick: function(info) { self.#dateClick(info); },
-//             select: function(info) { self.#select(info); },
-//             eventClick: function(info) { self.#eventClick(info); },
-//             eventMouseEnter: function(info) { self.#eventMouseEnter(info); },
-//             eventMouseLeave: function(info) { self.#eventMouseLeave(info); },
-//             eventDrop: function(info) { self.#eventDrop(info); },
-//             eventResize: function(info) { self.#eventResize(info); },
-//             eventDidMount: function(info) { self.#eventDidMount(info); },
-//             eventContent: function(arg) { return self.#eventContent(arg); },
-//         };
-
-//         // Create Calendar
-//         this.#object.fullCalendar = new FullCalendar.Calendar(this.#object[0], this.#object.options);
-
-//         // Initialize Calendar
-//         this.render();
-
-//         // Set header Class
-//         if(this.#options.class.header){
-//             this.#object.find('.fc-header-toolbar').addClass(this.#options.class.header);
-//         }
-
-//         // Add Events
-//         for(const [key, value] of Object.entries(this.#options.events)){
-//             this.add(value);
-//         }
-
-//         // Add Event to Calendar on Sidebar Toggle
-//         $('#sidebarToggle').click(function(){
-//             this.#object.fullCalendar.render();
-//         });
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"headerToolbar":
-//                     case"callback":
-//                     case"defaults":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     add(param1 = null, param2 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         let properties = {};
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof properties[key] === 'undefined'){
-//                 properties[key] = value;
-//             }
-//         }
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof properties[key] !== 'undefined'){
-//                 switch(key){
-//                     case"callback":
-//                         if(typeof properties[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof properties[key][k] !== 'undefined'){
-//                                     properties[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(properties[key][section] != null){
-//                                 properties[key][section] += ' ' + classes;
-//                             } else {
-//                                 properties[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         properties[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Increment Count
-//         this.#count++;
-
-//         // Set ID
-//         const EventID = this.#count;
-
-//         // Set Event
-//         var event = {
-//             title: properties.title,
-//             start: properties.start,
-//             end: properties.end,
-//             allDay: properties.allDay,
-//             id: EventID,
-//         };
-
-//         if(properties.color){
-//             event.classNames = 'text-bg-' + properties.color + ' border-' + properties.color;
-//         }
-
-//         if(properties.icon){
-//             event.extendedProps = {icon: properties.icon};
-//         }
-
-//         if(properties.isBackground){
-//             event.display = 'background';
-//         }
-
-//         // Set Event
-//         this.#events[EventID] = {
-//             id: EventID,
-//             event: event,
-//             properties: properties,
-//             callback: properties.callback,
-//         };
-
-//         // Add Event to Calendar
-//         var calendarEvent = this.#object.fullCalendar.addEvent(event);
-
-//         // Set Calendar Event
-//         this.#events[EventID].calEvent = calendarEvent;
-//     }
-
-//     render(){
-
-//         // Set Self
-//         const self = this;
-
-//         // Get all ancestors of the calendar element
-//         var ancestors = this.#selector.parents();
-        
-//         // Filter out only the collapsible ancestors
-//         var collapsibles = ancestors.filter(function() {
-//             return $(this).hasClass('collapse');
-//         });
-        
-//         // Listen for the shown.bs.collapse event on each collapsible ancestor
-//         collapsibles.on('shown.bs.collapse', function () {
-//             // Call the updateSize method after the collapsible is shown
-//             self.#object.fullCalendar.updateSize();
-//         });
-        
-//         // Render Calendar
-//         this.#object.fullCalendar.render();
-
-//         setTimeout(function() {
-//             // Call the updateSize method after the timeout
-//             self.#object.fullCalendar.updateSize();
-//         }, 100);
-//     }
-
-//     #dateClick(info){
-
-//         // Execute Callback
-//         if(typeof this.#options.callback.dateClick === 'function'){
-//             this.#options.callback.dateClick(info,this);
-//         }
-//     }
-
-//     #select(info){
-
-//         // Execute Callback
-//         if(typeof this.#options.callback.select === 'function'){
-//             this.#options.callback.select(info,this);
-//         }
-//     }
-
-//     #eventContent(arg) {
-//         let arrayOfDomNodes = [];
-
-//         let spacerElement = document.createElement('span');
-//         spacerElement.classList.add('ms-1');
-//         arrayOfDomNodes.push(spacerElement);
-
-//         if (arg.event.extendedProps.icon) {
-//             let iconElement = document.createElement('i');
-//             iconElement.classList.add('me-1','bi', 'bi-' + arg.event.extendedProps.icon);
-//             arrayOfDomNodes.push(iconElement);
-//         }
-
-//         let titleElement = document.createElement('span');
-//         titleElement.innerText = arg.event.title;
-//         arrayOfDomNodes.push(titleElement);
-
-//         return { domNodes: arrayOfDomNodes };
-//     }
-
-//     #eventClick(info){
-//         const EventID = info.event._def.publicId;
-//         const EventName = {calendar: 'eventClick', event: 'click'};
-
-//         // Check if Event Exists
-//         if(typeof this.#events[EventID] !== 'undefined'){
-
-//             const Event = this.#events[EventID];
-
-//             // Execute Calendar Callback
-//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
-//                 this.#options.callback[EventName.calendar](Event,info,this);
-//             }
-
-//             // Execute Event Callback
-//             if(typeof Event.callback[EventName.event] === 'function'){
-//                 Event.callback[EventName.event](Event,info,this);
-//             }
-//         }
-//     }
-
-//     #eventMouseEnter(info){
-//         const EventID = info.event._def.publicId;
-//         const EventName = {calendar: 'eventMouseEnter', event: 'mouseEnter'};
-
-//         // Check if Event Exists
-//         if(typeof this.#events[EventID] !== 'undefined'){
-
-//             const Event = this.#events[EventID];
-
-//             // Execute Calendar Callback
-//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
-//                 this.#options.callback[EventName.calendar](Event,info,this);
-//             }
-
-//             // Execute Event Callback
-//             if(typeof Event.callback[EventName.event] === 'function'){
-//                 Event.callback[EventName.event](Event,info,this);
-//             }
-//         }
-//     }
-
-//     #eventMouseLeave(info){
-//         const EventID = info.event._def.publicId;
-//         const EventName = {calendar: 'eventMouseLeave', event: 'mouseLeave'};
-
-//         // Check if Event Exists
-//         if(typeof this.#events[EventID] !== 'undefined'){
-
-//             const Event = this.#events[EventID];
-
-//             // Execute Calendar Callback
-//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
-//                 this.#options.callback[EventName.calendar](Event,info,this);
-//             }
-
-//             // Execute Event Callback
-//             if(typeof Event.callback[EventName.event] === 'function'){
-//                 Event.callback[EventName.event](Event,info,this);
-//             }
-//         }
-//     }
-
-//     #eventDrop(info){
-//         const EventID = info.event._def.publicId;
-//         const EventName = {calendar: 'eventDrop', event: 'drop'};
-
-//         // Check if Event Exists
-//         if(typeof this.#events[EventID] !== 'undefined'){
-
-//             const Event = this.#events[EventID];
-
-//             // Execute Calendar Callback
-//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
-//                 this.#options.callback[EventName.calendar](Event,info,this);
-//             }
-
-//             // Execute Event Callback
-//             if(typeof Event.callback[EventName.event] === 'function'){
-//                 Event.callback[EventName.event](Event,info,this);
-//             }
-//         }
-//     }
-
-//     #eventResize(info){
-//         const EventID = info.event._def.publicId;
-//         const EventName = {calendar: 'eventResize', event: 'resize'};
-
-//         // Check if Event Exists
-//         if(typeof this.#events[EventID] !== 'undefined'){
-
-//             const Event = this.#events[EventID];
-
-//             // Execute Calendar Callback
-//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
-//                 this.#options.callback[EventName.calendar](Event,info,this);
-//             }
-
-//             // Execute Event Callback
-//             if(typeof Event.callback[EventName.event] === 'function'){
-//                 Event.callback[EventName.event](Event,info,this);
-//             }
-//         }
-//     }
-
-//     #eventDidMount(info){
-//         const EventID = info.event._def.publicId;
-//         const EventName = {calendar: 'eventDidMount', event: 'didMount'};
-
-//         // Check if Event Exists
-//         if(typeof this.#events[EventID] !== 'undefined'){
-
-//             const Event = this.#events[EventID];
-
-//             // Create Popover
-//             if(Event.properties.popover){
-//                 // Create focus trigger
-//                 $(info.el).hover(function() {
-//                     $(this).trigger('focus');
-//                 });
-
-//                 // Create Popover
-//                 var title = $(document.createElement('span')).text(Event.properties.title);
-//                 if(Event.properties.icon){
-//                     title.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + Event.properties.icon).prependTo(title);
-//                 }
-//                 info.el.setAttribute('data-bs-toggle','popover');
-//                 info.el.setAttribute('data-bs-trigger','focus');
-//                 info.el.setAttribute('data-bs-html','true');
-//                 info.el.setAttribute('data-bs-title',title.html());
-//                 info.el.setAttribute('data-bs-content',Event.properties.description);
-//                 const popover = bootstrap.Popover.getOrCreateInstance(info.el);
-//             }
-
-//             // Execute Calendar Callback
-//             if(typeof this.#options.callback[EventName.calendar] === 'function'){
-//                 this.#options.callback[EventName.calendar](Event,info,this);
-//             }
-
-//             // Execute Event Callback
-//             if(typeof Event.callback[EventName.event] === 'function'){
-//                 Event.callback[EventName.event](Event,info,this);
-//             }
-//         }
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#object.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#object.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#object.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-
-//     outerHTML(){
-
-//         // Return Object
-//         return this.#object[0].outerHTML;
-//     }
-
-//     show(){
-
-//         // Show Object
-//         this.#object.show();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     hide(){
-
-//         // Hide Object
-//         this.#object.hide();
-
-//         // Return Object
-//         return this;
-//     }
-// }
-
-// // IDE
-// class IDE {
-
-//     #object = null;
-//     #editor = null;
-//     #options = {
-//         class: {
-//             ide: null,
-//             numbers: null,
-//             input: null,
-//         },
-//         callback: {
-//             input: null,
-//         },
-//     };
-//     #builder = null
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('div')).addClass('ide').attr('id','IDE' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Add IDE Lines
-//         this.#object.lines = $(document.createElement('div')).addClass('ide-lines').appendTo(this.#object);
-
-//         // Add IDE Input
-//         this.#editor = $(document.createElement('textarea')).addClass('ide-input').appendTo(this.#object);
-
-//         // Add IDE Events
-//         this.#editor
-//             .keydown(function(e) {
-//                 if(e.keyCode === 9) {
-//                     e.preventDefault();
-
-//                     var start = this.selectionStart;
-//                     var end = this.selectionEnd;
-
-//                     this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
-//                     this.selectionStart = this.selectionEnd = start + 1;
-//                 }
-//             })
-//             .on('input propertychange', function() {
-//                 var lines = $(this).val().split('\n').length;
-//                 var lineNumbers = '';
-//                 for (var i = 1; i <= lines; i++) {
-//                     lineNumbers += i + '\n';
-//                 }
-//                 self.#object.lines.text(lineNumbers);
-//             })
-//             .trigger('propertychange')
-
-//         // Set IDE Class
-//         if(this.#options.class.ide){
-//             this.#object.addClass(this.#options.class.ide);
-//         }
-
-//         // Set Line Numbers Class
-//         if(this.#options.class.numbers){
-//             this.#object.lines.addClass(this.#options.class.numbers);
-//         }
-
-//         // Set Input Class
-//         if(this.#options.class.input){
-//             this.#editor.addClass(this.#options.class.input);
-//         }
-
-//         // Execute Callback Input
-//         if(typeof this.#options.callback.input === 'function'){
-//             this.#editor.on('input propertychange', function() {
-//                 self.#options.callback.input(this,self);
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#object.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#object.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#object.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-
-//     outerHTML(){
-
-//         // Return Object
-//         return this.#object[0].outerHTML;
-//     }
-
-//     show(){
-
-//         // Show Object
-//         this.#object.show();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     hide(){
-
-//         // Hide Object
-//         this.#object.hide();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     sync(){
-//         this.#editor.trigger('propertychange');
-//     }
-
-//     val(value = null){
-
-//         if(value){
-
-//             // Set Input Value
-//             this.#editor.val(value).trigger('propertychange');
-
-//             // Return Object
-//             return this;
-//         }
-
-//         // Return Input Value
-//         return this.#editor.val();
-//     }
-
-//     toHTML(){
-
-//         // Return Input Value as HTML
-//         return Helper.markdownToHTML(this.val());
-//     }
-
-//     toMarkdown(){
-
-//         // Return Input Value as Markdown
-//         return Helper.htmlToMarkdown(this.val());
-//     }
-// }
-
-// // MCE
-// class MCE {
-
-//     #object = null;
-//     #editor = null;
-//     #options = {
-//         class: {
-//             mce: null,
-//         },
-//         callback: {
-//             input: null,
-//         },
-//     };
-
-// 	constructor(builder, param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         // Inject Builder
-//         this.#builder = builder;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('div')).addClass('mce').attr('id','MCE' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Add IDE Input
-//         this.#object.input = $(document.createElement('textarea')).appendTo(this.#object);
-
-//         // Add MCE Events
-//         this.#object.input.tinymce({
-//             height: 400,
-//             width: '100%',
-//             menubar: false,
-//             plugins: [
-//                 'advlist','autolink',
-//                 'lists','link','image','charmap','preview','anchor','searchreplace','visualblocks',
-//                 'fullscreen','insertdatetime','media','table','help','wordcount'
-//             ],
-//             toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help',
-//             init_instance_callback: function (editor) {
-//                 self.#editor = editor;
-//                 var container = $(editor.getContainer());
-//                 container.find('.tox-statusbar').addClass("d-none");
-
-//                 // Execute Callback Input
-//                 if(typeof self.#options.callback.input === 'function'){
-//                     editor.on('input propertychange', function() {
-//                         self.#options.callback.input(editor,self);
-//                     });
-//                 }
-//             },
-//         });
-
-//         // Set IDE Class
-//         if(this.#options.class.mce){
-//             this.#object.addClass(this.#options.class.mce);
-//         }
-
-//         // Execute Callback Input
-//         if(typeof this.#options.callback.input === 'function'){
-//             this.#object.input.on('input propertychange', function() {
-//                 self.#options.callback.input(this,self);
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#object.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#object.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#object.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-
-//     outerHTML(){
-
-//         // Return Object
-//         return this.#object[0].outerHTML;
-//     }
-
-//     show(){
-
-//         // Show Object
-//         this.#object.show();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     hide(){
-
-//         // Hide Object
-//         this.#object.hide();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     val(value = null){
-
-//         // Set Self
-//         const self = this;
-
-//         if(value){
-
-//             // Set Input Value
-//             if(this.#editor){
-//                 this.#editor.setContent(value);
-//                 // Execute Callback Input
-//                 if(typeof this.#options.callback.input === 'function'){
-//                     this.#options.callback.input(this.#editor,this);
-//                 }
-//             } else {
-//                 var interval = setInterval(function() {
-//                     if(self.#editor){
-//                         clearInterval(interval);
-//                         self.#editor.setContent(value);
-//                         // Execute Callback Input
-//                         if(typeof self.#options.callback.input === 'function'){
-//                             self.#options.callback.input(self.#editor,self);
-//                         }
-//                     }
-//                 }, 100);
-//             }
-
-//             // Return Object
-//             return this;
-//         }
-
-//         // Return Input Value
-//         return this.#editor.getContent();
-//     }
-
-//     toHTML(){
-
-//         // Return Input Value as HTML
-//         return Helper.markdownToHTML(this.val());
-//     }
-
-//     toMarkdown(){
-
-//         // Return Input Value as Markdown
-//         return Helper.htmlToMarkdown(this.val());
-//     }
-// }
-
-// // Template
-// class Template {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             object: null,
-//         },
-//     };
-
-// 	constructor(param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string' || param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Create Object
-// 		this.#object = $(document.createElement('div')).attr('id','object' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Set Object Class
-//         if(this.#options.class.object){
-//             this.#object.addClass(this.#options.class.object);
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-
-//         // Check if Selector is Set
-//         if(selector != null){
-
-//             // Append to Selector
-//             this.appendTo(selector);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     appendTo(object){
-        
-//         // Append Object To
-//         this.#object.appendTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prependTo(object){
-        
-//         // Prepend Object To
-//         this.#object.prependTo(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     append(object){
-        
-//         // Append Object
-//         this.#object.append(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     prepend(object){
-        
-//         // Prepend Object
-//         this.#object.prepend(object);
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-
-//     outerHTML(){
-
-//         // Return Object
-//         return this.#object[0].outerHTML;
-//     }
-
-//     show(){
-
-//         // Show Object
-//         this.#object.show();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     hide(){
-
-//         // Hide Object
-//         this.#object.hide();
-
-//         // Return Object
-//         return this;
-//     }
-// }
-
-// // Toast
-// class Toast {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             object: null,
-//         },
-//         callback: {
-//             click: null,
-//         },
-//         position: 'bottom-end',
-//         properties: {
-//             class: {
-//                 item: null,
-//             },
-//             callback: {
-//                 click: null,
-//             },
-//             color: null,
-//             icon: null,
-//             title: null,
-//             body: null,
-//             datetime: null,
-//             delay: 5000,
-//             autohide: true,
-//             animation: true,
-//             dismissible: true,
-//         },
-//     };
-
-// 	constructor(param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string') {
-//                     selector = $(param);
-//                 } else if (param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Save Selector as Object
-//         this.#object = selector;
-
-//         // Set ID
-//         this.#object.attr('id','toast' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Configure as Toast Container
-//         this.#object.addClass('toast-container position-fixed p-3');
-
-//         // Set Position
-//         if(this.#options.position){
-//             switch(this.#options.position){
-//                 case"top-start":
-//                     this.#object.addClass('top-0 start-0');
-//                     break;
-//                 case"top-center":
-//                     this.#object.addClass('top-0 start-50 translate-middle-x');
-//                     break;
-//                 case"top-end":
-//                     this.#object.addClass('top-0 end-0');
-//                     break;
-//                 case"bottom-start":
-//                     this.#object.addClass('bottom-0 start-0');
-//                     break;
-//                 case"bottom-center":
-//                     this.#object.addClass('bottom-0 start-50 translate-middle-x');
-//                     break;
-//                 case"bottom-end":
-//                     this.#object.addClass('bottom-0 end-0');
-//                     break;
-//             }
-//         }
-
-//         // Set Object Class
-//         if(this.#options.class.object){
-//             this.#object.addClass(this.#options.class.object);
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                     case"callback":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     add(param1 = null, param2 = null){
-
-//         // Set Self
-//         const self = this;
-        
-//         let options = {};
-//         let callback = null;
-
-//         let properties = {};
-
-//         // Set selector, options, and callback
-//         [param1, param2].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof properties[key] === 'undefined'){
-//                 properties[key] = value;
-//             }
-//         }
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof properties[key] !== 'undefined'){
-//                 switch(key){
-//                     case"callback":
-//                         if(typeof properties[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof properties[key][k] !== 'undefined'){
-//                                     properties[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(properties[key][section] != null){
-//                                 properties[key][section] += ' ' + classes;
-//                             } else {
-//                                 properties[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         properties[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Create Toast
-//         let toast = $(document.createElement('div')).addClass('toast show').attr({"role":"alert","aria-live":"assertive","aria-atomic":"true"}).prependTo(this.#object);
-
-//         // Create Toast Header
-//         toast.header = $(document.createElement('div')).addClass('toast-header').appendTo(toast);
-//         toast.header.icon = $(document.createElement('i')).addClass('bi bi-bell me-1').appendTo(toast.header);
-//         toast.header.title = $(document.createElement('strong')).addClass('me-auto').appendTo(toast.header);
-//         toast.header.time = $(document.createElement('small')).addClass('text-muted').appendTo(toast.header);
-//         toast.header.time.ago = $(document.createElement('timeago')).addClass('timeago ').attr('data-bs-toggle','tooltip').appendTo(toast.header.time);
-//         toast.header.close = $(document.createElement('button')).addClass('btn-close d-none').attr({"type":"button","data-bs-dismiss":"toast","aria-label":"Close"}).appendTo(toast.header);
-
-//         // Create Toast Body
-//         toast.body = $(document.createElement('div')).addClass('toast-body').appendTo(toast);
-
-//         // Configure Color
-//         if(properties.color){
-//             toast.addClass('text-bg-' + properties.color);
-//         }
-
-//         // Configure Icon
-//         if(properties.icon){
-//             toast.header.icon.addClass('bi-' + properties.icon);
-//         } else {
-//             toast.header.icon.addClass('d-none');
-//         }
-
-//         // Configure Title
-//         if(properties.title){
-//             toast.header.title.html(properties.title);
-//         } else {
-//             toast.header.addClass('d-none');
-//         }
-
-//         // Configure Body
-//         if(properties.body){
-//             toast.body.html(properties.body);
-//         } else {
-//             toast.body.addClass('d-none');
-//             toast.header.addClass('border-0');
-//         }
-
-//         // Configure Date Time
-//         let datetime = null;
-//         if(properties.datetime !== null){
-//             datetime = new Date(defaults.datetime);
-//         } else {
-//             datetime = new Date();
-//         }
-//         toast.header.time.ago.attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
-//         toast.header.time.ago.bootstrap = new bootstrap.Tooltip(toast.header.time.ago);
-
-//         // Configure Animation
-//         if(properties.animation){
-//             toast.addClass('fade');
-//         }
-
-//         // Configure Autohide
-//         if(properties.autohide){
-//             toast.timer = setTimeout(function(){
-//                 toast.addClass('opacity-0').delay(500).queue(function(){
-//                     toast.removeClass('show opacity-0').addClass('hide').dequeue();
-//                 });
-//             }, properties.delay);
-//         }
-
-//         // Configure Dismissible
-//         if(properties.dismissible){
-//             toast.header.close.removeClass('d-none');
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(toast,this);
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-// // Task
-// class Task {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             object: null,
-//         },
-//         callback: {
-//             click: null,
-//             viewAll: null,
-//         },
-//         icon: "list-task",
-//         color: "primary",
-//         properties: {
-//             class: {
-//                 item: null,
-//             },
-//             label: null,
-//             progress: {
-//                 size: null,
-//                 color: "primary",
-//                 striped: true,
-//                 animated: true,
-//                 scale: 100,
-//                 label: "",
-//             },
-//         },
-//     };
-
-// 	constructor(param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string') {
-//                     selector = $(param);
-//                 } else if (param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Save Selector as Object
-//         this.#object = selector;
-
-//         // Set ID
-//         this.#object.attr('id','task' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Configure as Dropdown
-//         this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
-
-//         // Create Button
-//         this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
-//         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
-//         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
-
-//         // Create Menu
-//         this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
-
-//         // Create Header
-//         this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
-//         this.#object.menu.header.title.label = $(document.createElement('span')).text('Tasks').appendTo(this.#object.menu.header.title);
-//         this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
-
-//         // Create Seperators
-//         this.#object.menu.seperator = {};
-//         this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
-
-//         // Create Items List
-//         this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
-
-//         // Create Footer
-//         this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
-//         this.#object.menu.footer.btn.label = $(document.createElement('small')).text('View All').appendTo(this.#object.menu.footer.btn);
-
-//         // Set Object Class
-//         if(this.#options.class.object){
-//             this.#object.addClass(this.#options.class.object);
-//         }
-
-//         // Set Icon
-//         if(this.#options.icon){
-//             this.#object.btn.icon.addClass('bi-' + this.#options.icon);
-//         }
-
-//         // Set Color
-//         if(this.#options.color){
-//             this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
-//             this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
-//         }
-
-//         // Add Callback
-//         if(typeof this.#options.callback.viewAll === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 this.#options.callback.viewAll();
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                     case"callback":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     count(){
-
-//         // Count the number of new notifications
-//         let count = this.#object.find('.dropdown-item.task').length;
-
-//         // Set Count
-//         this.#object.menu.header.title.count.text(count);
-
-//         // Show Badge
-//         if(count > 0){
-//             this.#object.menu.header.title.count.removeClass('d-none');
-//             this.#object.btn.badge.removeClass('d-none');
-//             this.#object.btn.addClass('animate-pulse');
-//         } else {
-//             this.#object.menu.header.title.count.addClass('d-none');
-//             this.#object.btn.badge.addClass('d-none');
-//             this.#object.btn.addClass('animate-pulse');
-//         }
-
-//         // Return Count
-//         return count;
-//     }
-
-//     add(param1 = null, param2 = null){
-
-//         // Set Self
-//         const self = this;
-        
-//         let options = {};
-//         let callback = null;
-
-//         let properties = {};
-
-//         // Set selector, options, and callback
-//         [param1, param2].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof properties[key] === 'undefined'){
-//                 properties[key] = value;
-//             }
-//         }
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof properties[key] !== 'undefined'){
-//                 switch(key){
-//                     case"progress":
-//                         if(typeof properties[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof properties[key][k] !== 'undefined'){
-//                                     properties[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(properties[key][section] != null){
-//                                 properties[key][section] += ' ' + classes;
-//                             } else {
-//                                 properties[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         properties[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Create Item
-//         let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
-
-//         // Create Button
-//         item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex flex-column py-2 task').attr('type','button').appendTo(item);
-
-//         // Add Label
-//         item.btn.label = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
-//         item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
-//         item.btn.label.scale = $(document.createElement('small')).addClass('text-muted float-end').appendTo(item.btn.label);
-
-//         // Add Progress Bar
-//         item.btn.progress = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
-
-//         // Add Seperator
-//         item.seperator = $(document.createElement('li')).insertAfter(item);
-//         item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
-
-//         // Add Change Callback to Progress Properties
-//         properties.progress.callback = {};
-//         properties.progress.callback.change = function(progress){
-
-//             // Set Scale
-//             item.btn.label.scale.text(progress.get() + '%');
-//         };
-
-//         // Configure Progress Bar
-//         item.btn.progress.bar = new Progress(
-//             item.btn.progress,
-//             properties.progress,
-//             function(progress){},
-//         );
-
-//         // Add Set Function
-//         item.set = function(value){
-//             item.btn.progress.bar.set(value);
-//         };
-
-//         // Configure Label
-//         if(properties.label !== null){
-//             item.btn.label.text.text(properties.label);
-//         }
-
-//         // Set Item Class
-//         if(properties.class.item){
-//             item.addClass(properties.class.item);
-//         }
-
-//         // Add Callback
-//         if(typeof this.#options.callback.click === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 self.#options.callback.click(item,self,self.#object);
-//             });
-//         }
-
-//         // Add Callback
-//         if(typeof properties.click === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 properties.click(item,self,self.#object);
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(item,this);
-//         }
-
-//         // Set Count
-//         this.count();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-
-// // Message
-// class Message {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             object: null,
-//         },
-//         callback: {
-//             click: null,
-//             viewAll: null,
-//             onRead: null,
-//         },
-//         icon: "envelope",
-//         color: "info",
-//         onReadDelay: 500,
-//         properties: {
-//             class: {
-//                 item: null,
-//             },
-//             click: null,
-//             onRead: null,
-//             datetime: null,
-//             label: null,
-//             email: null,
-//             name: null,
-//             isRead: false,
-//         },
-//     };
-
-// 	constructor(param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string') {
-//                     selector = $(param);
-//                 } else if (param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Save Selector as Object
-//         this.#object = selector;
-
-//         // Set ID
-//         this.#object.attr('id','message' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Configure as Dropdown
-//         this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
-
-//         // Create Button
-//         this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
-//         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
-//         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
-
-//         // Create Menu
-//         this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
-
-//         // Create Header
-//         this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
-//         this.#object.menu.header.title.label = $(document.createElement('span')).text('Messages').appendTo(this.#object.menu.header.title);
-//         this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
-
-//         // Create Seperators
-//         this.#object.menu.seperator = {};
-//         this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
-
-//         // Create Items List
-//         this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
-
-//         // Create Footer
-//         this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
-//         this.#object.menu.footer.btn.label = $(document.createElement('small')).text('View All').appendTo(this.#object.menu.footer.btn);
-
-//         // Set Object Class
-//         if(this.#options.class.object){
-//             this.#object.addClass(this.#options.class.object);
-//         }
-
-//         // Set Icon
-//         if(this.#options.icon){
-//             this.#object.btn.icon.addClass('bi-' + this.#options.icon);
-//         }
-
-//         // Set Color
-//         if(this.#options.color){
-//             this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
-//             this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
-//         }
-
-//         // Add Callback
-//         if(typeof this.#options.callback.viewAll === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 this.#options.callback.viewAll();
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                     case"callback":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     count(){
-
-//         // Count the number of new notifications
-//         let count = this.#object.find('[data-isRead="false"]').length;
-
-//         // Set Count
-//         this.#object.menu.header.title.count.text(count);
-
-//         // Show Badge
-//         if(count > 0){
-//             this.#object.menu.header.title.count.removeClass('d-none');
-//             this.#object.btn.badge.removeClass('d-none');
-//             this.#object.btn.addClass('animate-bounce');
-//         } else {
-//             this.#object.menu.header.title.count.addClass('d-none');
-//             this.#object.btn.badge.addClass('d-none');
-//             this.#object.btn.removeClass('animate-bounce');
-//         }
-
-//         // Return Count
-//         return count;
-//     }
-
-//     add(param1 = null, param2 = null){
-
-//         // Set Self
-//         const self = this;
-        
-//         let options = {};
-//         let callback = null;
-
-//         let properties = {};
-
-//         // Set selector, options, and callback
-//         [param1, param2].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof properties[key] === 'undefined'){
-//                 properties[key] = value;
-//             }
-//         }
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof properties[key] !== 'undefined'){
-//                 switch(key){
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(properties[key][section] != null){
-//                                 properties[key][section] += ' ' + classes;
-//                             } else {
-//                                 properties[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         properties[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Create Item
-//         let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
-
-//         // Create Button
-//         item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex align-items-center py-2').attr('type','button').appendTo(item);
-
-//         // Add Icon
-//         item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
-//         item.btn.icon.frame = $(document.createElement('div')).addClass('d-flex align-items-center justify-content-center rounded-circle text-bg-primary').css({"width":"48px","height":"48px"}).appendTo(item.btn.icon);
-
-//         // Add Label
-//         item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
-//         item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
-//         item.btn.label.meta = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
-//         item.btn.label.name = $(document.createElement('span')).appendTo(item.btn.label.meta);
-//         item.btn.label.timeago = $(document.createElement('timeago')).addClass('timeago ms-2').attr('data-bs-toggle','tooltip').appendTo(item.btn.label.meta);
-
-//         // Add Seperator
-//         item.seperator = $(document.createElement('li')).insertAfter(item);
-//         item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
-
-//         // Configure Avatar
-//         item.btn.icon.frame.avatar = new Avatar(
-//             properties.email, //Email
-//             {
-//                 class: { //Add Classes
-//                     object: "rounded-circle", //Object Element
-//                 },
-//                 size: "48px", //Set Size
-//             },
-//             function(avatar){}, //Callback
-//         ).appendTo(item.btn.icon.frame);
-
-//         // Configure Label
-//         if(properties.label !== null){
-//             item.btn.label.text.text(properties.label);
-//         }
-
-//         // Configure Name
-//         if(properties.name !== null){
-//             item.btn.label.name.text(properties.name);
-//         }
-
-//         // Configure Date Time
-//         let datetime = null;
-//         if(properties.datetime !== null){
-//             datetime = new Date(defaults.datetime);
-//         } else {
-//             datetime = new Date();
-//         }
-//         item.btn.label.timeago.attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
-//         item.btn.label.timeago.bootstrap = new bootstrap.Tooltip(item.btn.label.timeago);
-
-//         // Configure isRead
-//         item.attr('data-isRead',properties.isRead);
-//         if(!properties.isRead){
-//             item.addClass('blink-primary');
-//             item.btn.label.text.addClass('fw-bold');
-//         }
-
-//         // Set Item Class
-//         if(properties.class.item){
-//             item.addClass(properties.class.item);
-//         }
-
-//         // Add onRead Callback
-//         if(!properties.isRead){
-//             item.timer;
-//             item.hover(function() {
-//                 item.timer = setTimeout(function() {
-//                     item.attr('data-isRead', 'true').removeClass('blink-primary');
-//                     item.btn.label.text.removeClass('fw-bold');
-//                     self.count();
-//                     if(typeof properties.onRead === 'function'){
-//                         properties.onRead(item,self,self.#object);
-//                     }
-//                 }, self.#options.onReadDelay);
-//             }, function() {
-//                 clearTimeout(item.timer);
-//             });
-//         }
-
-//         // Add Callback
-//         if(typeof this.#options.callback.click === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 self.#options.callback.click(item,self,self.#object);
-//             });
-//         }
-
-//         // Add Callback
-//         if(typeof properties.click === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 properties.click(item,self,self.#object);
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(item,this);
-//         }
-
-//         // Set Count
-//         this.count();
-
-//         // Return Object
-//         return this;
-//     }
-
-//     html(){
-
-//         // Return Object
-//         return this.#object.html();
-//     }
-
-//     text(){
-
-//         // Return Object
-//         return this.#object.text();
-//     }
-// }
-
-// // Notification
-// class Notification {
-
-//     #object = null;
-//     #options = {
-//         class: {
-//             object: null,
-//         },
-//         callback: {
-//             click: null,
-//             readAll: null,
-//         },
-//         icon: "bell",
-//         color: "danger",
-//         onReadDelay: 500,
-//         properties: {
-//             class: {
-//                 item: null,
-//             },
-//             click: null,
-//             onRead: null,
-//             icon: "bell",
-//             color: "primary",
-//             datetime: null,
-//             label: null,
-//             isRead: false,
-//         },
-//     };
-
-// 	constructor(param1 = null, param2 = null, param3 = null){
-
-//         // Set Self
-//         const self = this;
-
-//         let selector = null;
-//         let options = {};
-//         let callback = null;
-
-//         // Set selector, options, and callback
-//         [param1, param2, param3].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'string') {
-//                     selector = $(param);
-//                 } else if (param instanceof jQuery) {
-//                     selector = param;
-//                 } else if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         this.config(options);
-
-//         // Increment Count
-//         builderCount++;
-
-//         // Save Selector as Object
-//         this.#object = selector;
-
-//         // Set ID
-//         this.#object.attr('id','notification' + builderCount);
-//         this.#object.id = this.#object.attr('id');
-
-//         // Configure as Dropdown
-//         this.#object.addClass('dropdown').addClass('animate-slide-hover-top-20');
-
-//         // Create Button
-//         this.#object.btn = $(document.createElement('button')).addClass('nav-link text-decoration-none py-2').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this.#object);
-//         this.#object.btn.icon = $(document.createElement('i')).addClass('bi fs-4').attr('style','height: 2.25rem !important;width: 1.5rem !important').appendTo(this.#object.btn);
-//         this.#object.btn.badge = $(document.createElement('span')).addClass('position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none').css({"padding":"8px"}).appendTo(this.#object.btn);
-
-//         // Create Menu
-//         this.#object.menu = $(document.createElement('ul')).addClass('dropdown-menu dropdown-list dropdown-menu-end pb-0').css({"min-width":"350px","max-width":"500px"}).appendTo(this.#object);
-
-//         // Create Header
-//         this.#object.menu.header = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this.#object.menu.header);
-//         this.#object.menu.header.title.label = $(document.createElement('span')).text('Notifications').appendTo(this.#object.menu.header.title);
-//         this.#object.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this.#object.menu.header.title);
-
-//         // Create Seperators
-//         this.#object.menu.seperator = {};
-//         this.#object.menu.seperator = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this.#object.menu.seperator);
-
-//         // Create Items List
-//         this.#object.menu.list = $(document.createElement('div')).addClass('overflow-auto').css({"max-height":"500px"}).appendTo(this.#object.menu);
-
-//         // Create Footer
-//         this.#object.menu.footer = $(document.createElement('li')).appendTo(this.#object.menu);
-//         this.#object.menu.footer.btn = $(document.createElement('button')).addClass('dropdown-item text-center py-2 rounded-bottom btn btn-link').attr('type','button').appendTo(this.#object.menu.footer);
-//         this.#object.menu.footer.btn.label = $(document.createElement('small')).text('Mark All as Read').appendTo(this.#object.menu.footer.btn);
-
-//         // Set Object Class
-//         if(this.#options.class.object){
-//             this.#object.addClass(this.#options.class.object);
-//         }
-
-//         // Set Icon
-//         if(this.#options.icon){
-//             this.#object.btn.icon.addClass('bi-' + this.#options.icon);
-//         }
-
-//         // Set Color
-//         if(this.#options.color){
-//             this.#object.btn.badge.addClass('text-bg-' + this.#options.color);
-//             this.#object.menu.header.title.count.addClass('text-bg-' + this.#options.color);
-//         }
-
-//         // Add Callback
-//         this.#object.menu.footer.btn.on('click',function(){
-//             self.readAll();
-//         });
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(this,this.#object);
-//         }
-//     }
-
-//     config(options = {}){
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof this.#options[key] !== 'undefined'){
-//                 switch(key){
-//                     case"defaults":
-//                     case"callback":
-//                         if(typeof this.#options[key] !== 'undefined'){
-//                             for(const [k, v] of Object.entries(value)){
-//                                 if(typeof this.#options[key][k] !== 'undefined'){
-//                                     this.#options[key][k] = v;
-//                                 }
-//                             }
-//                         }
-//                         break;
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(this.#options[key][section] != null){
-//                                 this.#options[key][section] += ' ' + classes;
-//                             } else {
-//                                 this.#options[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         this.#options[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     count(){
-
-//         // Count the number of new notifications
-//         let count = this.#object.find('[data-isRead="false"]').length;
-
-//         // Set Count
-//         this.#object.menu.header.title.count.text(count);
-
-//         // Show Badge
-//         if(count > 0){
-//             this.#object.menu.header.title.count.removeClass('d-none');
-//             this.#object.btn.badge.removeClass('d-none');
-//             this.#object.btn.addClass('animate-wobble');
-//         } else {
-//             this.#object.menu.header.title.count.addClass('d-none');
-//             this.#object.btn.badge.addClass('d-none');
-//             this.#object.btn.removeClass('animate-wobble');
-//         }
-
-//         // Return Count
-//         return count;
-//     }
-
-//     readAll(){
-
-//         // Get all unread notifications
-//         let items = this.#object.find('[data-isRead="false"]');
-
-//         // Set all notifications as read
-//         items.attr('data-isRead', 'true').removeClass('blink-primary');
-//         items.find('span.text-wrap').removeClass('fw-bold');
-
-//         // Count the number of new notifications
-//         this.count();
-
-//         // Execute Callback
-//         if(typeof this.#options.callback.readAll === 'function'){
-//             this.#options.callback.readAll(self,self.#object);
-//         }
-
-//         // Return Object
-//         return this;
-//     }
-
-//     add(param1 = null, param2 = null){
-
-//         // Set Self
-//         const self = this;
-        
-//         let options = {};
-//         let callback = null;
-
-//         let properties = {};
-
-//         // Set selector, options, and callback
-//         [param1, param2].forEach(param => {
-//             if(param !== null){
-//                 if (typeof param === 'object') {
-//                     options = param;
-//                 } else if (typeof param === 'function') {
-//                     callback = param;
-//                 }
-//             }
-//         });
-
-//         // Configure Options
-//         for(const [key, value] of Object.entries(this.#options.defaults)){
-//             if(typeof properties[key] === 'undefined'){
-//                 properties[key] = value;
-//             }
-//         }
-//         for(const [key, value] of Object.entries(options)){
-//             if(typeof properties[key] !== 'undefined'){
-//                 switch(key){
-//                     case"class":
-//                         for(const [section, classes] of Object.entries(value)){
-//                             if(properties[key][section] != null){
-//                                 properties[key][section] += ' ' + classes;
-//                             } else {
-//                                 properties[key][section] = classes;
-//                             }
-//                         }
-//                         break;
-//                     default:
-//                         properties[key] = value;
-//                         break;
-//                 }
-//             }
-//         }
-
-//         // Create Item
-//         let item = $(document.createElement('li')).prependTo(this.#object.menu.list);
-
-//         // Create Button
-//         item.btn = $(document.createElement('button')).addClass('dropdown-item d-flex align-items-center py-2').attr('type','button').appendTo(item);
-
-//         // Add Icon
-//         item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
-//         item.btn.icon.frame = $(document.createElement('div')).addClass('d-flex align-items-center justify-content-center rounded-circle').css({"width":"48px","height":"48px"}).appendTo(item.btn.icon);
-//         item.btn.icon.frame.icon = $(document.createElement('i')).addClass('bi').appendTo(item.btn.icon.frame);
-
-//         // Add Label
-//         item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
-//         item.btn.label.time = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
-//         item.btn.label.time.timeago = $(document.createElement('timeago')).addClass('timeago').attr('data-bs-toggle','tooltip').appendTo(item.btn.label.time);
-//         item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').appendTo(item.btn.label);
-
-//         // Add Seperator
-//         item.seperator = $(document.createElement('li')).insertAfter(item);
-//         item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
-
-//         // Configure Color
-//         if(properties.color !== null){
-//             item.btn.icon.frame.addClass('text-bg-' + properties.color);
-//         } else {
-//             item.btn.icon.frame.addClass('text-bg-primary');
-//         }
-
-//         // Configure Icon
-//         if(properties.icon !== null){
-//             item.btn.icon.frame.icon.addClass('bi-' + properties.icon);
-//         } else {
-//             item.btn.icon.frame.icon.addClass('bi-bell');
-//         }
-
-//         // Configure Date Time
-//         let datetime = null;
-//         if(properties.datetime !== null){
-//             datetime = new Date(defaults.datetime);
-//         } else {
-//             datetime = new Date();
-//         }
-//         item.btn.label.time.timeago.attr('title',datetime.toLocaleString()).attr('data-bs-title',datetime.toLocaleString()).attr('datetime',datetime.toLocaleString()).timeago();
-//         item.btn.label.time.timeago.bootstrap = new bootstrap.Tooltip(item.btn.label.time.timeago);
-
-//         // Configure Label
-//         if(properties.label !== null){
-//             item.btn.label.text.text(properties.label);
-//         }
-
-//         // Configure isRead
-//         item.attr('data-isRead',properties.isRead);
-//         if(!properties.isRead){
-//             item.addClass('blink-primary');
-//             item.btn.label.text.addClass('fw-bold');
-//         }
-
-//         // Set Item Class
-//         if(properties.class.item){
-//             item.addClass(properties.class.item);
-//         }
-
-//         // Add onRead Callback
-//         if(!properties.isRead){
-//             item.timer;
-//             item.hover(function() {
-//                 item.timer = setTimeout(function() {
-//                     item.attr('data-isRead', 'true').removeClass('blink-primary');
-//                     item.btn.label.text.removeClass('fw-bold');
-//                     self.count();
-//                     if(typeof properties.onRead === 'function'){
-//                         properties.onRead(item,self,self.#object);
-//                     }
-//                 }, self.#options.onReadDelay);
-//             }, function() {
-//                 clearTimeout(item.timer);
-//             });
-//         }
-
-//         // Add Callback
-//         if(typeof this.#options.callback.click === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 self.#options.callback.click(item,self,self.#object);
-//             });
-//         }
-
-//         // Add Callback
-//         if(typeof properties.click === 'function'){
-//             this.#object.menu.footer.btn.on('click',function(){
-//                 properties.click(item,self,self.#object);
-//             });
-//         }
-
-//         // Execute Callback
-//         if(typeof callback === 'function'){
-//             callback(item,this);
-//         }
-
-//         // Set Count
-//         this.count();
 
 //         // Return Object
 //         return this;

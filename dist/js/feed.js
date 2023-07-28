@@ -1,15 +1,18 @@
 $(document).ready(function(){
 
-    // Sample
-    
-    const sampleObject = new Feed(
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Component
+    const sampleComponent = sampleBuilder.component(
+        "feed", //Component Name
         "#example", //Selector or JQuery Object to appendTo
         {
             class: { //Add Classes
                 feed: "card card-body", //Feed Element
                 post: null, //Post Element
             },
-            defaults: { //Default for individual Post Values
+            properties: { //Default for individual Post Values
                 username: null, //Username
                 content: null, //Content
                 datetime: null, //Datetime
@@ -52,54 +55,58 @@ $(document).ready(function(){
                 },
             },
         },
-        function(feed){ //Callback
-            feed.post(
+        function(feed,component){ //Callback
+            feed.add(
                 {
                     class: { //Add Classes
                         post: null, //Post Element
                     },
                     datetime: null, //Datetime
-                    username: "louis@laswitchtech.com", //Username
+                    username: "john.doe@domain.com", //Username
                     content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", //Content
                 },
                 function(post,feed){}, //Callback
             );
-            feed.post(
+            feed.add(
                 {
                     class: { //Add Classes
                         post: null, //Post Element
                     },
                     datetime: null, //Datetime
-                    username: "louis@laswitchtech.com", //Username
+                    username: "john.doe@domain.com", //Username
                     content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", //Content
                 },
                 function(post,feed){}, //Callback
             );
-            feed.post(
+            feed.add(
                 {
                     class: { //Add Classes
                         post: null, //Post Element
                     },
                     datetime: null, //Datetime
-                    username: "louis@laswitchtech.com", //Username
+                    username: "john.doe@domain.com", //Username
                     content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", //Content
                 },
                 function(post,feed){}, //Callback
             );
-        }, 
+        },
     );
 
-    // Code
-
+    // Javascript Code
     let scriptCode = '';
-    scriptCode += 'const sampleObject = new Feed(' + "\n";
+    scriptCode += '// Builder' + "\n";
+    scriptCode += 'const sampleBuilder = new Builder();' + "\n";
+    scriptCode += '' + "\n";
+    scriptCode += '// Component' + "\n";
+    scriptCode += 'const sampleComponent = sampleBuilder.component(' + "\n";
+    scriptCode += '    "feed", //Component Name' + "\n";
     scriptCode += '    "#example", //Selector or JQuery Object to appendTo' + "\n";
     scriptCode += '    {' + "\n";
     scriptCode += '        class: { //Add Classes' + "\n";
     scriptCode += '            feed: "card card-body", //Feed Element' + "\n";
     scriptCode += '            post: null, //Post Element' + "\n";
     scriptCode += '        },' + "\n";
-    scriptCode += '        defaults: { //Default for individual Post Values' + "\n";
+    scriptCode += '        properties: { //Default for individual Post Values' + "\n";
     scriptCode += '            username: null, //Username' + "\n";
     scriptCode += '            content: null, //Content' + "\n";
     scriptCode += '            datetime: null, //Datetime' + "\n";
@@ -142,45 +149,47 @@ $(document).ready(function(){
     scriptCode += '            },' + "\n";
     scriptCode += '        },' + "\n";
     scriptCode += '    },' + "\n";
-    scriptCode += '    function(feed){ //Callback' + "\n";
-    scriptCode += '        feed.post(' + "\n";
+    scriptCode += '    function(feed,component){ //Callback' + "\n";
+    scriptCode += '        feed.add(' + "\n";
     scriptCode += '            {' + "\n";
     scriptCode += '                class: { //Add Classes' + "\n";
     scriptCode += '                    post: null, //Post Element' + "\n";
     scriptCode += '                },' + "\n";
     scriptCode += '                datetime: null, //Datetime' + "\n";
-    scriptCode += '                username: "louis@laswitchtech.com", //Username' + "\n";
-    scriptCode += '                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", //Content' + "\n";
+    scriptCode += '                username: "john.doe@domain.com", //Username' + "\n";
+    scriptCode += '                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", //Content' + "\n";
     scriptCode += '            },' + "\n";
     scriptCode += '            function(post,feed){}, //Callback' + "\n";
     scriptCode += '        );' + "\n";
-    scriptCode += '        feed.post(' + "\n";
+    scriptCode += '        feed.add(' + "\n";
     scriptCode += '            {' + "\n";
     scriptCode += '                class: { //Add Classes' + "\n";
     scriptCode += '                    post: null, //Post Element' + "\n";
     scriptCode += '                },' + "\n";
     scriptCode += '                datetime: null, //Datetime' + "\n";
-    scriptCode += '                username: "louis@laswitchtech.com", //Username' + "\n";
-    scriptCode += '                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", //Content' + "\n";
+    scriptCode += '                username: "john.doe@domain.com", //Username' + "\n";
+    scriptCode += '                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.", //Content' + "\n";
     scriptCode += '            },' + "\n";
     scriptCode += '            function(post,feed){}, //Callback' + "\n";
     scriptCode += '        );' + "\n";
-    scriptCode += '        feed.post(' + "\n";
+    scriptCode += '        feed.add(' + "\n";
     scriptCode += '            {' + "\n";
     scriptCode += '                class: { //Add Classes' + "\n";
     scriptCode += '                    post: null, //Post Element' + "\n";
     scriptCode += '                },' + "\n";
     scriptCode += '                datetime: null, //Datetime' + "\n";
-    scriptCode += '                username: "louis@laswitchtech.com", //Username' + "\n";
-    scriptCode += '                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", //Content' + "\n";
+    scriptCode += '                username: "john.doe@domain.com", //Username' + "\n";
+    scriptCode += '                content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", //Content' + "\n";
     scriptCode += '            },' + "\n";
     scriptCode += '            function(post,feed){}, //Callback' + "\n";
     scriptCode += '        );' + "\n";
-    scriptCode += '    }, ' + "\n";
+    scriptCode += '    },' + "\n";
     scriptCode += ');';
-    
-    const code = new Code(
-        '#code',
+
+    // Code
+    const code = sampleBuilder.component(
+        "code", //Component Name
+        "#code", //Selector or JQuery Object to appendTo
         {
             language: 'javascript',
             title: 'Code',
@@ -189,13 +198,13 @@ $(document).ready(function(){
             collapsed:true,
             code:scriptCode,
         },
-        function(element,code){}
     );
 
-    let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    
-    const html = new Code(
-        '#htmlcode',
+    // HTML Code
+    let pretty = prettier.format(sampleComponent.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+    const html = sampleBuilder.component(
+        "code", //Component Name
+        "#htmlcode", //Selector or JQuery Object to appendTo
         {
             language: 'markup',
             title: 'Code',
@@ -204,6 +213,5 @@ $(document).ready(function(){
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
     );
 });
