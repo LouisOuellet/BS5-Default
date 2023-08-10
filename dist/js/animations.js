@@ -1,8 +1,15 @@
 $(document).ready(function() {
+
+    // Builder
+    const sampleBuilder = new Builder();
+
+    // Pretty
     let pretty = prettier.format($('#example').html(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
     
-    const html = new Code(
-        '#markup',
+    // Code
+    const html = sampleBuilder.Component(
+        "code",
+        "#markup",
         {
             language: 'markup',
             title: 'Code',
@@ -11,6 +18,6 @@ $(document).ready(function() {
             collapsed:true,
             code:pretty,
         },
-        function(element,code){}
+        function(code,component){},
     );
 });

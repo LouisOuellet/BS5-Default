@@ -1,6 +1,19 @@
 // Autor: Louis Ouellet
-// Content Container
+
+// Create Builder
+const builder = new Builder();
+
+// Declare Components
 const content = $('#content');
+const sidebar = $('#sidebar');
+const defaultTheme = $('html[data-theme]').attr('data-theme');
+const breadcrumbs = $('#breadcrumbs');
+
+// Declare Utilities
+builder.Notification.appendTo('#notificationArea');
+builder.Message.appendTo('#messageArea');
+builder.Task.appendTo('#taskArea');
+builder.Toast.position('top-center');
 
 // FullScreen Toggle
 $("#fullscreenToggle").on("click", function () {
@@ -31,7 +44,6 @@ $('[data-theme-value]').click(function () {
 });
 
 // Default Theme
-const defaultTheme = $('html[data-theme]').attr('data-theme');
 $('[data-theme-value]').removeClass('active');
 $('[data-theme-value="' + defaultTheme + '"]').addClass('active');
 $('link[data-theme]').prop("disabled", true);
@@ -57,7 +69,6 @@ window.onscroll = function() {
 };
 
 // Sidebar Toggle
-const sidebar = $('#sidebar');
 if(sidebar.length > 0){
 	const sidebarCollapse = new bootstrap.Collapse(sidebar, {toggle: false});
 	const sidebarToggle = $('#sidebarToggle');
@@ -208,35 +219,7 @@ breadcrumbArray.forEach(function(item, index){
 	}
 	breadcrumbHtml += '</li>';
 });
-$('#breadcrumbs').html(breadcrumbHtml); // display the breadcrumb
-
-// Create Notification Area
-const Notifications = new Notification(
-	"#notificationArea",
-	{},
-	function(notification){},
-);
-
-// Create Message Area
-const Messages = new Message(
-	"#messageArea",
-	{},
-	function(message){},
-);
-
-// Create Task Area
-const Tasks = new Task(
-	"#taskArea",
-	{},
-	function(task){},
-);
-
-// Create Toast Area
-const Toasts = new Toast(
-	"#toastArea",
-	{},
-	function(toast){},
-);
+breadcrumbs.html(breadcrumbHtml); // display the breadcrumb
 
 // // Check User Activity
 // $(document).ready(function() {
