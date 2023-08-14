@@ -729,19 +729,19 @@
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="?p=profile">
+                                                <a class="dropdown-item" href="?t=layouts&p=profile">
                                                     <i class="bi bi-person me-1"></i>
                                                     <span>Profile</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="?p=settings">
+                                                <a class="dropdown-item" href="?t=layouts&p=settings">
                                                     <i class="bi bi-gear me-1"></i>
                                                     <span>Settings</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="?p=help">
+                                                <a class="dropdown-item" href="?t=layouts&p=help">
                                                     <i class="bi bi-question-circle me-1"></i>
                                                     <span>Help</span>
                                                 </a>
@@ -781,7 +781,7 @@
                         <script src="/js/panel.js"></script>
             
                         <!-- ======= Page Content ======= -->
-                        <div class="row mt-4 px-3 mx-0 pb-3">
+                        <div id="page" class="row mt-4 px-3 mx-0 pb-3">
                             <?php if(file_exists($file)){ require $file; } ?>
                         </div>
                         <!-- ======= End Page Content ======= -->

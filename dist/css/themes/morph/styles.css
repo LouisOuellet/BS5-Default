@@ -15937,6 +15937,25 @@ textarea.form-control-lg {
   opacity: 0.5;
 }
 
+.emphasized-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.emphasized-element {
+  position: relative;
+  z-index: 2100;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e52527;
+}
+
 .dropdown-submenu {
   position: relative;
 }

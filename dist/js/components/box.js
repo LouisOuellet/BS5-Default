@@ -195,17 +195,19 @@ $(document).ready(function(){
     );
 
     // HTML Code
-    let pretty = prettier.format(sampleComponentBadge1.outerHTML() + sampleComponentBadge2.outerHTML() + sampleComponentInfo.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
-    const html = sampleBuilder.Component(
-        "code", //Component Name
-        "#htmlcode", //Selector or JQuery Object to appendTo
-        {
-            language: 'markup',
-            title: 'Code',
-            clipboard:true,
-            fullscreen:true,
-            collapsed:true,
-            code:pretty,
-        },
-    );
+    setTimeout(function(){
+        let pretty = prettier.format(sampleComponentBadge1.outerHTML() + sampleComponentBadge2.outerHTML() + sampleComponentInfo.outerHTML(), { parser: "html", tabWidth: 4, useTabs: true, plugins: prettierPlugins });
+        const html = builder.Component(
+            "code", //Component Name
+            "#htmlcode", //Selector or JQuery Object to appendTo
+            {
+                language: 'markup',
+                title: 'Code',
+                clipboard:true,
+                fullscreen:true,
+                collapsed:true,
+                code:pretty,
+            },
+        );
+    }, 0);
 });

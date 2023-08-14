@@ -279,6 +279,13 @@ class Builder {
                 }
                 this.#utilities[name] = object;
                 break;
+            case'layouts':
+                if(typeof this.#layouts[name] !== 'undefined'){
+                    console.log('Layout Already Exist');
+                    return false;
+                }
+                this.#layouts[name] = object;
+                break;
             case'components':
                 if(typeof this.#components[name] !== 'undefined'){
                     console.log('Component Already Exist');
@@ -317,6 +324,19 @@ class Builder {
             return false;
         }
         return new this.#components[name](self, param1, param2, param3);
+    }
+
+    Layout(name, param1 = null, param2 = null, param3 = null){
+        const self = this;
+        if(typeof name !== 'string'){
+            console.log('Builder.layout(String)');
+            return false;
+        }
+        if(typeof this.#layouts[name] === 'undefined'){
+            console.log('Unknown Layout');
+            return false;
+        }
+        return new this.#layouts[name](self, param1, param2, param3);
     }
 
     #utilities = {
@@ -1528,6 +1548,40 @@ class Builder {
         },
         helper: class extends this.UtilityClass {
 
+            // Create Emphasis on element
+            emphasis(element = null){
+
+                // If the element is null, remove any existing emphasis
+                if(element === null){
+                    $('.emphasized-element').removeClass('emphasized-element');
+                    $('.emphasized-overlay').remove();
+                    return true;
+                }
+
+                // If the element is a jQuery object
+                if(!element instanceof jQuery){
+                    element = $(element);
+                }
+
+                // Check if element is in DOM
+                if(element.length <= 0){
+                    return false;
+                }
+
+                // If the overlay already exists, remove it
+                if($('.emphasized-overlay').length <= 0){
+
+                    // Append the overlay div
+                    $('body').append('<div class="emphasized-overlay"></div>');
+                }
+
+                // Clear any previous emphasized elements
+                $('.emphasized-element').removeClass('emphasized-element');
+
+                // Add the emphasized class to the target element
+                $(element).addClass('emphasized-element');
+            }
+
             // Generate a random number between min and max
             randomNumber(min = -10, max = 10){
                 return Math.floor(Math.random() * (max - min + 1) + min);
@@ -1872,6 +1926,780 @@ class Builder {
             }
         },
     };
+
+    #layouts = {
+        help: class extends this.ComponentClass {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                    },
+                    title: null,
+                    link: {
+                        articles: null,
+                        contactus: null,
+                    },
+                };
+            }
+        
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'layout' + this._id,
+                    'class': 'row',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Create Title
+                this._component.title = $(document.createElement('h1')).addClass('text-center').text(this._properties.title).appendTo(this._component);
+        
+                // Create Search
+                this._component.search = $(document.createElement('div')).addClass('col-12 mb-2 d-flex justify-content-center').appendTo(this._component);
+                this._component.search.form = $(document.createElement('form')).attr({
+                    'class': 'text-center col-6',
+                    'method': 'post',
+                }).appendTo(this._component.search);
+                this._component.search.form.input = $(document.createElement('input')).attr({
+                    'class': 'form-control search',
+                    'type': 'text',
+                    'name': 'search',
+                    'placeholder': 'Search...',
+                    'value': '',
+                }).appendTo(this._component.search.form);
+        
+                // Create Announcements
+                this._component.announcements = $(document.createElement('div')).addClass('col-12 my-2 d-none').appendTo(this._component);
+                this._component.announcements.container = $(document.createElement('div')).addClass('container').appendTo(this._component.announcements);
+                this._component.announcements.container.title = $(document.createElement('h1')).addClass('text-center').text('Announcements').appendTo(this._component.announcements.container);
+                this._component.announcements.container.announcements = $(document.createElement('div')).addClass('d-flex justify-content-center align-items-center').appendTo(this._component.announcements.container);
+        
+                // Create Ressources
+                this._component.ressources = $(document.createElement('div')).addClass('col-12 my-2 d-none').appendTo(this._component);
+                this._component.ressources.container = $(document.createElement('div')).addClass('container').appendTo(this._component.ressources);
+                this._component.ressources.container.title = $(document.createElement('h1')).addClass('text-center').text('Ressources').appendTo(this._component.ressources.container);
+                this._component.ressources.container.ressources = $(document.createElement('div')).addClass('row row-cols-1 row-cols-md-3').appendTo(this._component.ressources.container);
+        
+                // Create Articles
+                this._component.articles = $(document.createElement('div')).addClass('col-12 my-2 d-none').appendTo(this._component);
+                this._component.articles.container = $(document.createElement('div')).addClass('container').appendTo(this._component.articles);
+                this._component.articles.container.title = $(document.createElement('h1')).addClass('text-center').text('Featured Articles').appendTo(this._component.articles.container);
+                this._component.articles.container.articles = $(document.createElement('div')).addClass('row row-cols-1 row-cols-md-3').appendTo(this._component.articles.container);
+                this._component.articles.more = $(document.createElement('div')).addClass('row my-2').appendTo(this._component.articles);
+                this._component.articles.more.container = $(document.createElement('div')).addClass('col-12').appendTo(this._component.articles.more);
+                this._component.articles.more.container.quote = $(document.createElement('p')).addClass('lead text-center').text('Browse a broad library of manuals, training materials, articles and more.').appendTo(this._component.articles.more.container);
+                this._component.articles.more.container.button = $(document.createElement('div')).addClass('d-flex justify-content-center align-items-center').appendTo(this._component.articles.more.container);
+                this._component.articles.more.container.button.link = $(document.createElement('a')).attr({
+                    class: 'btn btn-secondary',
+                    href: this._properties.link.articles,
+                }).text('View all articles').appendTo(this._component.articles.more.container.button);
+        
+                // Create Contact
+                this._component.articles.contact = $(document.createElement('div')).addClass('col-12 my-2').appendTo(this._component);
+                this._component.articles.contact.container = $(document.createElement('p')).addClass('lead text-center').appendTo(this._component.articles.contact);
+                this._component.articles.contact.container.link = $(document.createElement('a')).attr({href:this._properties.link.contactus}).text('Contact us').appendTo(this._component.articles.contact.container);
+                this._component.articles.contact.container.span = $(document.createElement('span')).text(', if you did not find the right anwser or you have an other question?').appendTo(this._component.articles.contact.container);
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+            }
+            
+            _config(name,options){
+                if(typeof this._properties[name] !== 'undefined'){
+                    switch(name){
+                        case'link':
+                            for(const [key, value] of Object.entries(options)){
+                                if(typeof this._properties[name][key] !== 'undefined'){
+                                    this._properties[name][key] = value;
+                                }
+                            }
+                            break;
+                        default:
+                            this._properties[name] = options;
+                            break;
+                    }
+                }
+            }
+        
+            alert(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                let properties = {
+                    class: { //Add Classes
+                        alert: null, //Alert Element
+                    },
+                    color: "danger", //Set Color
+                    dismissible: true, //Set Dismissible
+                    icon: null, //Set Icon
+                    title: null, //Set Title
+                    content: null, //Set Content
+                    datetime: null, //Set Datetime
+                };
+        
+                // Configure Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"callback":
+                                if(typeof properties[key] !== 'undefined'){
+                                    for(const [k, v] of Object.entries(value)){
+                                        if(typeof properties[key][k] !== 'undefined'){
+                                            properties[key][k] = v;
+                                        }
+                                    }
+                                }
+                                break;
+                            case"class":
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Unhide Announcements
+                this._component.announcements.removeClass('d-none');
+        
+                // Create Alert
+                var alert = this._builder.Component(
+                    'alert',
+                    this._component.announcements.container.announcements,
+                    properties,
+                    function(alert,component){
+        
+                        // Save Properties
+                        component.properties = properties;
+        
+                        // Add padding
+                        component.addClass('p-2 ps-3');
+        
+                        // Remove margin
+                        component.content.addClass('m-0');
+        
+                        // Create Icon
+                        component.content.icon = $(document.createElement('i')).addClass('me-1 bi bi-clock').appendTo(component.content);
+        
+                        // Configure Datetime
+                        let datetime = null;
+                        if(properties.datetime !== null){
+                            datetime = new Date(properties.datetime);
+                        } else {
+                            datetime = new Date();
+                        }
+        
+                        // Create Time
+                        component.content.time = $(document.createElement('time')).attr({
+                            'class': 'timeago',
+                            'title': datetime.toLocaleString(),
+                            'datetime': datetime.toLocaleString(),
+                            'data-bs-title': datetime.toLocaleString(),
+                            'data-bs-toggle': 'tooltip',
+                            'data-bs-placement': 'top',
+                        }).text(datetime.toLocaleString()).appendTo(component.content);
+        
+                        // Initialize Tooltip
+                        component.content.time.bootstrap = new bootstrap.Tooltip(component.content.time);
+        
+                        // Initialize Timeago
+                        setTimeout(function(){ component.content.time.timeago(); }, 0);
+                
+                        // Check if callback is a function
+                        if(typeof callback === "function"){
+                            callback(alert,component);
+                        }
+                    },
+                );
+        
+                // Return
+                return this;
+            }
+        
+            ressource(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                let properties = {
+                    class: { //Add Classes
+                        ressource: null, //Ressource Element
+                    },
+                    icon: null, //Set Icon
+                    title: null, //Set Title
+                    content: null, //Set Content
+                };
+        
+                // Configure Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"callback":
+                                if(typeof properties[key] !== 'undefined'){
+                                    for(const [k, v] of Object.entries(value)){
+                                        if(typeof properties[key][k] !== 'undefined'){
+                                            properties[key][k] = v;
+                                        }
+                                    }
+                                }
+                                break;
+                            case"class":
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Unhide Ressources
+                this._component.ressources.removeClass('d-none');
+        
+                // Set ID
+                let id = this._count();
+        
+                // Create Ressource
+                var ressource = $(document.createElement('div')).attr({
+                    'id': this._component.id + 'ressource' + id,
+                    'class': 'col',
+                }).appendTo(this._component.ressources.container.ressources);
+                ressource.id = ressource.attr('id');
+                ressource.properties = properties;
+        
+                // Set Ressource Class
+                if(properties.class.ressource){
+                    ressource.addClass(properties.class.ressource);
+                }
+        
+                // Create Card
+                ressource.card = $(document.createElement('div')).addClass('card').appendTo(ressource);
+        
+                // Create Card Header
+                ressource.card.header = $(document.createElement('div')).addClass('card-header d-flex flex-column justify-content-center align-items-center').appendTo(ressource.card);
+        
+                // Create Card Title
+                ressource.card.header.icon = $(document.createElement('i')).addClass('bi bi-' + properties.icon).css('font-size', '4rem').appendTo(ressource.card.header);
+                ressource.card.header.title = $(document.createElement('h3')).addClass('card-title').text(properties.title).appendTo(ressource.card.header);
+        
+                // Create Card Body
+                ressource.card.body = $(document.createElement('div')).addClass('card-body').html(properties.content).appendTo(ressource.card);
+                
+                // Check if callback is a function
+                if(typeof callback === "function"){
+                    callback(ressource);
+                }
+        
+                // Return
+                return this;
+            }
+        
+            article(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                let properties = {
+                    class: { //Add Classes
+                        article: null, //Ressource Element
+                    },
+                    icon: null, //Set Icon
+                    title: null, //Set Title
+                    content: null, //Set Content
+                };
+        
+                // Configure Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"callback":
+                                if(typeof properties[key] !== 'undefined'){
+                                    for(const [k, v] of Object.entries(value)){
+                                        if(typeof properties[key][k] !== 'undefined'){
+                                            properties[key][k] = v;
+                                        }
+                                    }
+                                }
+                                break;
+                            case"class":
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Unhide Articles
+                this._component.articles.removeClass('d-none');
+        
+                // Set ID
+                let id = this._count();
+        
+                // Create Article
+                var article = $(document.createElement('div')).attr({
+                    'id': this._component.id + 'article' + id,
+                    'class': 'col my-2',
+                }).appendTo(this._component.articles.container.articles);
+                article.id = article.attr('id');
+                article.properties = properties;
+        
+                // Set Article Class
+                if(properties.class.article){
+                    article.addClass(properties.class.article);
+                }
+        
+                // Set Content
+                if (properties.content.length > 100) {
+                    properties.content = properties.content.slice(0, 100) + '...';
+                }
+        
+                // Create Card
+                article.card = $(document.createElement('div')).addClass('card card-body').appendTo(article);
+        
+                // Create Card Header
+                article.card.title = $(document.createElement('h4')).addClass('card-title').text(properties.title).appendTo(article.card);
+        
+                // Create Card Body
+                article.card.body = $(document.createElement('p')).addClass('card-text mt-2').html(properties.content).appendTo(article.card);
+                
+                // Check if callback is a function
+                if(typeof callback === "function"){
+                    callback(article);
+                }
+        
+                // Return
+                return this;
+            }
+        },
+        settings: class extends this.ComponentClass {
+
+            #forms = {};
+        
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                        content: null,
+                        menu: null,
+                    },
+                };
+            }
+        
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'layout' + this._id,
+                    'class': 'row',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Create side menu
+                this._component.menu = $(document.createElement('div')).addClass('col-4 col-lg-3').appendTo(this._component);
+                this._component.menu.accordion = $(document.createElement('div')).attr({
+                    'id': this._component.id + 'menu',
+                    'class': 'accordion',
+                }).appendTo(this._component.menu);
+                this._component.menu.id = this._component.menu.accordion.attr('id');
+        
+                // Create content
+                this._component.content = $(document.createElement('div')).addClass('col-8 col-lg-9').appendTo(this._component);
+                this._component.content.card = $(document.createElement('div')).addClass('card').appendTo(this._component.content);
+                this._component.content.accordion = $(document.createElement('div')).attr({
+                    'id': this._component.id + 'content',
+                    'class': 'accordion',
+                }).appendTo(this._component.content.card);
+                this._component.content.id = this._component.content.accordion.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Set Menu Class
+                if(this._properties.class.menu){
+                    this._component.menu.addClass(this._properties.class.menu);
+                }
+        
+                // Set Content Class
+                if(this._properties.class.content){
+                    this._component.content.addClass(this._properties.class.content);
+                }
+            }
+        
+            add(param1 = null, param2 = null){
+        
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                let properties = {
+                    icon: 'gear',
+                    label: null,
+                    class: null,
+                };
+        
+                // Configure Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"callback":
+                                if(typeof properties[key] !== 'undefined'){
+                                    for(const [k, v] of Object.entries(value)){
+                                        if(typeof properties[key][k] !== 'undefined'){
+                                            properties[key][k] = v;
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Set ID
+                let id = this._count();
+        
+                // Create Category
+                var category = $(document.createElement('div')).attr({
+                    'id': this._component.menu.id + 'category' + id,
+                    'class': 'accordion-item bg-transparent',
+                }).appendTo(this._component.menu.accordion);
+                category.id = category.attr('id');
+                category.properties = properties;
+        
+                // Create Header
+                category.header = $(document.createElement('h2')).addClass('accordion-header').appendTo(category);
+        
+                // Create Button
+                category.button = $(document.createElement('button')).attr({
+                    'id': category.id + 'button',
+                    'class': 'accordion-button collapsed',
+                    'type': 'button',
+                    'data-bs-toggle': 'collapse',
+                    'aria-expanded': 'false',
+                }).text(properties.label).appendTo(category.header);
+                category.button.id = category.button.attr('id');
+                category.button.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(category.button);
+        
+                // Create Collapse
+                category.collapse = $(document.createElement('div')).attr({
+                    'id': category.id + 'collapse',
+                    'class': 'accordion-collapse collapse',
+                    'data-bs-parent': '#' + this._component.menu.id,
+                }).appendTo(category);
+                category.collapse.id = category.collapse.attr('id');
+        
+                // Configure Button
+                category.button.attr({
+                    'aria-controls': category.collapse.id,
+                    'data-bs-target': '#' + category.collapse.id,
+                });
+        
+                // Create Menu
+                category.menu = $(document.createElement('div')).attr({
+                    'id': category.id + 'menu',
+                    'class': 'accordion-body p-0',
+                    'data-bs-parent': '#' + this._component.menu.id,
+                }).appendTo(category.collapse);
+                category.menu.id = category.menu.attr('id');
+        
+                // Create Menu List
+                category.menu.list = $(document.createElement('ul')).attr({
+                    'id': category.menu.id + 'list',
+                    'class': 'list-group list-group-flush w-100',
+                }).appendTo(category.menu);
+                category.menu.list.id = category.menu.list.attr('id');
+        
+                // Add method to add content
+                category.add = function(param1 = null, param2 = null){
+                    self.#item(category,param1,param2);
+                }
+        
+                if(properties.icon == null){
+                    category.button.icon.remove();
+                }
+        
+                if(properties.class){
+                    category.addClass(properties.class);
+                }
+        
+                if(this._count <= 1){
+                    category.button.removeClass('collapsed').attr('aria-expanded',true);
+                    category.collapse.addClass('show');
+                }
+        
+                if(typeof callback === "function"){
+                    callback(category,self);
+                }
+        
+                // Return
+                return this;
+            }
+        
+            #item(category, param1 = null, param2 = null){
+        
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                let properties = {
+                    icon: 'gear',
+                    label: null,
+                    class: null,
+                    body: false,
+                    form: true,
+                    callback:{
+                        submit: function(form){},
+                        val: function(form){},
+                        reset: function(form){},
+                        clear: function(form){},
+                    },
+                };
+        
+                // Configure Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"callback":
+                                if(typeof properties[key] !== 'undefined'){
+                                    for(const [k, v] of Object.entries(value)){
+                                        if(typeof properties[key][k] !== 'undefined'){
+                                            properties[key][k] = v;
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Set ID
+                let id = this._count();
+        
+                // Create Content Item
+                var content = $(document.createElement('div')).attr({
+                    'id': category.id + 'content' + id,
+                    'class': 'accordion-collapse collapse',
+                    'data-bs-parent': '#' + this._component.content.id,
+                }).appendTo(this._component.content.accordion);
+                content.id = content.attr('id');
+                content.properties = properties;
+        
+                // Create Header
+                content.header = $(document.createElement('div')).attr({
+                    'class': 'accordion-header card-body pb-0',
+                }).appendTo(content);
+                content.header.title = $(document.createElement('h4')).text(properties.label).appendTo(content.header);
+                content.header.title.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(content.header.title);
+        
+                // Create Form
+                content.form = this._builder.Component(
+                    'form',
+                    content,
+                    {
+                        class: {
+                            component: 'card-body',
+                        },
+                        callback:{
+                            submit: function(form){
+        
+                                // Check if Submit Callback is a function
+                                if(typeof properties.callback.submit === 'function'){
+                                    properties.callback.submit(form);
+                                }
+                            },
+                            val: function(form){
+        
+                                // Check if Val Callback is a function
+                                if(typeof properties.callback.val === 'function'){
+                                    properties.callback.val(form);
+                                }
+                            },
+                            reset: function(form){
+        
+                                // Check if Reset Callback is a function
+                                if(typeof properties.callback.reset === 'function'){
+                                    properties.callback.reset(form);
+                                }
+                            },
+                            clear: function(form){
+        
+                                // Check if Clear Callback is a function
+                                if(typeof properties.callback.clear === 'function'){
+                                    properties.callback.clear(form);
+                                }
+                            },
+                        },
+                    },
+                    function(form,component){},
+                );
+        
+                // Create Body
+                content.body = $(document.createElement('div')).appendTo(content.form._component);
+        
+                // Create Menu Item
+                var item = $(document.createElement('li')).attr({
+                    'id': category.id + 'item' + id,
+                    'class': 'list-group-item item user-select-none cursor-pointer',
+                    'data-bs-toggle': 'collapse',
+                    'data-bs-target': '#' + content.id,
+                    'style': 'transition: all 300ms ease 0s;',
+                }).appendTo(category.menu.list);
+                item.id = item.attr('id');
+                item.properties = properties;
+        
+                // Create Flex
+                item.flex = $(document.createElement('div')).addClass('d-flex align-items-center').appendTo(item);
+                item.flex.icon = $(document.createElement('div')).addClass('flex-shrink-1 px-1').appendTo(item.flex);
+                item.flex.icon.i = $(document.createElement('i')).addClass('bi bi-' + properties.icon).appendTo(item.flex.icon);
+                item.flex.label = $(document.createElement('div')).addClass('flex-grow-1 px-1 text-break').text(properties.label).appendTo(item.flex);
+        
+                // Check for an icon
+                if(properties.icon == null){
+                    content.header.title.icon.remove();
+                    item.flex.icon.remove();
+                }
+        
+                // Check for classes to add
+                if(properties.class){
+                    content.addClass(properties.class);
+                }
+        
+                // Add Event Listener
+                content.on('show.bs.collapse', function(){
+                    // Clear Active
+                    self._component.menu.find('.active').removeClass('active');
+                    // Set Active
+                    self._component.menu.find('[data-bs-target="#'+content.id+'"]').addClass('active');
+                });
+        
+                // Open first item
+                if(this._component.content.accordion.children().length > 0){
+        
+                    var firstContent = this._component.content.accordion.children().first();
+                    firstContent.addClass('show');
+        
+                    var firstItem = this._component.menu.find('[data-bs-target="#'+firstContent.attr('id')+'"]');
+                    firstItem.addClass('active');
+        
+                    var firstCategory = firstItem.parents('.accordion-item');
+        
+                    var firstCategoryCollapse = firstCategory.find('.collapse');
+                    firstCategoryCollapse.addClass('show');
+        
+                    var firstCategoryBtn = firstCategory.find('[data-bs-target="#'+firstCategoryCollapse.attr('id')+'"]');
+                    firstCategoryBtn.removeClass('collapsed');
+                }
+        
+                if(typeof callback === "function"){
+                    callback(item,content,self);
+                }
+        
+                // Return
+                return this;
+            }
+        },
+    }
 
     #components = {
         code: class extends this.ComponentClass {
