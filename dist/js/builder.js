@@ -1928,6 +1928,437 @@ class Builder {
     };
 
     #layouts = {
+        list: class extends this.ComponentClass {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                    },
+                    title: null,
+                    icon: null,
+                    actions:{},
+                    buttons:[],
+                    columnDefs:[],
+                    dblclick:function(event, table, node, data){},
+                };
+            }
+        
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'layout' + this._id,
+                    'class': 'row',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Create Card
+                this._component.card = this._builder.Component(
+                    'card',
+                    this._component,
+                    {
+                        class: {
+                            collapse: "w-100",
+                        },
+                        icon: this._properties.icon,
+                        title: this._properties.title,
+                    },
+                    function(card,component){
+                        component.body.addClass('p-0');
+                        self._component.table = self._builder.Component(
+                            'table',
+                            component.body,
+                            {
+                                class: {
+                                    buttons: "px-4 pt-4",
+                                    table: "border-top",
+                                    footer: "px-4 pt-2 pb-4",
+                                },
+                                showButtonsLabel: true,
+                                selectTools:true,
+                                actions:self._properties.actions,
+                                datatable:{
+                                    columnDefs:self._properties.columnDefs,
+                                    buttons:self._properties.buttons,
+                                },
+                                dblclick:self._properties.dblclick,
+                            },
+                        );
+                    },
+                );
+            }
+        
+            add(data){
+        
+                this._component.table.add(data);
+            }
+        
+            update(row, data){
+        
+                this._component.table.update(row, data);
+            }
+        
+            delete(row){
+        
+                this._component.table.delete(row);
+            }
+        },
+        profile: class extends this.ComponentClass {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                    },
+                    status: null,
+                    isActive: false,
+                    isDeleted: false,
+                    isBanned: false,
+                };
+            }
+        
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'layout' + this._id,
+                    'class': 'row',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Create Columns
+                this._component.col1 = $(document.createElement('div')).attr({
+                    class: 'col-4 col-lg-3',
+                }).appendTo(this._component);
+                this._component.col2 = $(document.createElement('div')).attr({
+                    class: 'col-8 col-lg-9',
+                }).appendTo(this._component);
+        
+                // Create Profile Details Section
+                this._component.detail = this._builder.Component(
+                    'card',
+                    this._component.col1,
+                    {
+                        title: 'Details',
+                        icon: 'person',
+                        class: {
+                            card: 'mb-3',
+                        },
+                    },
+                    function(card,component){
+        
+                        // Remove Padding
+                        component.body.addClass('p-0');
+        
+                        // Create List
+                        self._component.detailList = self._builder.Component(
+                            'list',
+                            component.body,
+                            {
+                                callback: {
+                                    item: function(item){},
+                                },
+                                class: {
+                                    component: 'bg-transparent',
+                                },
+                            },
+                        );
+        
+                        // Add status icon
+                        component.footer.removeClass('d-none').addClass('p-0');
+                        component.footer.group = $(document.createElement('div')).addClass('btn-group-vertical rounded-0 rounded-bottom w-100').appendTo(component.footer);
+                        component.footer.group.status = $(document.createElement('button')).addClass('btn rounded-0 rounded-bottom').appendTo(component.footer.group);
+                        component.footer.group.status.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(component.footer.group.status);
+                        component.footer.group.status.label = $(document.createElement('span')).appendTo(component.footer.group.status);
+                        self._component.status = component.footer.group.status;
+        
+                        // Add Status Button Events
+                        let body = $(document.createElement('div'));
+                        body.p1 = $(document.createElement('p')).text('This modal allows you to manage various settings for the user\'s profile. By toggling the buttons below, you can control the following aspects:').appendTo(body);
+                        body.list = $(document.createElement('ul')).appendTo(body);
+                        body.list.item1 = $(document.createElement('li')).text('Delete/Restore: Toggling this button will either delete or restore the user\'s account. Deleting the account will result in permanent removal of their profile and associated data. Restoring the account will reverse this action.').appendTo(body.list);
+                        body.list.item2 = $(document.createElement('li')).text('Ban/Unban: Toggling this button will either ban or unban the user. Banning a user will restrict their access and participation on the platform. Unbanning the user will lift the restrictions.').appendTo(body.list);
+                        body.list.item3 = $(document.createElement('li')).text('Activate/Deactivate: Toggling this button will either activate or deactivate the user\'s account. Activating the account will enable the user to access and use the platform. Deactivating the account will temporarily disable their access.').appendTo(body.list);
+                        body.p2 = $(document.createElement('p')).text('Please note that these actions can have significant consequences, so exercise caution when making changes to a user\'s profile. Always review the situation and ensure the appropriate action is taken.').appendTo(body);
+                        let modal = self._builder.Component(
+                            'modal',
+                            component.footer.group.status,
+                            {
+                                onEnter: false,
+                                destroy:true,
+                                icon: "gear",
+                                title: "User Profile Controls",
+                                body: body,
+                                submit: false,
+                                size: "lg",
+                            },
+                            function(modal,element){
+                                if(self._properties.isActive){
+                                    modal.add(
+                                        {
+                                            label: "Deactivate",
+                                            color: "danger",
+                                        },
+                                        function(action){},
+                                    );
+                                } else {
+                                    modal.add(
+                                        {
+                                            label: "Activate",
+                                            color: "info",
+                                        },
+                                        function(action){},
+                                    );
+                                }
+                                if(self._properties.isBanned){
+                                    modal.add(
+                                        {
+                                            label: "Unban",
+                                            color: "info",
+                                        },
+                                        function(action){},
+                                    );
+                                } else {
+                                    modal.add(
+                                        {
+                                            label: "Ban",
+                                            color: "danger",
+                                        },
+                                        function(action){},
+                                    );
+                                }
+                                if(self._properties.isDeleted){
+                                    modal.add(
+                                        {
+                                            label: "Restore",
+                                            color: "info",
+                                        },
+                                        function(action){},
+                                    );
+                                } else {
+                                    modal.add(
+                                        {
+                                            label: "Delete",
+                                            color: "danger",
+                                        },
+                                        function(action){},
+                                    );
+                                }
+                            },
+                        );
+                        setTimeout(function(){ self.status(); }, 0);
+                        card.hide();
+                    },
+                );
+        
+                // Create Profile About Section
+                this._component.about = this._builder.Component(
+                    'card',
+                    this._component.col1,
+                    {
+                        title: 'About',
+                        icon: 'person-vcard',
+                        class: {
+                            container: 'mb-3',
+                        },
+                    },
+                    function(card,component){
+                        component.body.addClass('p-0');
+                        self._component.aboutList = self._builder.Component(
+                            'list',
+                            component.body,
+                            {
+                                callback: {
+                                    item: function(item){},
+                                },
+                                class: {
+                                    component: 'bg-transparent rounded-bottom',
+                                },
+                            },
+                        );
+                        card.hide();
+                    },
+                );
+        
+                // Create Profile Tabs Section
+                this._component.tabs = this._builder.Component(
+                    'tabs',
+                    this._component.col2,
+                    {
+                        class: {
+                            navbar: 'nav-pills'
+                        },
+                        properties: {
+                            class: {
+                                tab: 'fade',
+                            },
+                        },
+                    },
+                    function(tabs,component){
+                        tabs.hide();
+                    }
+                );
+            }
+        
+            status(value = null){
+        
+                // Check Value
+                if(typeof value === 'number'){
+                    this._properties.status = value;
+                }
+        
+                // Reset Status
+                this._component.status.removeClass('btn-danger btn-warning btn-secondary');
+                this._component.status.icon.removeClass('bi-trash bi-exclamation-triangle bi-lock bi-clock');
+                this._component.status.label.text('');
+        
+                // Configure Status
+                switch(this._properties.status){
+                    case 1:
+                        this._component.status.addClass('btn-danger');
+                        this._component.status.icon.addClass('bi-trash');
+                        this._component.status.label.text('Deleted');
+                        break;
+                    case 2:
+                        this._component.status.addClass('btn-danger');
+                        this._component.status.icon.addClass('bi-exclamation-triangle');
+                        this._component.status.label.text('Banned');
+                        break;
+                    case 3:
+                        this._component.status.addClass('btn-danger');
+                        this._component.status.icon.addClass('bi-lock');
+                        this._component.status.label.text('Locked Out');
+                        break;
+                    case 4:
+                        this._component.status.addClass('btn-warning');
+                        this._component.status.icon.addClass('bi-clock');
+                        this._component.status.label.text('Rate Limited');
+                        break;
+                    case 5:
+                        this._component.status.addClass('btn-secondary');
+                        this._component.status.icon.addClass('bi-pause');
+                        this._component.status.label.text('Inactive');
+                        break;
+                    case 6:
+                        this._component.status.addClass('btn-success');
+                        this._component.status.icon.addClass('bi-check');
+                        this._component.status.label.text('Verified');
+                        break;
+                    default:
+                        this._component.status.addClass('btn-success');
+                        this._component.status.icon.addClass('bi-check');
+                        this._component.status.label.text('Active');
+                        break;
+                }
+        
+                // Return
+                return this._properties.status;
+            }
+                
+            detail(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                // Show Detail
+                this._component.detail.show();
+        
+                // Add Detail
+                this._component.detailList.add(options,callback);
+        
+                // Return
+                return this;
+            }
+                
+            about(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                // Show About
+                this._component.about.show();
+        
+                // Add About
+                this._component.aboutList.add(options,callback);
+        
+                // Return
+                return this;
+            }
+                
+            tab(param1 =null, param2 =null, param3 =null){
+                
+                const self = this;
+        
+                let name = {};
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2, param3].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'string') {
+                            name = param;
+                        } else if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                // Show Tabs
+                this._component.tabs.show();
+        
+                // Add Tab
+                this._component.tabs.add(name,options,callback);
+        
+                // Return
+                return this;
+            }
+        },
         help: class extends this.ComponentClass {
 
             _init(){
@@ -2911,7 +3342,7 @@ class Builder {
                 }).appendTo(this._component.collapse);
                 
                 // Create Card Footer
-                this._component.footer = $(document.createElement('div')).addClass('card-footer').appendTo(this._component);
+                this._component.footer = $(document.createElement('div')).addClass('card-footer').appendTo(this._component.card);
         
                 // Set Component Class
                 if(this._properties.class.component){
@@ -4541,7 +4972,7 @@ class Builder {
             
                 // Add Item Icon
                 if(properties.icon){
-                    item.container.icon = $(document.createElement('div')).addClass('flex-shrink-1 px-1').appendTo(item.container);
+                    item.container.icon = $(document.createElement('div')).addClass('flex-shrink-1').appendTo(item.container);
                     item.icon = $(document.createElement('i')).appendTo(item.container.icon);
                     item.icon.addClass('bi bi-' + properties.icon);
                 }
@@ -6909,6 +7340,9 @@ class Builder {
                 if(this._properties.class.form){
                     this._component.addClass(this._properties.class.form);
                 }
+
+                // Adding Search Support
+                this._builder.Search.add(this._component);
             }
 
             submit(){
@@ -7319,6 +7753,9 @@ class Builder {
                 if(typeof callback === 'function'){
                     callback(field, self);
                 }
+
+                // Set Search
+                this._builder.Search.set(field);
         
                 // Return Field
                 return field;
