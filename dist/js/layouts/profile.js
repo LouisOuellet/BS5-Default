@@ -1,20 +1,5 @@
 $(document).ready(function(){
 
-    // Load the profile data
-    const Profile = {
-        "created": "2023-04-10 11:40:05",
-        "username": "louis@laswitchtech.com",
-        "name": "Louis Ouellet",
-        "address": "15 rue Richardson",
-        "city": "Beauharnois",
-        "state": "Quebec",
-        "country": "Canada",
-        "zipcode": "J6N 2S9",
-        "phone": "4502250426",
-        "mobile": "5145940414",
-        "status": 7,
-    };
-
     // Layout
     const sampleLayout = builder.Layout(
         "profile", //Layout Name
@@ -39,16 +24,16 @@ $(document).ready(function(){
                         item.field,
                         {
                             class: {
-                                object: "rounded-circle",
+                                component: "rounded-circle",
                             },
-                            email: Profile.username,
+                            email: sampleRecords.profile.username,
                             size: "128px",
                         },
                     );
-                    item.field.name = $(document.createElement('h5')).addClass('my-0 mt-2').text(Profile.name).appendTo(item.field);
+                    item.field.name = $(document.createElement('h5')).addClass('my-0 mt-2').text(sampleRecords.profile.name).appendTo(item.field);
                 },
             );
-            if(Profile.username){
+            if(sampleRecords.profile.username){
                 layout.detail(
                     {
                         icon: 'at',
@@ -57,11 +42,11 @@ $(document).ready(function(){
                         item.field.addClass('d-flex justify-content-between align-items-center');
                         item.field.header = $(document.createElement('div')).addClass('fw-bold text-capitalize text-nowrap me-2').text('Username:').appendTo(item.field);
                         item.field.value = $(document.createElement('div')).addClass('text-end').appendTo(item.field);
-                        item.field.value.link = $(document.createElement('a')).attr('href','mailto:' + Profile.username).text(Profile.username).appendTo(item.field.value);
+                        item.field.value.link = $(document.createElement('a')).attr('href','mailto:' + sampleRecords.profile.username).text(sampleRecords.profile.username).appendTo(item.field.value);
                     },
                 );
             }
-            if(Profile.created){
+            if(sampleRecords.profile.created){
                 layout.detail(
                     {
                         icon: 'calendar-event',
@@ -73,8 +58,8 @@ $(document).ready(function(){
 
                         // Configure Datetime
                         let datetime = null;
-                        if(Profile.created !== null){
-                            datetime = new Date(Profile.created);
+                        if(sampleRecords.profile.created !== null){
+                            datetime = new Date(sampleRecords.profile.created);
                         } else {
                             datetime = new Date();
                         }
@@ -99,7 +84,7 @@ $(document).ready(function(){
             }
 
             // About
-            if(Profile.username){
+            if(sampleRecords.profile.username){
                 layout.about(
                     {
                         icon: 'envelope',
@@ -108,11 +93,11 @@ $(document).ready(function(){
                         item.field.addClass('d-flex justify-content-between align-items-center');
                         item.field.header = $(document.createElement('div')).addClass('fw-bold text-capitalize text-nowrap me-2').text('Email:').appendTo(item.field);
                         item.field.value = $(document.createElement('div')).addClass('text-end').appendTo(item.field);
-                        item.field.value.link = $(document.createElement('a')).attr('href','mailto:' + Profile.username).text(Profile.username).appendTo(item.field.value);
+                        item.field.value.link = $(document.createElement('a')).attr('href','mailto:' + sampleRecords.profile.username).text(sampleRecords.profile.username).appendTo(item.field.value);
                     },
                 );
             }
-            if(Profile.phone){
+            if(sampleRecords.profile.phone){
                 layout.about(
                     {
                         icon: 'telephone',
@@ -121,11 +106,11 @@ $(document).ready(function(){
                         item.field.addClass('d-flex justify-content-between align-items-center');
                         item.field.header = $(document.createElement('div')).addClass('fw-bold text-capitalize text-nowrap me-2').text('Phone:').appendTo(item.field);
                         item.field.value = $(document.createElement('div')).addClass('text-end').appendTo(item.field);
-                        item.field.value.link = $(document.createElement('a')).attr('href','tel:' + Profile.phone).text(builder.Helper.formatPhoneNumber(Profile.phone)).appendTo(item.field.value);
+                        item.field.value.link = $(document.createElement('a')).attr('href','tel:' + sampleRecords.profile.phone).text(builder.Helper.formatPhoneNumber(sampleRecords.profile.phone)).appendTo(item.field.value);
                     },
                 );
             }
-            if(Profile.mobile){
+            if(sampleRecords.profile.mobile){
                 layout.about(
                     {
                         icon: 'phone',
@@ -134,20 +119,20 @@ $(document).ready(function(){
                         item.field.addClass('d-flex justify-content-between align-items-center');
                         item.field.header = $(document.createElement('div')).addClass('fw-bold text-capitalize text-nowrap me-2').text('Mobile:').appendTo(item.field);
                         item.field.value = $(document.createElement('div')).addClass('text-end').appendTo(item.field);
-                        item.field.value.link = $(document.createElement('a')).attr('href','tel:' + Profile.mobile).text(builder.Helper.formatPhoneNumber(Profile.mobile)).appendTo(item.field.value);
+                        item.field.value.link = $(document.createElement('a')).attr('href','tel:' + sampleRecords.profile.mobile).text(builder.Helper.formatPhoneNumber(sampleRecords.profile.mobile)).appendTo(item.field.value);
                     },
                 );
             }
-            if(Profile.address){
+            if(sampleRecords.profile.address){
                 layout.about(
                     {
                         icon: 'geo-alt',
                     },
                     function(item){
-                        var address = Profile.address;
+                        var address = sampleRecords.profile.address;
                         for(const [key, value] of Object.entries(['city','state','country','zipcode'])){
-                            if(Profile[value]){
-                                address += ', ' + Profile[value];
+                            if(sampleRecords.profile[value]){
+                                address += ', ' + sampleRecords.profile[value];
                             }
                         }
                         item.field.addClass('d-flex justify-content-between align-items-center');
@@ -183,13 +168,13 @@ $(document).ready(function(){
                                     icon: "balloon",
                                     color: "success",
                                     type: "event",
-                                    datetime: Profile.created,
+                                    datetime: sampleRecords.profile.created,
                                 },
                                 function(object){
                             
                                     // Set Content
                                     var header = $(document.createElement("div")).addClass("card-header border-0").appendTo(object.item);
-                                    header.h5 = $(document.createElement("h5")).addClass("card-title").text(Profile.username + " has joined!").appendTo(header);
+                                    header.h5 = $(document.createElement("h5")).addClass("card-title").text(sampleRecords.profile.username + " has joined!").appendTo(header);
                                 }
                             );
                             timeline.add(
@@ -197,13 +182,13 @@ $(document).ready(function(){
                                     icon: "person-check",
                                     color: "primary",
                                     type: "event",
-                                    datetime: Profile.verifiedOn,
+                                    datetime: sampleRecords.profile.verifiedOn,
                                 },
                                 function(object){
                             
                                     // Set Content
                                     var header = $(document.createElement("div")).addClass("card-header border-0").appendTo(object.item);
-                                    header.h5 = $(document.createElement("h5")).addClass("card-title").text(Profile.username + " has been verified!").appendTo(header);
+                                    header.h5 = $(document.createElement("h5")).addClass("card-title").text(sampleRecords.profile.username + " has been verified!").appendTo(header);
                                 }
                             );
                         },
@@ -255,8 +240,8 @@ $(document).ready(function(){
                                     function(input,form){
 
                                         // Set Value
-                                        if(Profile[value]){
-                                            input.val(Profile[value]);
+                                        if(sampleRecords.profile[value]){
+                                            input.val(sampleRecords.profile[value]);
                                         }
                                     },
                                 );

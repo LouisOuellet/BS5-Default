@@ -1,4 +1,4 @@
-<!-- ======= Profile ======= -->
+<!-- ======= Details ======= -->
 <div class="col-12" id="layout"></div>
 <div class="col-12">
     <div class="row">
@@ -12,4 +12,4 @@
 <?php } else { ?>
     <script src="/js/<?= $page ?>.js"></script>
 <?php } ?>
-<!-- ======= End Profile ======= -->
+<!-- ======= End Details ======= -->

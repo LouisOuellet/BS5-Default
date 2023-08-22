@@ -1,16 +1,15 @@
 <!-- ======= Help ======= -->
+<div class="col-12" id="layout"></div>
 <div class="col-12">
     <div class="row">
-        <div class="col-12 mb-2">
-            <h1 class="text-center">Frequently Asked Questions</h1>
-        </div>
-        <div class="col-12 my-2" id="faq"></div>
-        <div class="col-12 my-2">
-            <p class="lead text-center">
-                <a href="?p=contact">Contact us</a>, if you did not find the right anwser or you have an other question?<br>
-            </p>
-        </div>
+        <div id="code" class="col-12 my-2"></div>
+        <div id="htmlcode" class="col-12 my-2"></div>
     </div>
 </div>
-<script src="/js/<?= $page ?>.js"></script>
+<script src="/js/sampleData.js"></script>
+<?php if($type){ ?>
+    <script src="/js/<?= $type ?>/<?= $page ?>.js"></script>
+<?php } else { ?>
+    <script src="/js/<?= $page ?>.js"></script>
+<?php } ?>
 <!-- ======= End Help ======= -->

@@ -148,6 +148,10 @@ class Builder {
             this._counter++;
             return this._counter;
         }
+
+        component(){
+            return this._component;
+        }
     
         config(options = null){
     
@@ -1548,6 +1552,104 @@ class Builder {
         },
         helper: class extends this.UtilityClass {
 
+            // Log all event names of an element
+            logEvents(element){
+                // List of common events
+                var events = [
+                    'abort',
+                    'afterprint',
+                    'animationend',
+                    'animationiteration',
+                    'animationstart',
+                    'beforeprint',
+                    'beforeunload',
+                    'blur',
+                    'canplay',
+                    'canplaythrough',
+                    'change',
+                    'click',
+                    'contextmenu',
+                    'copy',
+                    'cut',
+                    'dblclick',
+                    'drag',
+                    'dragend',
+                    'dragenter',
+                    'dragleave',
+                    'dragover',
+                    'dragstart',
+                    'drop',
+                    'durationchange',
+                    'ended',
+                    'error',
+                    'focus',
+                    'focusin',
+                    'focusout',
+                    'fullscreenchange',
+                    'fullscreenerror',
+                    'hashchange',
+                    'input',
+                    'invalid',
+                    'keydown',
+                    'keypress',
+                    'keyup',
+                    'load',
+                    'loadeddata',
+                    'loadedmetadata',
+                    'loadstart',
+                    'message',
+                    'mousedown',
+                    'mouseenter',
+                    'mouseleave',
+                    'mousemove',
+                    'mouseout',
+                    'mouseover',
+                    'mouseup',
+                    'mousewheel',
+                    'offline',
+                    'online',
+                    'open',
+                    'pagehide',
+                    'pageshow',
+                    'paste',
+                    'pause',
+                    'play',
+                    'playing',
+                    'popstate',
+                    'progress',
+                    'ratechange',
+                    'resize',
+                    'reset',
+                    'scroll',
+                    'search',
+                    'seeked',
+                    'seeking',
+                    'select',
+                    'show',
+                    'stalled',
+                    'submit',
+                    'suspend',
+                    'timeupdate',
+                    'toggle',
+                    'touchcancel',
+                    'touchend',
+                    'touchmove',
+                    'touchstart',
+                    'transitionend',
+                    'unload',
+                    'volumechange',
+                    'waiting',
+                    'wheel'
+                ];
+
+                // Add Listeners
+                $.each(events, function(i, eventName) {
+                    element.on(eventName, function(e) {
+                        console.log('Event type:', e.type);
+                    });
+                });
+            }
+
             // Create Emphasis on element
             emphasis(element = null){
 
@@ -1928,6 +2030,385 @@ class Builder {
     };
 
     #layouts = {
+        quiz: class extends this.ComponentClass {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                    },
+                    callback:{
+                        val: function(values){ return values; },
+                        reset: function(form){},
+                        clear: function(form){},
+                        submit: function(form){},
+                    },
+                    title: null,
+                    clear: true,
+                    reset: true,
+                    submit: true,
+                };
+            }
+                    
+            _config(name,options){
+                if(typeof this._properties[name] !== 'undefined'){
+                    switch(name){
+                        default:
+                            this._properties[name] = options;
+                            break;
+                    }
+                }
+            }
+        
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'layout' + this._id,
+                    'class': 'row',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Create Title
+                this._component.header = $(document.createElement('div')).addClass('col-12 mb-2').appendTo(this._component);
+                this._component.header.title = $(document.createElement('h1')).addClass('text-center').text(this._properties.title).appendTo(this._component.header);
+        
+                // Create Form
+                this._component.form = this._builder.Component(
+                    "form",
+                    this._component,
+                    {
+                        callback:{
+                            val: function(values){
+                                var array = {};
+                                for(var [key, value] of Object.entries(values)){
+                                    if(key !== 'clear' && key !== 'reset' && key !== 'submit'){
+                                        var page = key.split('question')[1];
+                                        page = page.split('range')[0];
+                                        page = page.split('comment')[0];
+                                        var id = key.split(page)[1];
+                                        if(typeof array[page] === 'undefined'){
+                                            array[page] = {};
+                                        }
+                                        array[page][id] = value;
+                                    }
+                                }
+                                if(typeof self._properties.callback.val === 'function'){
+                                    array = self._properties.callback.val(array);
+                                }
+                                return array;
+                            },
+                            reset: this._properties.callback.reset,
+                            clear: this._properties.callback.clear,
+                            submit: this._properties.callback.submit,
+                        },
+                    },
+                    function(form, component){
+                        // Create Stepper
+                        self._component.stepper = self._builder.Component(
+                            "stepper",
+                            component,
+                            {
+                                class: {
+                                    stepper: null,
+                                    controls: 'card card-body mb-2',
+                                    steps: 'card card-body my-2',
+                                    pagination: 'card card-body mt-2',
+                                },
+                                color: null,
+                                properties: {},
+                            },
+                            function(stepper, component){
+                                // Create Form Controls
+                                self._component.controls = $(document.createElement('div')).addClass('btn-group').appendTo(component.pagination.list);
+        
+                                // Add Clear Control
+                                if(self._properties.clear){
+                                    form.add(
+                                        {
+                                            name: 'clear',
+                                            label: 'Clear',
+                                            icon: 'x-lg',
+                                            type: 'clear',
+                                        },
+                                        function(input){
+                                            input.input.appendTo(self._component.controls);
+                                        },
+                                    );
+                                }
+        
+                                // Add Reset Control
+                                if(self._properties.reset){
+                                    form.add(
+                                        {
+                                            name: 'reset',
+                                            label: 'Reset',
+                                            icon: 'arrow-clockwise',
+                                            type: 'reset',
+                                        },
+                                        function(input){
+                                            input.input.appendTo(self._component.controls);
+                                        },
+                                    );
+                                }
+        
+                                // Add Submit Control
+                                if(self._properties.submit){
+                                    form.add(
+                                        {
+                                            name: 'submit',
+                                            label: 'Submit',
+                                            icon: 'save',
+                                            type: 'submit',
+                                        },
+                                        function(input){
+                                            input.input.appendTo(self._component.controls);
+                                        },
+                                    );
+                                }
+                            },
+                        );
+                    }
+                );
+            }
+        
+            #addStep(properties){
+                
+                const self = this;
+        
+                // Add Step
+                this._component.stepper.add(
+                    function(step){
+        
+                        // Save Properties
+                        step.properties = properties;
+        
+                        // Create Question
+                        step.content.question = $(document.createElement('h3')).html(properties.label).appendTo(step.content);
+        
+                        // Create Range
+                        step.content.range = self._component.form.add( //Add Inputs
+                            {
+                                name: 'question'+properties.id+'range',
+                                label: properties.scaleDescription,
+                                icon: null,
+                                type: 'range',
+                                value: 1,
+                                min: 1,
+                                max: Object.entries(properties.scale).length,
+                                options: properties.scale,
+                                class: {
+                                    input: null,
+                                    label: null,
+                                    field: 'my-3',
+                                },
+                            },
+                        ).appendTo(step.content);
+        
+                        // Create MCE
+                        step.content.comment = self._component.form.add(
+                            {
+                                name: 'question'+properties.id+'comment',
+                                label: 'Comments',
+                                icon: null,
+                                type: 'mce',
+                                class: {
+                                    input: null,
+                                    label: null,
+                                    field: null,
+                                },
+                            },
+                        ).appendTo(step.content);
+                    },
+                );
+            }
+                        
+            add(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+                
+                let properties = {
+                    label: null,
+                    range: true,
+                    comment: true,
+                    scaleDescription: null,
+                    scale: null, 
+                };
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                // Configure Options
+                for(const [key, value] of Object.entries(options)){
+                    if(typeof properties[key] !== 'undefined'){
+                        switch(key){
+                            case"scale":
+                                var opts = null;
+                                if(typeof value === 'object'){
+                                    opts = value;
+                                    if($.isArray(value)){
+                                        opts = {};
+                                        for(var [k, v] of Object.entries(value)){
+                                            var kv = parseInt(k) + 1;
+                                            opts[kv] = v;
+                                        }
+                                    }
+                                }
+                                properties[key] = opts;
+                                break;
+                            case"class":
+                                for(const [section, classes] of Object.entries(value)){
+                                    if(properties[key][section] != null){
+                                        properties[key][section] += ' ' + classes;
+                                    } else {
+                                        properties[key][section] = classes;
+                                    }
+                                }
+                                break;
+                            default:
+                                properties[key] = value;
+                                break;
+                        }
+                    }
+                }
+        
+                // Set ID
+                let id = this._count();
+                properties.id = id;
+        
+                // Add Step
+                if(typeof this._component.stepper !== 'undefined'){
+                    self.#addStep(properties);
+                } else {
+                    var interval = setInterval(function() {
+                        if(typeof self._component.stepper !== 'undefined'){
+                            clearInterval(interval);
+                            self.#addStep(properties);
+                        }
+                    }, 100);
+                }
+        
+                // Return
+                return this;
+            }
+        
+            val(values = null){
+                return this._component.form.val(values);
+            }
+        
+            reset(){
+                return this._component.form.reset();
+            }
+        
+            clear(){
+                return this._component.form.clear();
+            }
+        
+            submit(){
+                return this._component.form.submit();
+            }
+        },
+        faq: class extends this.ComponentClass {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                    },
+                    title: 'Frequently Asked Questions',
+                    contact: '?t=layouts&p=contact',
+                };
+            }
+        
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'layout' + this._id,
+                    'class': 'row',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Create Title
+                this._component.header = $(document.createElement('div')).addClass('col-12 mb-2').appendTo(this._component);
+                this._component.header.title = $(document.createElement('h1')).addClass('text-center').text(this._properties.title).appendTo(this._component.header);
+        
+                // Create Accordion
+                this._component.faqs = this._builder.Component(
+                    'accordion',
+                    this._component,
+                    {
+                        class: {
+                            component: 'col-12 mt-2 bg-transparent',
+                            collapse: "mb-2 rounded",
+                            button: "rounded",
+                        },
+                        flush: false,
+                        alwaysOpen: true,
+                    },
+                );
+        
+                // Create Footer
+                this._component.footer = $(document.createElement('div')).addClass('col-12 mt-2').appendTo(this._component);
+                this._component.footer.paragraph = $(document.createElement('p')).addClass('lead text-center').appendTo(this._component.footer);
+                this._component.footer.paragraph.link = $(document.createElement('a')).attr({
+                    href: this._properties.contact,
+                }).text('Contact us').appendTo(this._component.footer.paragraph);
+                this._component.footer.paragraph.text = $(document.createElement('span')).text(', if you did not find the right anwser or you have an other question?').appendTo(this._component.footer.paragraph);
+            }
+                        
+            add(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                // Add FAQ
+                this._component.faqs.add(options,callback);
+        
+                // Return
+                return this;
+            }
+        },
         list: class extends this.ComponentClass {
 
             _init(){
@@ -3339,7 +3820,7 @@ class Builder {
                 this._component.body = $(document.createElement('div')).attr({
                     'class': 'card-body',
                     'style': 'transition: all 400ms ease',
-                }).appendTo(this._component.collapse);
+                }).html(this._properties.body).appendTo(this._component.collapse);
                 
                 // Create Card Footer
                 this._component.footer = $(document.createElement('div')).addClass('card-footer').appendTo(this._component.card);
@@ -3361,12 +3842,12 @@ class Builder {
                 
                 // Set Card Body Class
                 if(this._properties.class.body){
-                    this._component.card.body.addClass(this._properties.class.body);
+                    this._component.body.addClass(this._properties.class.body);
                 }
                 
                 // Set Card Footer Class
                 if(this._properties.class.footer){
-                    this._component.body.addClass(this._properties.class.footer);
+                    this._component.footer.addClass(this._properties.class.footer);
                 }
                 
                 // Configure Card
@@ -3469,11 +3950,6 @@ class Builder {
                     if(!this._properties.hideFooter && !this._properties.hideHeader){
                         this._component.footer.addClass('border-0');
                     }
-                }
-                
-                // Configure Card Body
-                if(this._properties.body){
-                    this._component.body.html(this._properties.body);
                 }
                 
                 // Configure Card Footer
@@ -3748,6 +4224,9 @@ class Builder {
 
                 // Check if Selector is Set
                 if(this._component && this._selector){
+
+                    // Add Class to Selector
+                    this._selector.addClass('cursor-pointer');
             
                     // Add Event to Selector
                     this._selector.click(function(){
@@ -3777,6 +4256,7 @@ class Builder {
         
                 // Create Header
                 this._component.dialog.content.header = $(document.createElement('div')).addClass('modal-header').appendTo(this._component.dialog.content);
+                this._component.header = this._component.dialog.content.header;
         
                 // Create Title
                 this._component.dialog.content.header.title = $(document.createElement('h5')).addClass('modal-title').appendTo(this._component.dialog.content.header);
@@ -3794,9 +4274,11 @@ class Builder {
         
                 // Create Body
                 this._component.dialog.content.body = $(document.createElement('div')).addClass('modal-body').appendTo(this._component.dialog.content);
+                this._component.body = this._component.dialog.content.body;
         
                 // Create Footer
                 this._component.dialog.content.footer = $(document.createElement('div')).addClass('modal-footer p-0').appendTo(this._component.dialog.content);
+                this._component.footer = this._component.dialog.content.footer;
         
                 // Create Submit Button
                 this._component.dialog.content.footer.submit = $(document.createElement('button')).attr('type','button').css({'border-top-left-radius': 'none','border-top-right-radius': 'none'}).addClass('btn btn-lg btn-link fs-6 text-decoration-none col py-3 m-0 rounded-0 border-end').text('Save changes').appendTo(this._component.dialog.content.footer);
@@ -4108,6 +4590,9 @@ class Builder {
             
                 // Check if Selector is Set
                 if(this._component && this._selector){
+
+                    // Add Class to Selector
+                    this._selector.addClass('cursor-pointer');
             
                     // Add Event to Selector
                     this._selector.click(function(){
@@ -5367,6 +5852,9 @@ class Builder {
                 if(this._properties.flush){
                     this._component.addClass('accordion-flush');
                 }
+
+                // Add Search
+                this._builder.Search.add(this._component);
             }
 
             add(param1 = null, param2 = null){
@@ -5497,6 +5985,9 @@ class Builder {
                 if(typeof callback === 'function'){
                     callback(collapse,this);
                 }
+
+                // Set Search
+                this._builder.Search.set(collapse);
         
                 // Return collapse
                 return collapse;
@@ -6766,7 +7257,7 @@ class Builder {
                     this.#datatable.row.add(data).draw()
                 } else {
 
-                    // Clear the interval after 5 seconds
+                    // Clear the interval once the table is found
                     var interval = setInterval(function() {
                         if(self.#datatable){
                             clearInterval(interval);
@@ -7224,14 +7715,14 @@ class Builder {
                     }
         
                     // Check if Step is Last
-                    if(step.id === self._count){
+                    if(step.id === self._counter){
                         self._component.pagination.next.attr('disabled',true).attr('data-bs-target','');
                     } else {
                         self._component.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self._component.steps.id + (step.id + 1));
                     }
         
                     // Set Steps
-                    for (let id = 1; id <= self._count; id++) {
+                    for (let id = 1; id <= self._counter; id++) {
                         if(id <= step.id){
                             self.#steps[id].control.removeClass('btn-secondary').addClass('btn-primary');
                         } else {
@@ -7247,8 +7738,8 @@ class Builder {
         
                     // Set Progress Bar
                     let width = 0 + '%';
-                    if(self._count > 1){
-                        width = (((step.id - 1) / (self._count - 1)) * 100) + '%';
+                    if(self._counter > 1){
+                        width = (((step.id - 1) / (self._counter - 1)) * 100) + '%';
                     }
                     self._component.progress.bar.css('width',width);
         
@@ -7271,7 +7762,7 @@ class Builder {
                 }
         
                 // Check if Stepper contains a single step
-                if(this._count > 1 && this._component.pagination.next.attr('disabled') === 'disabled'){
+                if(this._counter > 1 && this._component.pagination.next.attr('disabled') === 'disabled'){
                     this._component.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self._component.steps.id + '2');
                 }
         
@@ -7299,7 +7790,7 @@ class Builder {
                     },
                     callback:{
                         submit: function(form){},
-                        val: function(form){},
+                        val: function(values){ return values; },
                         reset: function(form){},
                         clear: function(form){},
                     },
@@ -7421,7 +7912,7 @@ class Builder {
 
                 // Callback
                 if(typeof self._properties.callback.val === 'function'){
-                    self._properties.callback.val(object);
+                    object = self._properties.callback.val(object);
                 }
     
                 // Return
@@ -7448,13 +7939,17 @@ class Builder {
                     }
                 });
         
-                // Configure Options
+                // Configure Default Options
                 let properties = {
                     name: null,
                     label: null,
+                    color: null,
                     icon: 'input-cursor-text',
                     type: 'text',
                     value: null,
+                    step: null,
+                    min: null,
+                    max: null,
                     options: null,
                     class: {
                         input: null,
@@ -7462,32 +7957,8 @@ class Builder {
                         field: null,
                     },
                 };
-                switch(properties.type){
-                    case 'textarea':
-                        properties.icon = 'textarea-t';
-                        break;
-                    case 'select':
-                        properties.icon = 'list';
-                        break;
-                    case 'ide':
-                        properties.icon = 'code';
-                        break;
-                    case 'mce':
-                        properties.icon = 'input-cursor-text';
-                        break;
-                    case 'submit':
-                        properties.icon = 'save';
-                        break;
-                    case 'reset':
-                        properties.icon = 'arrow-clockwise';
-                        break;
-                    case 'clear':
-                        properties.icon = 'x-lg';
-                        break;
-                    default:
-                        properties.icon = 'input-cursor';
-                        break;
-                }
+
+                // Overwrite Default Options
                 for(const [key, value] of Object.entries(options)){
                     switch(key){
                         case 'class':
@@ -7505,6 +7976,74 @@ class Builder {
                             }
                             break;
                     }
+                }
+
+                // Add Default Options
+                switch(properties.type){
+                    case 'textarea':
+                        if(properties.icon === null){
+                            properties.icon = 'textarea-t';
+                        }
+                        if(properties.color === null){
+                            properties.color = null;
+                        }
+                        break;
+                    case 'select':
+                        if(properties.icon === null){
+                            properties.icon = 'list';
+                        }
+                        if(properties.color === null){
+                            properties.color = null;
+                        }
+                        break;
+                    case 'ide':
+                        if(properties.icon === null){
+                            properties.icon = 'code';
+                        }
+                        if(properties.color === null){
+                            properties.color = null;
+                        }
+                        break;
+                    case 'mce':
+                        if(properties.icon === null){
+                            properties.icon = 'input-cursor-text';
+                        }
+                        if(properties.color === null){
+                            properties.color = null;
+                        }
+                        break;
+                    case 'submit':
+                        if(properties.icon === null){
+                            properties.icon = 'save';
+                        }
+                        if(properties.color === null){
+                            properties.color = 'success';
+                        }
+                        break;
+                    case 'reset':
+                        if(properties.icon === null){
+                            properties.icon = 'arrow-clockwise';
+                        }
+                        if(properties.color === null){
+                            properties.color = 'info';
+                        }
+                        break;
+                    case 'clear':
+                        if(properties.icon === null){
+                            properties.icon = 'x-lg';
+                        }
+                        if(properties.color === null){
+                            properties.color = 'light';
+                        }
+                        break;
+                    default:
+                        if(properties.icon === null){
+                            properties.icon = 'input-cursor';
+                        }
+                        if(properties.color === null){
+                            properties.color = null;
+                        }
+                        break;
                 }
 
                 // Set ID
@@ -7604,7 +8143,11 @@ class Builder {
                                 field.input.editor.mce = editor;
                                 var container = $(editor.getContainer());
                                 container.find('.tox-statusbar').addClass("d-none");
-                                container.addClass("rounded-0");
+                                if(field.hasClass('rounded-0')){
+                                    container.addClass("rounded-0 rounded-end border-0");
+                                } else {
+                                    container.addClass("rounded-0 border-0");
+                                }
                             },
                         });
                         field.input.val = function(value = null){
@@ -7642,9 +8185,28 @@ class Builder {
                             'name': properties.name,
                             'autocomplete': 'off',
                         }).appendTo(field);
+                        field.options = {};
+                        field.delete = function(id = null){
+                            if(id){
+                                if(typeof field.options[id] !== 'undefined'){
+                                    field.options.remove();
+                                    delete field.options[id];
+                                }
+                            } else {
+                                for(const [key, element] of Object.entries(field.options)){
+                                    field.options.remove();
+                                    delete field.options[key];
+                                }
+                            }
+                        };
+                        field.add = function(id,text){
+                            if(typeof field.options[id] === 'undefined'){
+                                field.options[id] = $(document.createElement('option')).attr('value',id).text(text).appendTo(field.input);
+                            }
+                        }
                         if(properties.options !== null){
                             for(const [key, option] of Object.entries(properties.options)){
-                                field.input.option = $(document.createElement('option')).attr('value',option.id).text(option.text).appendTo(field.input);
+                                field.add(option.id,option.text);
                             }
                         }
                         field.input.val(properties.value);
@@ -7652,7 +8214,7 @@ class Builder {
                     case'clear':
                         field.input = $(document.createElement('button')).attr({
                             'id': field.id + 'clear',
-                            'class': 'btn btn-light',
+                            'class': 'btn btn-' + properties.color,
                             'name': properties.name,
                             'type': 'button',
                             'value': properties.value,
@@ -7671,7 +8233,7 @@ class Builder {
                     case'reset':
                         field.input = $(document.createElement('button')).attr({
                             'id': field.id + 'reset',
-                            'class': 'btn btn-secondary',
+                            'class': 'btn btn-' + properties.color,
                             'name': properties.name,
                             'type': properties.type,
                             'value': properties.value,
@@ -7687,7 +8249,7 @@ class Builder {
                     case'submit':
                         field.input = $(document.createElement('button')).attr({
                             'id': field.id + 'submit',
-                            'class': 'btn btn-success',
+                            'class': 'btn btn-' + properties.color,
                             'name': properties.name,
                             'type': properties.type,
                             'value': properties.value,
@@ -7699,6 +8261,33 @@ class Builder {
                         if(properties.class.label){
                             field.input.addClass(properties.class.label);
                         }
+                        break;
+                    case'range':
+                        field.addClass('d-flex');
+                        field.input = $(document.createElement('div')).addClass('tooltip-range border border-start-0 rounded-end flex-grow-1 px-2 d-flex align-items-center').appendTo(field);
+                        field.input.range = $(document.createElement('input')).attr({
+                            'id': field.id + 'input',
+                            'class': 'form-range',
+                            'type': properties.type,
+                            'step': properties.step,
+                            'value': properties.value,
+                            'min': properties.min,
+                            'max': properties.max,
+                        }).appendTo(field.input);
+                        field.input.output = $(document.createElement('output')).attr({
+                            'for': field.id + 'input',
+                        }).html(properties.options[properties.value]).appendTo(field.input);
+                        field.input.range.on('input',function(){
+                            field.input.output.html(properties.options[field.input.range.val()]);
+                        });
+                        field.input.val = function(value = null){
+                            if(value !== null){
+                                field.input.range.val(value);
+                                field.input.range.trigger('input');
+                            }
+
+                            return field.input.range.val();
+                        };
                         break;
                     default:
                         field.input = $(document.createElement('input')).attr({
