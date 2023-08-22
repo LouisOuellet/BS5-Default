@@ -125,8 +125,7 @@ $('button').each(function () {
 // Set Avatars
 $('img[data-avatar]').each(function () {
 	if (!$(this).attr('src')) {
-		const avatar = new Gravatar($(this).attr('data-avatar'));
-		$(this).attr('src',avatar.url())
+		$(this).attr('src',builder.Helper.gravatar($(this).attr('data-avatar')))
 	}
 });
 
