@@ -2415,6 +2415,11 @@ class Builder {
                 this._properties = {
                     class: {
                         component: null,
+                        object: null,
+                        buttons: null,
+                        searchBuilder: null,
+                        table: null,
+                        footer: null,
                     },
                     title: null,
                     icon: null,
@@ -2464,9 +2469,11 @@ class Builder {
                             component.body,
                             {
                                 class: {
-                                    buttons: "px-4 pt-4",
-                                    table: "border-top",
-                                    footer: "px-4 pt-2 pb-4",
+                                    component: self._properties.class.object,
+                                    searchBuilder: self._properties.class.searchBuilder,
+                                    buttons: "px-4 pt-4 " + self._properties.class.buttons,
+                                    table: "border-top " + self._properties.class.table,
+                                    footer: "px-4 pt-2 pb-4 " + self._properties.class.footer,
                                 },
                                 showButtonsLabel: true,
                                 selectTools:true,
@@ -6910,7 +6917,7 @@ class Builder {
             _init(){
                 this._properties = {
                     class: {
-                        object: null,
+                        component: null,
                         buttons: null,
                         searchBuilder: null,
                         table: null,
