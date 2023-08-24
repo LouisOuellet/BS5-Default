@@ -2422,6 +2422,10 @@ class Builder {
                     buttons:[],
                     columnDefs:[],
                     dblclick:function(event, table, node, data){},
+                    advancedSearch:true,
+                    exportTools:true,
+                    columnsVisibility:true,
+                    selectTools:true,
                 };
             }
         
@@ -2472,6 +2476,10 @@ class Builder {
                                     buttons:self._properties.buttons,
                                 },
                                 dblclick:self._properties.dblclick,
+                                advancedSearch:self._properties.advancedSearch,
+                                exportTools:self._properties.exportTools,
+                                columnsVisibility:self._properties.columnsVisibility,
+                                selectTools:self._properties.selectTools,
                             },
                         );
                     },
