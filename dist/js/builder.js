@@ -7179,8 +7179,11 @@ class Builder {
                 if(this._properties.class.searchBuilder){
                     this._properties.datatable.dom += ' ' + this._properties.class.searchBuilder;
                 }
-                this._properties.datatable.dom += '"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><"mt-4';
+                this._properties.datatable.dom += '"<"card card-body"Q>><"#SearchPanes.collapse py-2 pt-3"<"card card-body"P>>><"';
                 if(this._properties.class.table){
+                    if(this._properties.class.table.indexOf('mt-0') === -1){
+                        this._properties.datatable.dom += ' mt-4';
+                    }
                     this._properties.datatable.dom += ' ' + this._properties.class.table;
                 }
                 this._properties.datatable.dom += '"t><"d-flex justify-content-between align-items-center';
