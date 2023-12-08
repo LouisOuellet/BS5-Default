@@ -4,12 +4,21 @@ const sampleLoremTitle = 'Lorem ipsum dolor sit amet';
 const sampleLoremDescription = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 const sampleLoremContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
+const sampleReferencesTypes = [
+    {id:'ccn',text:'Cargo Control Number'},
+    {id:'cn',text:'Container'},
+    {id:'tr',text:'Transaction'},
+    {id:'po',text:'Purchase Order'},
+    {id:'inv',text:'Invoice'},
+    {id:'other',text:'Other'},
+];
+
 const sampleReferences = {
-    'cargo control number': ['1234ABCD123456789'],
-    'container number': ['ABCD123456','ABCD123457'],
-    'transaction number': ['12345123456789'],
-    'purchase order': ['ABCD'],
-    'invoice number': ['INV-1234'],
+    'ccn': ['1234ABCD123456789'],
+    'cn': ['ABCD123456','ABCD123457'],
+    'tr': ['12345123456789'],
+    'po': ['ABCD'],
+    'inv': ['INV-1234'],
 };
 
 const sampleMeta = [
@@ -567,6 +576,7 @@ for (var id = 1; id <= 20; id++){
         modified:sampleDate,
         owner:randomOwner, 
         updatedBy:randomUpdatedBy, 
+        organization:'Head Quarters',
         office:'Head Quarters',
         team:'IT',
         status:randomStatus,

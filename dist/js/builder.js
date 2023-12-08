@@ -304,7 +304,7 @@ class Builder {
         return this;
     }
 
-    Utility(name){
+    Utility(name, param1 = null, param2 = null, param3 = null){
         const self = this;
         if(typeof name !== 'string'){
             console.log('Builder.utility(String)');
@@ -314,7 +314,7 @@ class Builder {
             console.log('Unknown Utility');
             return false;
         }
-        return new this.#utilities[name](self);
+        return new this.#utilities[name](self, param1, param2, param3);
     }
 
     Component(name, param1 = null, param2 = null, param3 = null){
@@ -1458,7 +1458,7 @@ class Builder {
                 // Create Toast
                 let toast = $(document.createElement('div')).attr({
                     'id': this._component.id + 'toast' + id,
-                    'class': 'toast show',
+                    'class': 'toast show animate-wobble-once animate-pulse-hover',
                     'role': 'alert',
                     'aria-live': 'assertive',
                     'aria-atomic': 'true',
@@ -1648,6 +1648,15 @@ class Builder {
                         console.log('Event type:', e.type);
                     });
                 });
+            }
+
+            // Check if a string is a valid base64 string
+            isBase64(str) {
+                try {
+                    return btoa(atob(str)) === str;
+                } catch (err) {
+                    return false;
+                }
             }
 
             // Create Emphasis on element
@@ -5136,6 +5145,9 @@ class Builder {
 
             _timeout(){
 
+                // Set Self
+                const self = this;
+
                 // Add Tools
                 for(var [name, tool] of Object.entries(this._properties.tools)){
                     tool.name = name;
@@ -5154,6 +5166,13 @@ class Builder {
                 // Generate Actions
                 for(var [id, item] of Object.entries(this.#items)){
                     this.#genActions(item);
+                }
+
+                // Remove Tools if none exist
+                if(Object.entries(this.#tools).length <= 0){
+                    if(typeof this._component.tools !== 'undefined'){
+                        this._component.tools.remove();
+                    }
                 }
             }
 
@@ -5233,6 +5252,11 @@ class Builder {
             
                 // Set Self
                 const self = this;
+
+                // Check if Item wants actions
+                if(!item.properties.actions){
+                    return false;
+                }
 
                 // Create Actions Group
                 let actions = $(document.createElement('div')).addClass('flex-shrink-1 mx-1 btn-group').appendTo(item.container);
@@ -5317,17 +5341,10 @@ class Builder {
                 // Set Self
                 const self = this;
 
-                if(Object.entries(this.#actions).length <= 0){
-                    return false;
-                }
-
                 // Create Tools Group
                 let tools = $(document.createElement('li')).addClass('list-group-item user-select-none').prependTo(this._component);
                 tools.flex = $(document.createElement('div')).addClass('d-flex justify-content-center align-items-center').appendTo(tools);
                 tools.group = $(document.createElement('div')).addClass('btn-group w-100').appendTo(tools.flex);
-
-                // Save Tools in Component
-                this._component.tools = tools;
 
                 // Create Tools Array Property
                 tools.tools = {};
@@ -5336,6 +5353,9 @@ class Builder {
                 for(const [name, properties] of Object.entries(this.#tools)){
                     tools.tools[name] = this.#genTool(tools, name);
                 }
+
+                // Save Tools in Component
+                this._component.tools = tools;
             
                 // Return Tools
                 return tools;
@@ -5428,6 +5448,7 @@ class Builder {
                     field: null,
                     click: null,
                     dblclick: null,
+                    actions: true,
                 };
                 for(const [key, value] of Object.entries(this._properties)){
                     switch(key){
@@ -8098,7 +8119,12 @@ class Builder {
                 }
     
                 // Create Icon
-                field.label.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(field.label);
+                field.label.icon = $(document.createElement('i')).addClass('bi bi-' + properties.icon).prependTo(field.label);
+
+                // Add Margin if Label is not Empty
+                if(properties.label){
+                    field.label.icon.addClass('me-1');
+                }
 
                 // Create Input
                 switch(properties.type){
@@ -8820,6 +8846,249 @@ class Builder {
                         Event.callback[EventName.event](Event,info,this);
                     }
                 }
+            }
+        },
+        references: class extends this.ComponentClass {
+            
+            #references = {};
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                        list: null,
+                        form: null,
+                    },
+                    callback: {
+                        add: function(values){},
+                        remove: function(type, reference){},
+                    },
+                    types: [],
+                    default: null,
+                };
+            }
+
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'component' + this._id,
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+                
+                // Create References Form
+                this._component.form = self._builder.Component(
+                    "form",
+                    self._component,
+                    {
+                        class:{
+                            component: 'mb-2 d-flex flex-column justify-content-center align-items-start',
+                            input: null,
+                            label: null,
+                            field: 'mb-2',
+                        },
+                        callback:{
+                            submit: function(form){
+        
+                                // Retrieve Values
+                                var values = form.val();
+        
+                                // Add Reference
+                                self.add(values.type,values.reference);
+                                
+                                // Execute Callback
+                                if(typeof self._properties.callback.add === 'function'){
+                                    self._properties.callback.add(values);
+                                }
+        
+                                // Reset Form
+                                form.reset();
+                            },
+                            val: function(values){ return values; },
+                            reset: function(form){},
+                            clear: function(form){},
+                        },
+                    },
+                    function(form,component){
+                        // Set Form Class
+                        if(self._properties.class.form){
+                            component.addClass(self._properties.class.form);
+                        }
+                        self._component.list = self._builder.Component(
+                            'list',
+                            component,
+                            {
+                                class: {
+                                    component: "rounded w-100 border-0",
+                                },
+                            },
+                            function(list, component){
+                                // Set List Class
+                                if(self._properties.class.list){
+                                    component.addClass(self._properties.class.list);
+                                }
+                                list.add(
+                                    {
+                                        actions: false,
+                                    },
+                                    function(item,list){
+                                        item.prependTo(component);
+                                        item.actions = $(document.createElement('div')).addClass('flex-shrink-1 mx-1 btn-group').appendTo(item.container);
+                                        form.add(
+                                            {
+                                                name: 'submit',
+                                                icon: 'plus-lg',
+                                                type: 'submit',
+                                                class: {
+                                                    input: 'btn-sm',
+                                                },
+                                            },
+                                            function(submit,form){
+                                                submit.input.appendTo(item.actions);
+                                                submit.remove();
+                                            },
+                                        );
+                                        item.type = form.add(
+                                            {
+                                                name: 'type',
+                                                type: 'select',
+                                                options: self._properties.types,
+                                                value: self._properties.default,
+                                            },
+                                            function(type,form){
+                                                type.label.remove();
+                                                type.input.addClass('form-select-sm');
+                                                type.removeClass('mb-2').appendTo(item.field);
+                                                item.reference = form.add(
+                                                    {
+                                                        name: 'reference',
+                                                        type: 'text',
+                                                    },
+                                                    function(reference,form){
+                                                        reference.input.attr('placeholder','Reference').addClass('border-start form-control-sm').appendTo(type);
+                                                        reference.remove();
+                                                    },
+                                                );
+                                            },
+                                        );
+                                    },
+                                );
+                            },
+                        );
+                    },
+                );
+            }
+        
+            add(type,reference){
+        
+                // Set Self
+                const self = this;
+        
+                // Check if Type and Reference are provided
+                if(type == null || reference == null || typeof reference !== 'string' || reference.length <= 0){
+                    return self;
+                }
+        
+                // Check if Reference Type is listed in References Types Array
+                for(const [key, value] of Object.entries(self._properties.types)){
+                    if(value.id === type){
+        
+                        // Check if Reference List Exists
+                        if(typeof self.#references[type] === 'undefined'){
+        
+                            // Create Reference Object
+                            self.#references[type] = {};
+        
+                            // Create Reference List Object and Element
+                            self.#references[type].object = self._component.list.add(
+                                {
+                                    icon: "tag",
+                                    field: type + ":",
+                                },
+                                function(item,list){
+        
+                                    // Add Class
+                                    item.field.addClass('text-uppercase');
+        
+                                    // Save Reference Type Element
+                                    self.#references[type].element = item;
+                                },
+                            );
+        
+                            // Create Reference List References Badges
+                            self.#references[type].references = {};
+                        }
+        
+                        // Check if References Object Exists
+                        if(typeof self.#references[type].references[reference] === 'undefined'){
+        
+                            // Create Reference
+                            self.#references[type].references[reference] = {};
+        
+                            // Create Reference Badge
+                            self.#references[type].references[reference].reference = $(document.createElement('span'))
+                                .addClass('badge text-bg-primary rounded-0 rounded-start ms-1 cursor-pointer')
+                                .text(reference)
+                                .click(function(){
+                                    self._builder.Helper.copyToClipboard(reference);
+                                    self._builder.Toast.add(
+                                        {
+                                            icon: "clipboard-plus",
+                                            title: "Added to Clipboard",
+                                            body: reference,
+                                        },
+                                    );
+                                })
+                                .appendTo(self.#references[type].element.field);
+        
+                            // Create Delete Badge
+                            self.#references[type].references[reference].delete = $(document.createElement('span'))
+                                .addClass('badge text-bg-danger rounded-0 rounded-end cursor-pointer')
+                                .html('<i class="bi bi-x-lg"></i>')
+                                .click(function(){
+        
+                                    // Remove Reference
+                                    self.#references[type].references[reference].reference.remove();
+        
+                                    // Remove Delete
+                                    self.#references[type].references[reference].delete.remove();
+        
+                                    // Delete Reference
+                                    delete self.#references[type].references[reference];
+        
+                                    // Check for Empty References Type
+                                    if(Object.entries(self.#references[type].references).length <= 0){
+                                            
+                                            // Remove Reference Type
+                                            self.#references[type].element.remove();
+            
+                                            // Delete Reference Type
+                                            delete self.#references[type];
+                                    }
+                                    
+                                    // Check for Callback
+                                    if(typeof self._properties.callback.remove === 'function'){
+                                        self._properties.callback.remove(type,reference);
+                                    }
+                                })
+                                .appendTo(self.#references[type].element.field);
+                        }
+                        
+                        // Return
+                        return self;
+                    }
+                }
+        
+                console.log('Reference Type "' + type + '" is not listed in References Types');
+                return self;
             }
         },
         template: class extends this.ComponentClass {
