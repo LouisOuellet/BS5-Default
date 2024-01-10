@@ -2517,6 +2517,151 @@ class Builder {
                 this._component.table.delete(row);
             }
         },
+        details: class extends this.ComponentClass {
+
+            _init(){
+                this._properties = {
+                    class: {
+                        component: null,
+                    },
+                    title: 'Details',
+                    icon: 'person',
+                };
+            }
+        
+            _create(){
+        
+                // Set Self
+                const self = this;
+        
+                // Create Component
+                this._component = $(document.createElement('div')).attr({
+                    'id': 'layout' + this._id,
+                    'class': 'row',
+                });
+                this._component.id = this._component.attr('id');
+        
+                // Set Component Class
+                if(this._properties.class.component){
+                    this._component.addClass(this._properties.class.component);
+                }
+        
+                // Create Columns
+                this._component.col1 = $(document.createElement('div')).attr({
+                    class: 'col-4',
+                }).appendTo(this._component);
+                this._component.col2 = $(document.createElement('div')).attr({
+                    class: 'col-8',
+                }).appendTo(this._component);
+        
+                // Create Profile Details Section
+                this._component.detail = this._builder.Component(
+                    'card',
+                    this._component.col1,
+                    {
+                        title: self._properties.title,
+                        icon: self._properties.icon,
+                        class: {
+                            card: 'mb-3',
+                        },
+                    },
+                    function(card,component){
+                        component.body.addClass('p-0');
+                        self._component.detailList = self._builder.Component(
+                            'list',
+                            component.body,
+                            {
+                                callback: {
+                                    item: function(item){},
+                                },
+                                class: {
+                                    component: 'bg-transparent rounded-bottom',
+                                },
+                            },
+                        );
+                        card.hide();
+                    },
+                );
+        
+                // Create Profile Tabs Section
+                this._component.tabs = this._builder.Component(
+                    'tabs',
+                    this._component.col2,
+                    {
+                        class: {
+                            navbar: 'nav-pills'
+                        },
+                        properties: {
+                            class: {
+                                tab: 'fade',
+                            },
+                        },
+                    },
+                    function(tabs,component){
+                        tabs.hide();
+                    }
+                );
+            }
+                
+            detail(param1 =null, param2 =null){
+                
+                const self = this;
+        
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                // Show Detail
+                this._component.detail.show();
+        
+                // Add Detail
+                this._component.detailList.add(options,callback);
+        
+                // Return
+                return this;
+            }
+                
+            tab(param1 =null, param2 =null, param3 =null){
+                
+                const self = this;
+        
+                let name = {};
+                let options = {};
+                let callback = null;
+        
+                // Set selector, options, and callback
+                [param1, param2, param3].forEach(param => {
+                    if(param !== null){
+                        if (typeof param === 'string') {
+                            name = param;
+                        } else if (typeof param === 'object') {
+                            options = param;
+                        } else if (typeof param === 'function') {
+                            callback = param;
+                        }
+                    }
+                });
+        
+                // Show Tabs
+                this._component.tabs.show();
+        
+                // Add Tab
+                this._component.tabs.add(name,options,callback);
+        
+                // Return
+                return this;
+            }
+        },
         profile: class extends this.ComponentClass {
 
             _init(){
