@@ -1650,6 +1650,16 @@ class Builder {
                 });
             }
 
+            // Get the value of a query string from a URL
+            getParameterByName(name, url = window.location.href) {
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+
             // Check if a string is a valid base64 string
             isBase64(str) {
                 try {
