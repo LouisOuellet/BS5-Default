@@ -8408,6 +8408,9 @@ class Builder {
                                 field.add(option.id,option.text);
                             }
                         }
+                        field.input.select2({
+                            theme: "bootstrap-5"
+                        });
                         field.input.val(properties.value);
                         break;
                     case'clear':
