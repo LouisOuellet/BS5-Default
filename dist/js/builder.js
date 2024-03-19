@@ -34,7 +34,7 @@ class Builder {
     #count = 0;
 
     constructor(){
-        
+
         // Create Utilities
         this.Search = this.Utility('search');
         this.Helper = this.Utility('helper');
@@ -50,22 +50,22 @@ class Builder {
     }
 
     UtilityClass = class  {
-    
+
         _builder = null;
         _id = null;
-    
+
         constructor(builder){
-    
+
             // Set Builder
             this._builder = builder;
-    
+
             // Generate Incremental ID
             this._id = this._builder.count();
         }
     }
 
     ComponentClass = class extends this.UtilityClass {
-    
+
         _bootstrap = null;
         _selector = null;
         _options = {};
@@ -73,15 +73,15 @@ class Builder {
         _component = null;
         _properties = {};
         _counter = 0;
-    
+
         constructor(builder, param1 = null, param2 = null, param3 = null){
-            
+
             // Call Parent
             super(builder);
-    
+
             // Set Self
             const self = this;
-    
+
             // Set selector, options, and callback
             [param1, param2, param3].forEach(param => {
                 if(param !== null){
@@ -97,34 +97,34 @@ class Builder {
                     }
                 }
             });
-    
+
             // Init Component
             this._init();
-    
+
             // Configure Options
             this.config(this._options);
-    
+
             // Create Component
             this._create();
-            
+
             // Execute Callback
             if(typeof this._callback === 'function'){
                 setTimeout(() => this._callback(this, this._component), 0);
             }
-    
+
             // Timeout
             setTimeout(() => this._timeout(), 0);
-    
+
             // Insert Component
             this._insert();
         }
-    
+
         _create(){}
-    
+
         _init(){}
-    
+
         _timeout(){}
-    
+
         _config(name,options){
             if(typeof this._properties[name] !== 'undefined'){
                 switch(name){
@@ -134,16 +134,16 @@ class Builder {
                 }
             }
         }
-    
+
         _insert(){
             // Check if Selector is Set
             if(this._component && this._selector){
-    
+
                 // Append to Selector
                 this.appendTo(this._selector);
             }
         }
-    
+
         _count(){
             this._counter++;
             return this._counter;
@@ -152,14 +152,14 @@ class Builder {
         component(){
             return this._component;
         }
-    
+
         config(options = null){
-    
+
             // Check if Options is Set
             if(options == null){
                 options = this._options;
             }
-    
+
             // Configure Options
             for(const [key, value] of Object.entries(options)){
                 if(typeof this._properties[key] !== 'undefined'){
@@ -191,79 +191,79 @@ class Builder {
                     }
                 }
             }
-    
+
             // Return Object
             return this;
         }
-    
+
         appendTo(object){
-            
+
             // Append Object To
             this._component.appendTo(object);
-    
+
             // Return Object
             return this;
         }
-    
+
         prependTo(object){
-            
+
             // Prepend Object To
             this._component.prependTo(object);
-    
+
             // Return Object
             return this;
         }
-    
+
         append(object){
-            
+
             // Append Object
             this._component.append(object);
-    
+
             // Return Object
             return this;
         }
-    
+
         prepend(object){
-            
+
             // Prepend Object
             this._component.prepend(object);
-    
+
             // Return Object
             return this;
         }
-    
+
         text(){
-    
+
             // Return Object
             return this._component.text();
         }
-    
+
         html(){
-    
+
             // Return Object
             return this._component.html();
         }
-    
+
         outerHTML(){
-    
+
             // Return Object
             return this._component[0].outerHTML;
         }
-    
+
         show(){
-    
+
             // Show Object
             this._component.show();
-    
+
             // Return Object
             return this;
         }
-    
+
         hide(){
-    
+
             // Hide Object
             this._component.hide();
-    
+
             // Return Object
             return this;
         }
@@ -349,7 +349,7 @@ class Builder {
             #field = null
 
             constructor(builder){
-            
+
                 // Call Parent
                 super(builder);
 
@@ -435,14 +435,14 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'notifications' + this._id,
                     'class': 'dropdown animate-slide-hover-top-20',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -463,30 +463,30 @@ class Builder {
                     'class': 'position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none',
                     'style': 'padding: 8px;',
                 }).appendTo(this._component.btn);
-        
+
                 // Create Menu
                 this._component.menu = $(document.createElement('ul')).attr({
                     'class': 'dropdown-menu dropdown-list dropdown-menu-end pb-0',
                     'style': 'min-width: 350px; max-width: 500px;',
                 }).appendTo(this._component);
-        
+
                 // Create Header
                 this._component.menu.header = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this._component.menu.header);
                 this._component.menu.header.title.label = $(document.createElement('span')).text('Notifications').appendTo(this._component.menu.header.title);
                 this._component.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this._component.menu.header.title);
-        
+
                 // Create Seperators
                 this._component.menu.seperator = {};
                 this._component.menu.seperator = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this._component.menu.seperator);
-        
+
                 // Create Items List
                 this._component.menu.list = $(document.createElement('div')).attr({
                     'class': 'overflow-auto',
                     'style': 'max-height: 500px;',
                 }).appendTo(this._component.menu);
-        
+
                 // Create Footer
                 this._component.menu.footer = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.footer.btn = $(document.createElement('button')).attr({
@@ -494,18 +494,18 @@ class Builder {
                     'type': 'button',
                 }).appendTo(this._component.menu.footer);
                 this._component.menu.footer.btn.label = $(document.createElement('small')).text('Mark All as Read').appendTo(this._component.menu.footer.btn);
-                
+
                 // Set Icon
                 if(this._properties.icon === null){
                     this._component.btn.icon.remove();
                 }
-                
+
                 // Set Color
                 if(this._properties.color){
                     this._component.btn.badge.addClass('text-bg-' + this._properties.color);
                     this._component.menu.header.title.count.addClass('text-bg-' + this._properties.color);
                 }
-                
+
                 // Add Callback
                 this._component.menu.footer.btn.on('click',function(){
                     self.readAll();
@@ -516,13 +516,13 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Count the number of new notifications
                 let count = this._component.find('[data-isRead="false"]').length;
-        
+
                 // Set Count
                 this._component.menu.header.title.count.text(count);
-        
+
                 // Show Badge
                 if(count > 0){
                     this._component.menu.header.title.count.removeClass('d-none');
@@ -533,45 +533,45 @@ class Builder {
                     this._component.btn.badge.addClass('d-none');
                     this._component.btn.removeClass('animate-wobble');
                 }
-        
+
                 // Return Count
                 return count;
             }
-            
+
             readAll(){
 
                 // Set Self
                 const self = this;
-        
+
                 // Get all unread notifications
                 let items = this._component.find('[data-isRead="false"]');
-        
+
                 // Set all notifications as read
                 items.attr('data-isRead', 'true').removeClass('blink-primary');
                 items.find('span.text-wrap').removeClass('fw-bold');
-        
+
                 // Count the number of new notifications
                 this.count();
-        
+
                 // Execute Callback
                 if(typeof this._properties.callback.readAll === 'function'){
                     this._properties.callback.readAll(self,self._component);
                 }
-        
+
                 // Return Object
                 return this;
             }
-            
+
             add(param1 = null, param2 = null){
-        
+
                 // Set Self
                 const self = this;
-                
+
                 let options = {};
                 let callback = null;
-        
+
                 let properties = {};
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -582,7 +582,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -610,18 +610,18 @@ class Builder {
 
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Item
                 let item = $(document.createElement('li')).attr({
                     'id': this._component.id + 'item' + id,
                 }).prependTo(this._component.menu.list);
-            
+
                 // Create Button
                 item.btn = $(document.createElement('button')).attr({
                     'class': 'dropdown-item d-flex align-items-center py-2',
                     'type': 'button',
                 }).appendTo(item);
-        
+
                 // Add Icon
                 item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
                 item.btn.icon.frame = $(document.createElement('div')).attr({
@@ -629,7 +629,7 @@ class Builder {
                     'style': 'width: 48px; height: 48px;',
                 }).appendTo(item.btn.icon);
                 item.btn.icon.frame.icon = $(document.createElement('i')).addClass('bi').appendTo(item.btn.icon.frame);
-        
+
                 // Add Label
                 item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
                 item.btn.label.time = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
@@ -638,25 +638,25 @@ class Builder {
                     'data-bs-toggle': 'tooltip',
                 }).appendTo(item.btn.label.time);
                 item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').text(properties.label).appendTo(item.btn.label);
-        
+
                 // Add Seperator
                 item.seperator = $(document.createElement('li')).insertAfter(item);
                 item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
-        
+
                 // Configure Color
                 if(properties.color !== null){
                     item.btn.icon.frame.addClass('text-bg-' + properties.color);
                 } else {
                     item.btn.icon.frame.addClass('text-bg-primary');
                 }
-        
+
                 // Configure Icon
                 if(properties.icon !== null){
                     item.btn.icon.frame.icon.addClass('bi-' + properties.icon);
                 } else {
                     item.btn.icon.frame.icon.addClass('bi-bell');
                 }
-        
+
                 // Configure Date Time
                 let datetime = null;
                 if(properties.datetime !== null){
@@ -673,19 +673,19 @@ class Builder {
                 }).text(datetime.toLocaleString());
                 setTimeout(function(){ item.btn.label.time.timeago.timeago(); }, 0);
                 item.btn.label.time.timeago.bootstrap = new bootstrap.Tooltip(item.btn.label.time.timeago);
-        
+
                 // Configure isRead
                 item.attr('data-isRead',properties.isRead);
                 if(!properties.isRead){
                     item.addClass('blink-primary');
                     item.btn.label.text.addClass('fw-bold');
                 }
-        
+
                 // Set Item Class
                 if(properties.class.item){
                     item.addClass(properties.class.item);
                 }
-        
+
                 // Add onRead Callback
                 if(!properties.isRead){
                     item.timer;
@@ -702,29 +702,29 @@ class Builder {
                         clearTimeout(item.timer);
                     });
                 }
-        
+
                 // Add Callback
                 if(typeof this._properties.callback.click === 'function'){
                     this._component.menu.footer.btn.on('click',function(){
                         self._properties.callback.click(item,self,self._component);
                     });
                 }
-        
+
                 // Add Callback
                 if(typeof properties.click === 'function'){
                     this._component.menu.footer.btn.on('click',function(){
                         properties.click(item,self,self._component);
                     });
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(item,this);
                 }
-        
+
                 // Set Count
                 this.count();
-        
+
                 // Return Object
                 return this;
             }
@@ -763,14 +763,14 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'messages' + this._id,
                     'class': 'dropdown animate-slide-hover-top-20',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -791,30 +791,30 @@ class Builder {
                     'class': 'position-absolute top-25 start-75 translate-middle border border-light rounded-circle d-none',
                     'style': 'padding: 8px;',
                 }).appendTo(this._component.btn);
-        
+
                 // Create Menu
                 this._component.menu = $(document.createElement('ul')).attr({
                     'class': 'dropdown-menu dropdown-list dropdown-menu-end pb-0',
                     'style': 'min-width: 350px;max-width: 500px;',
                 }).appendTo(this._component);
-        
+
                 // Create Header
                 this._component.menu.header = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this._component.menu.header);
                 this._component.menu.header.title.label = $(document.createElement('span')).text('Messages').appendTo(this._component.menu.header.title);
                 this._component.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this._component.menu.header.title);
-        
+
                 // Create Seperators
                 this._component.menu.seperator = {};
                 this._component.menu.seperator = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this._component.menu.seperator);
-        
+
                 // Create Items List
                 this._component.menu.list = $(document.createElement('div')).attr({
                     'class': 'overflow-auto',
                     'style': 'max-height: 500px;',
                 }).appendTo(this._component.menu);
-        
+
                 // Create Footer
                 this._component.menu.footer = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.footer.btn = $(document.createElement('button')).attr({
@@ -827,13 +827,13 @@ class Builder {
                 if(this._properties.icon === null){
                     this._component.btn.icon.remove();
                 }
-        
+
                 // Set Color
                 if(this._properties.color){
                     this._component.btn.badge.addClass('text-bg-' + this._properties.color);
                     this._component.menu.header.title.count.addClass('text-bg-' + this._properties.color);
                 }
-        
+
                 // Add Callback
                 if(typeof this._properties.callback.viewAll === 'function'){
                     this._component.menu.footer.btn.on('click',function(){
@@ -846,13 +846,13 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Count the number of new notifications
                 let count = this._component.find('[data-isRead="false"]').length;
-        
+
                 // Set Count
                 this._component.menu.header.title.count.text(count);
-        
+
                 // Show Badge
                 if(count > 0){
                     this._component.menu.header.title.count.removeClass('d-none');
@@ -863,7 +863,7 @@ class Builder {
                     this._component.btn.badge.addClass('d-none');
                     this._component.btn.removeClass('animate-bounce');
                 }
-        
+
                 // Return Count
                 return count;
             }
@@ -872,12 +872,12 @@ class Builder {
 
                 // Set Self
                 const self = this;
-                
+
                 let options = {};
                 let callback = null;
-        
+
                 let properties = {};
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -888,7 +888,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -916,7 +916,7 @@ class Builder {
 
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Item
                 let item = $(document.createElement('li')).attr({
                     'id': this._component.id + 'item' + id,
@@ -926,18 +926,18 @@ class Builder {
 
                 // Create Button
                 item.btn = $(document.createElement('button')).attr({}).addClass('dropdown-item d-flex align-items-center py-2').attr('type','button').appendTo(item);
-        
+
                 // Add Icon
                 item.btn.icon = $(document.createElement('div')).addClass('me-3').appendTo(item.btn);
                 item.btn.icon.frame = $(document.createElement('div')).attr({}).addClass('d-flex align-items-center justify-content-center rounded-circle text-bg-primary').css({"width":"48px","height":"48px"}).appendTo(item.btn.icon);
-        
+
                 // Add Label
                 item.btn.label = $(document.createElement('div')).addClass('d-flex flex-column align-items-justify').appendTo(item.btn);
                 item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').text(properties.label).appendTo(item.btn.label);
                 item.btn.label.meta = $(document.createElement('small')).addClass('text-muted').appendTo(item.btn.label);
                 item.btn.label.name = $(document.createElement('span')).text(properties.name).appendTo(item.btn.label.meta);
                 item.btn.label.timeago = $(document.createElement('time')).attr({}).addClass('timeago ms-2').attr('data-bs-toggle','tooltip').appendTo(item.btn.label.meta);
-        
+
                 // Add Seperator
                 item.seperator = $(document.createElement('li')).insertAfter(item);
                 item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
@@ -979,7 +979,7 @@ class Builder {
                     item.addClass('blink-primary');
                     item.btn.label.text.addClass('fw-bold');
                 }
-        
+
                 // Set Item Class
                 if(properties.class.item){
                     item.addClass(properties.class.item);
@@ -1001,29 +1001,29 @@ class Builder {
                         clearTimeout(item.timer);
                     });
                 }
-                
+
                 // Add Callback
                 if(typeof this._properties.callback.click === 'function'){
                     this._component.menu.footer.btn.on('click',function(){
                         self._properties.callback.click(item,self,self._component);
                     });
                 }
-        
+
                 // Add Callback
                 if(typeof properties.click === 'function'){
                     this._component.menu.footer.btn.on('click',function(){
                         properties.click(item,self,self._component);
                     });
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(item,this);
                 }
-        
+
                 // Set Count
                 this.count();
-        
+
                 // Return Object
                 return this;
             }
@@ -1062,14 +1062,14 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'tasks' + this._id,
                     'class': 'dropdown animate-slide-hover-top-20',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -1096,24 +1096,24 @@ class Builder {
                     'class': 'dropdown-menu dropdown-menu-end pb-0',
                     'style': 'min-width:350px;max-width:500px',
                 }).appendTo(this._component);
-        
+
                 // Create Header
                 this._component.menu.header = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.header.title = $(document.createElement('h5')).addClass('py-2 px-3 m-0 cursor-default d-flex justify-content-center align-items-center').appendTo(this._component.menu.header);
                 this._component.menu.header.title.label = $(document.createElement('span')).text('Tasks').appendTo(this._component.menu.header.title);
                 this._component.menu.header.title.count = $(document.createElement('span')).addClass('badge rounded-pill ms-2 d-none').appendTo(this._component.menu.header.title);
-        
+
                 // Create Seperators
                 this._component.menu.seperator = {};
                 this._component.menu.seperator = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(this._component.menu.seperator);
-        
+
                 // Create Items List
                 this._component.menu.list = $(document.createElement('div')).attr({
                     'class': 'overflow-auto',
                     'style': 'max-height:500px',
                 }).appendTo(this._component.menu);
-        
+
                 // Create Footer
                 this._component.menu.footer = $(document.createElement('li')).appendTo(this._component.menu);
                 this._component.menu.footer.btn = $(document.createElement('button')).attr({
@@ -1126,7 +1126,7 @@ class Builder {
                 if(this._properties.icon === null){
                     this._component.btn.icon.remove();
                 }
-        
+
                 // Set Color
                 if(this._properties.color){
                     this._component.btn.badge.addClass('text-bg-' + this._properties.color);
@@ -1148,10 +1148,10 @@ class Builder {
 
                 // Count the number of new notifications
                 let count = this._component.find('.dropdown-item.task').length;
-        
+
                 // Set Count
                 this._component.menu.header.title.count.text(count);
-        
+
                 // Show Badge
                 if(count > 0){
                     this._component.menu.header.title.count.removeClass('d-none');
@@ -1162,7 +1162,7 @@ class Builder {
                     this._component.btn.badge.addClass('d-none');
                     this._component.btn.addClass('animate-pulse');
                 }
-        
+
                 // Return Count
                 return count;
             }
@@ -1171,12 +1171,12 @@ class Builder {
 
                 // Set Self
                 const self = this;
-                
+
                 let options = {};
                 let callback = null;
-        
+
                 let properties = {};
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -1187,7 +1187,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -1237,15 +1237,15 @@ class Builder {
                     'class': 'dropdown-item d-flex flex-column py-2 task',
                     'type': 'button',
                 }).appendTo(item);
-        
+
                 // Add Label
                 item.btn.label = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
                 item.btn.label.text = $(document.createElement('span')).addClass('text-wrap').text(properties.label).appendTo(item.btn.label);
                 item.btn.label.scale = $(document.createElement('small')).addClass('text-muted float-end').appendTo(item.btn.label);
-        
+
                 // Add Progress Bar
                 item.btn.progress = $(document.createElement('div')).addClass('w-100').appendTo(item.btn);
-        
+
                 // Add Seperator
                 item.seperator = $(document.createElement('li')).insertAfter(item);
                 item.seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider m-0').appendTo(item.seperator);
@@ -1259,7 +1259,7 @@ class Builder {
                     change = properties.progress.callback.change;
                 }
                 properties.progress.callback.change = function(progress){
-        
+
                     // Set Scale
                     item.btn.label.scale.text(progress.get() + '%');
 
@@ -1281,7 +1281,7 @@ class Builder {
                 item.set = function(value){
                     item.btn.progress.bar.set(value);
                 };
-        
+
                 // Set Item Class
                 if(properties.class.item){
                     item.addClass(properties.class.item);
@@ -1293,7 +1293,7 @@ class Builder {
                         self._properties.callback.click(item,self,self._component);
                     });
                 }
-        
+
                 // Add Callback
                 if(typeof properties.click === 'function'){
                     this._component.menu.footer.btn.on('click',function(){
@@ -1305,10 +1305,10 @@ class Builder {
                 if(typeof callback === 'function'){
                     callback(item,this);
                 }
-        
+
                 // Set Count
                 this.count();
-        
+
                 // Return Object
                 return this;
             }
@@ -1348,14 +1348,14 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'toasts' + this._id,
                     'class': 'toast-container position-fixed p-3',
                 }).prependTo('body');
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -1401,12 +1401,12 @@ class Builder {
 
                 // Set Self
                 const self = this;
-                
+
                 let options = {};
                 let callback = null;
-        
+
                 let properties = {};
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -1417,7 +1417,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -1545,7 +1545,7 @@ class Builder {
                 if(typeof callback === 'function'){
                     callback(toast,this);
                 }
-        
+
                 // Return Object
                 return this;
             }
@@ -1707,13 +1707,13 @@ class Builder {
             randomNumber(min = -10, max = 10){
                 return Math.floor(Math.random() * (max - min + 1) + min);
             }
-        
+
             // Validate an email address
             validateEmail($email) {
                 var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
                 return ( $email.length > 0 && emailReg.test($email))
             }
-        
+
             // Check if a value is in an array
             inArray(needle, haystack) {
                 var length = haystack.length;
@@ -1722,7 +1722,7 @@ class Builder {
                 }
                 return false;
             }
-        
+
             // Format a number of bytes into a human readable string
             formatBytes(bytes, decimals = 2) {
                 if (!+bytes) return '0 Bytes'
@@ -1732,7 +1732,7 @@ class Builder {
                 const i = Math.floor(Math.log(bytes) / Math.log(k))
                 return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
             }
-        
+
             // Copy a string or object content to the clipboard
             copyToClipboard(object){
                 if(typeof object !== 'undefined' && typeof object !== null && typeof object !== 'function'){
@@ -1748,7 +1748,7 @@ class Builder {
                     input.remove();
                 }
             }
-        
+
             // Format a phone number
             formatPhoneNumber(phoneNumberString) {
                 var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
@@ -1758,20 +1758,20 @@ class Builder {
                 }
                 return null
             }
-        
+
             // Convert a string containing HTML entities to regular characters
             htmlEntities(str) {
                 return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
                    return '&#' + i.charCodeAt(0) + ';';
                 });
             }
-        
+
             // Check if a variable is constant
             isConstant(variable) {
                 const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(variable), Object.keys(variable)[0]);
                 return descriptor && descriptor.writable === false;
             }
-        
+
             // Format a string to a slug
             formatSlug (value) {
                 return value
@@ -1780,44 +1780,44 @@ class Builder {
                     .replace(/\s+/g, '-')
                     .replace(/[^a-z0-9-]/g, '');
             };
-        
+
             // Check if the current device is a mobile device
             isMobileDevice() {
                 const userAgent = navigator.userAgent;
                 var mobileDeviceUserAgents = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
                 return mobileDeviceUserAgents.test(userAgent);
             }
-        
+
             // Function to retrieve the available Bootstrap Icons
             bootstrapIcons() {
                 const styleSheets = document.styleSheets;
                 var icons = [];
-          
+
                 for (const styleSheet of styleSheets) {
                     const rules = styleSheet.rules || styleSheet.cssRules;
-            
+
                     for (const rule of rules) {
                         if(typeof rule.selectorText === 'undefined'){ continue; }
-        
+
                         if (rule.selectorText.startsWith(".bi-")) {
-        
+
                             const iconName = rule.selectorText.slice(4);
-        
+
                             // Remove "::before" from the icon name
                             const cleanedIconName = iconName.replace("::before", "");
-        
+
                             icons.push(cleanedIconName);
                         }
                     }
                 }
-        
+
                 return icons;
             }
-        
+
             // Convert to Markdown
             htmlToMarkdown(html) {
                 const converter = new TurndownService();
-        
+
                 // Use '#' for headers
                 converter.addRule('heading', {
                     filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -1830,7 +1830,7 @@ class Builder {
                         return '\n\n' + hPrefix + ' ' + content + '\n\n';
                     }
                 });
-            
+
                 // Use triple backticks for code blocks
                 converter.addRule('codeBlock', {
                     filter: 'pre',
@@ -1838,20 +1838,20 @@ class Builder {
                         return '\n\n```' + '\n' + content + '\n' + '```\n\n';
                     }
                 });
-        
+
                 return converter.turndown(html);
             }
-        
+
             // Convert to HTML
             markdownToHTML(markdown) {
                 const converter = new showdown.Converter();
                 return converter.makeHtml(markdown);
             }
-        
+
             // Check the OS Type
             detectOperatingSystem() {
                 const userAgent = navigator.userAgent;
-            
+
                 if (/iPad|iPhone|iPod/.test(userAgent)) {
                     return 'iOS';
                 }
@@ -1869,7 +1869,7 @@ class Builder {
                 }
                 return 'Unknown OS';
             }
-        
+
             // Convert to MD5
             md5 = (function() {
                 var MD5 = function (d) {
@@ -1944,7 +1944,7 @@ class Builder {
                     }
                     return MD5(binary.join(''));
                 }
-              
+
                 return MD5Unicode;
             })()
 
@@ -1954,7 +1954,7 @@ class Builder {
 
                 let email = null;
                 let options = {};
-        
+
                 // Set email, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -2037,7 +2037,7 @@ class Builder {
                         }
                     }
                 }
-		
+
                 // Return URL
                 return url
             }
@@ -2068,7 +2068,7 @@ class Builder {
                     submit: true,
                 };
             }
-                    
+
             _config(name,options){
                 if(typeof this._properties[name] !== 'undefined'){
                     switch(name){
@@ -2078,28 +2078,28 @@ class Builder {
                     }
                 }
             }
-        
+
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'layout' + this._id,
                     'class': 'row',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Create Title
                 this._component.header = $(document.createElement('div')).addClass('col-12 mb-2').appendTo(this._component);
                 this._component.header.title = $(document.createElement('h1')).addClass('text-center').text(this._properties.title).appendTo(this._component.header);
-        
+
                 // Create Form
                 this._component.form = this._builder.Component(
                     "form",
@@ -2148,7 +2148,7 @@ class Builder {
                             function(stepper, component){
                                 // Create Form Controls
                                 self._component.controls = $(document.createElement('div')).addClass('btn-group').appendTo(component.pagination.list);
-        
+
                                 // Add Clear Control
                                 if(self._properties.clear){
                                     form.add(
@@ -2163,7 +2163,7 @@ class Builder {
                                         },
                                     );
                                 }
-        
+
                                 // Add Reset Control
                                 if(self._properties.reset){
                                     form.add(
@@ -2178,7 +2178,7 @@ class Builder {
                                         },
                                     );
                                 }
-        
+
                                 // Add Submit Control
                                 if(self._properties.submit){
                                     form.add(
@@ -2198,21 +2198,21 @@ class Builder {
                     }
                 );
             }
-        
+
             #addStep(properties){
-                
+
                 const self = this;
-        
+
                 // Add Step
                 this._component.stepper.add(
                     function(step){
-        
+
                         // Save Properties
                         step.properties = properties;
-        
+
                         // Create Question
                         step.content.question = $(document.createElement('h3')).html(properties.label).appendTo(step.content);
-        
+
                         // Create Range
                         step.content.range = self._component.form.add( //Add Inputs
                             {
@@ -2231,7 +2231,7 @@ class Builder {
                                 },
                             },
                         ).appendTo(step.content);
-        
+
                         // Create MCE
                         step.content.comment = self._component.form.add(
                             {
@@ -2249,22 +2249,22 @@ class Builder {
                     },
                 );
             }
-                        
+
             add(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-                
+
                 let properties = {
                     label: null,
                     range: true,
                     comment: true,
                     scaleDescription: null,
-                    scale: null, 
+                    scale: null,
                 };
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -2275,7 +2275,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -2309,11 +2309,11 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Set ID
                 let id = this._count();
                 properties.id = id;
-        
+
                 // Add Step
                 if(typeof this._component.stepper !== 'undefined'){
                     self.#addStep(properties);
@@ -2325,23 +2325,23 @@ class Builder {
                         }
                     }, 100);
                 }
-        
+
                 // Return
                 return this;
             }
-        
+
             val(values = null){
                 return this._component.form.val(values);
             }
-        
+
             reset(){
                 return this._component.form.reset();
             }
-        
+
             clear(){
                 return this._component.form.clear();
             }
-        
+
             submit(){
                 return this._component.form.submit();
             }
@@ -2357,28 +2357,28 @@ class Builder {
                     contact: '?t=layouts&p=contact',
                 };
             }
-        
+
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'layout' + this._id,
                     'class': 'row',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Create Title
                 this._component.header = $(document.createElement('div')).addClass('col-12 mb-2').appendTo(this._component);
                 this._component.header.title = $(document.createElement('h1')).addClass('text-center').text(this._properties.title).appendTo(this._component.header);
-        
+
                 // Create Accordion
                 this._component.faqs = this._builder.Component(
                     'accordion',
@@ -2393,7 +2393,7 @@ class Builder {
                         alwaysOpen: true,
                     },
                 );
-        
+
                 // Create Footer
                 this._component.footer = $(document.createElement('div')).addClass('col-12 mt-2').appendTo(this._component);
                 this._component.footer.paragraph = $(document.createElement('p')).addClass('lead text-center').appendTo(this._component.footer);
@@ -2402,14 +2402,14 @@ class Builder {
                 }).text('Contact us').appendTo(this._component.footer.paragraph);
                 this._component.footer.paragraph.text = $(document.createElement('span')).text(', if you did not find the right anwser or you have an other question?').appendTo(this._component.footer.paragraph);
             }
-                        
+
             add(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -2420,10 +2420,10 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Add FAQ
                 this._component.faqs.add(options,callback);
-        
+
                 // Return
                 return this;
             }
@@ -2452,24 +2452,24 @@ class Builder {
                     selectTools:true,
                 };
             }
-        
+
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'layout' + this._id,
                     'class': 'row',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Create Card
                 this._component.card = this._builder.Component(
                     'card',
@@ -2511,19 +2511,19 @@ class Builder {
                     },
                 );
             }
-        
+
             add(data){
-        
+
                 this._component.table.add(data);
             }
-        
+
             update(row, data){
-        
+
                 this._component.table.update(row, data);
             }
-        
+
             delete(row){
-        
+
                 this._component.table.delete(row);
             }
         },
@@ -2538,24 +2538,24 @@ class Builder {
                     icon: 'person',
                 };
             }
-        
+
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'layout' + this._id,
                     'class': 'row',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Create Columns
                 this._component.col1 = $(document.createElement('div')).attr({
                     class: 'col-4',
@@ -2563,7 +2563,7 @@ class Builder {
                 this._component.col2 = $(document.createElement('div')).attr({
                     class: 'col-8',
                 }).appendTo(this._component);
-        
+
                 // Create Profile Details Section
                 this._component.detail = this._builder.Component(
                     'card',
@@ -2592,7 +2592,7 @@ class Builder {
                         card.hide();
                     },
                 );
-        
+
                 // Create Profile Tabs Section
                 this._component.tabs = this._builder.Component(
                     'tabs',
@@ -2612,14 +2612,14 @@ class Builder {
                     }
                 );
             }
-                
+
             detail(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -2630,25 +2630,25 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Show Detail
                 this._component.detail.show();
-        
+
                 // Add Detail
                 this._component.detailList.add(options,callback);
-        
+
                 // Return
                 return this;
             }
-                
+
             tab(param1 =null, param2 =null, param3 =null){
-                
+
                 const self = this;
-        
+
                 let name = {};
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2, param3].forEach(param => {
                     if(param !== null){
@@ -2661,13 +2661,13 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Show Tabs
                 this._component.tabs.show();
-        
+
                 // Add Tab
                 this._component.tabs.add(name,options,callback);
-        
+
                 // Return
                 return this;
             }
@@ -2685,24 +2685,24 @@ class Builder {
                     isBanned: false,
                 };
             }
-        
+
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'layout' + this._id,
                     'class': 'row',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Create Columns
                 this._component.col1 = $(document.createElement('div')).attr({
                     class: 'col-4 col-lg-3',
@@ -2710,7 +2710,7 @@ class Builder {
                 this._component.col2 = $(document.createElement('div')).attr({
                     class: 'col-8 col-lg-9',
                 }).appendTo(this._component);
-        
+
                 // Create Profile Details Section
                 this._component.detail = this._builder.Component(
                     'card',
@@ -2723,10 +2723,10 @@ class Builder {
                         },
                     },
                     function(card,component){
-        
+
                         // Remove Padding
                         component.body.addClass('p-0');
-        
+
                         // Create List
                         self._component.detailList = self._builder.Component(
                             'list',
@@ -2740,7 +2740,7 @@ class Builder {
                                 },
                             },
                         );
-        
+
                         // Add status icon
                         component.footer.removeClass('d-none').addClass('p-0');
                         component.footer.group = $(document.createElement('div')).addClass('btn-group-vertical rounded-0 rounded-bottom w-100').appendTo(component.footer);
@@ -2748,7 +2748,7 @@ class Builder {
                         component.footer.group.status.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(component.footer.group.status);
                         component.footer.group.status.label = $(document.createElement('span')).appendTo(component.footer.group.status);
                         self._component.status = component.footer.group.status;
-        
+
                         // Add Status Button Events
                         let body = $(document.createElement('div'));
                         body.p1 = $(document.createElement('p')).text('This modal allows you to manage various settings for the user\'s profile. By toggling the buttons below, you can control the following aspects:').appendTo(body);
@@ -2827,7 +2827,7 @@ class Builder {
                         card.hide();
                     },
                 );
-        
+
                 // Create Profile About Section
                 this._component.about = this._builder.Component(
                     'card',
@@ -2856,7 +2856,7 @@ class Builder {
                         card.hide();
                     },
                 );
-        
+
                 // Create Profile Tabs Section
                 this._component.tabs = this._builder.Component(
                     'tabs',
@@ -2876,19 +2876,19 @@ class Builder {
                     }
                 );
             }
-        
+
             status(value = null){
-        
+
                 // Check Value
                 if(typeof value === 'number'){
                     this._properties.status = value;
                 }
-        
+
                 // Reset Status
                 this._component.status.removeClass('btn-danger btn-warning btn-secondary');
                 this._component.status.icon.removeClass('bi-trash bi-exclamation-triangle bi-lock bi-clock');
                 this._component.status.label.text('');
-        
+
                 // Configure Status
                 switch(this._properties.status){
                     case 1:
@@ -2927,18 +2927,18 @@ class Builder {
                         this._component.status.label.text('Active');
                         break;
                 }
-        
+
                 // Return
                 return this._properties.status;
             }
-                
+
             detail(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -2949,24 +2949,24 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Show Detail
                 this._component.detail.show();
-        
+
                 // Add Detail
                 this._component.detailList.add(options,callback);
-        
+
                 // Return
                 return this;
             }
-                
+
             about(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -2977,25 +2977,25 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Show About
                 this._component.about.show();
-        
+
                 // Add About
                 this._component.aboutList.add(options,callback);
-        
+
                 // Return
                 return this;
             }
-                
+
             tab(param1 =null, param2 =null, param3 =null){
-                
+
                 const self = this;
-        
+
                 let name = {};
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2, param3].forEach(param => {
                     if(param !== null){
@@ -3008,13 +3008,13 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Show Tabs
                 this._component.tabs.show();
-        
+
                 // Add Tab
                 this._component.tabs.add(name,options,callback);
-        
+
                 // Return
                 return this;
             }
@@ -3033,22 +3033,22 @@ class Builder {
                     },
                 };
             }
-        
+
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'layout' + this._id,
                     'class': 'row',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Create Title
                 this._component.title = $(document.createElement('h1')).addClass('text-center').text(this._properties.title).appendTo(this._component);
-        
+
                 // Create Search
                 this._component.search = $(document.createElement('div')).addClass('col-12 mb-2 d-flex justify-content-center').appendTo(this._component);
                 this._component.search.form = $(document.createElement('form')).attr({
@@ -3062,19 +3062,19 @@ class Builder {
                     'placeholder': 'Search...',
                     'value': '',
                 }).appendTo(this._component.search.form);
-        
+
                 // Create Announcements
                 this._component.announcements = $(document.createElement('div')).addClass('col-12 my-2 d-none').appendTo(this._component);
                 this._component.announcements.container = $(document.createElement('div')).addClass('container').appendTo(this._component.announcements);
                 this._component.announcements.container.title = $(document.createElement('h1')).addClass('text-center').text('Announcements').appendTo(this._component.announcements.container);
                 this._component.announcements.container.announcements = $(document.createElement('div')).addClass('d-flex justify-content-center align-items-center').appendTo(this._component.announcements.container);
-        
+
                 // Create Ressources
                 this._component.ressources = $(document.createElement('div')).addClass('col-12 my-2 d-none').appendTo(this._component);
                 this._component.ressources.container = $(document.createElement('div')).addClass('container').appendTo(this._component.ressources);
                 this._component.ressources.container.title = $(document.createElement('h1')).addClass('text-center').text('Ressources').appendTo(this._component.ressources.container);
                 this._component.ressources.container.ressources = $(document.createElement('div')).addClass('row row-cols-1 row-cols-md-3').appendTo(this._component.ressources.container);
-        
+
                 // Create Articles
                 this._component.articles = $(document.createElement('div')).addClass('col-12 my-2 d-none').appendTo(this._component);
                 this._component.articles.container = $(document.createElement('div')).addClass('container').appendTo(this._component.articles);
@@ -3088,19 +3088,19 @@ class Builder {
                     class: 'btn btn-secondary',
                     href: this._properties.link.articles,
                 }).text('View all articles').appendTo(this._component.articles.more.container.button);
-        
+
                 // Create Contact
                 this._component.articles.contact = $(document.createElement('div')).addClass('col-12 my-2').appendTo(this._component);
                 this._component.articles.contact.container = $(document.createElement('p')).addClass('lead text-center').appendTo(this._component.articles.contact);
                 this._component.articles.contact.container.link = $(document.createElement('a')).attr({href:this._properties.link.contactus}).text('Contact us').appendTo(this._component.articles.contact.container);
                 this._component.articles.contact.container.span = $(document.createElement('span')).text(', if you did not find the right anwser or you have an other question?').appendTo(this._component.articles.contact.container);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
             }
-            
+
             _config(name,options){
                 if(typeof this._properties[name] !== 'undefined'){
                     switch(name){
@@ -3117,14 +3117,14 @@ class Builder {
                     }
                 }
             }
-        
+
             alert(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -3135,7 +3135,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {
                     class: { //Add Classes
                         alert: null, //Alert Element
@@ -3147,7 +3147,7 @@ class Builder {
                     content: null, //Set Content
                     datetime: null, //Set Datetime
                 };
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -3176,29 +3176,29 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Unhide Announcements
                 this._component.announcements.removeClass('d-none');
-        
+
                 // Create Alert
                 var alert = this._builder.Component(
                     'alert',
                     this._component.announcements.container.announcements,
                     properties,
                     function(alert,component){
-        
+
                         // Save Properties
                         component.properties = properties;
-        
+
                         // Add padding
                         component.addClass('p-2 ps-3');
-        
+
                         // Remove margin
                         component.content.addClass('m-0');
-        
+
                         // Create Icon
                         component.content.icon = $(document.createElement('i')).addClass('me-1 bi bi-clock').appendTo(component.content);
-        
+
                         // Configure Datetime
                         let datetime = null;
                         if(properties.datetime !== null){
@@ -3206,7 +3206,7 @@ class Builder {
                         } else {
                             datetime = new Date();
                         }
-        
+
                         // Create Time
                         component.content.time = $(document.createElement('time')).attr({
                             'class': 'timeago',
@@ -3216,31 +3216,31 @@ class Builder {
                             'data-bs-toggle': 'tooltip',
                             'data-bs-placement': 'top',
                         }).text(datetime.toLocaleString()).appendTo(component.content);
-        
+
                         // Initialize Tooltip
                         component.content.time.bootstrap = new bootstrap.Tooltip(component.content.time);
-        
+
                         // Initialize Timeago
                         setTimeout(function(){ component.content.time.timeago(); }, 0);
-                
+
                         // Check if callback is a function
                         if(typeof callback === "function"){
                             callback(alert,component);
                         }
                     },
                 );
-        
+
                 // Return
                 return this;
             }
-        
+
             ressource(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -3251,7 +3251,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {
                     class: { //Add Classes
                         ressource: null, //Ressource Element
@@ -3260,7 +3260,7 @@ class Builder {
                     title: null, //Set Title
                     content: null, //Set Content
                 };
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -3289,13 +3289,13 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Unhide Ressources
                 this._component.ressources.removeClass('d-none');
-        
+
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Ressource
                 var ressource = $(document.createElement('div')).attr({
                     'id': this._component.id + 'ressource' + id,
@@ -3303,41 +3303,41 @@ class Builder {
                 }).appendTo(this._component.ressources.container.ressources);
                 ressource.id = ressource.attr('id');
                 ressource.properties = properties;
-        
+
                 // Set Ressource Class
                 if(properties.class.ressource){
                     ressource.addClass(properties.class.ressource);
                 }
-        
+
                 // Create Card
                 ressource.card = $(document.createElement('div')).addClass('card').appendTo(ressource);
-        
+
                 // Create Card Header
                 ressource.card.header = $(document.createElement('div')).addClass('card-header d-flex flex-column justify-content-center align-items-center').appendTo(ressource.card);
-        
+
                 // Create Card Title
                 ressource.card.header.icon = $(document.createElement('i')).addClass('bi bi-' + properties.icon).css('font-size', '4rem').appendTo(ressource.card.header);
                 ressource.card.header.title = $(document.createElement('h3')).addClass('card-title').text(properties.title).appendTo(ressource.card.header);
-        
+
                 // Create Card Body
                 ressource.card.body = $(document.createElement('div')).addClass('card-body').html(properties.content).appendTo(ressource.card);
-                
+
                 // Check if callback is a function
                 if(typeof callback === "function"){
                     callback(ressource);
                 }
-        
+
                 // Return
                 return this;
             }
-        
+
             article(param1 =null, param2 =null){
-                
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -3348,7 +3348,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {
                     class: { //Add Classes
                         article: null, //Ressource Element
@@ -3357,7 +3357,7 @@ class Builder {
                     title: null, //Set Title
                     content: null, //Set Content
                 };
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -3386,13 +3386,13 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Unhide Articles
                 this._component.articles.removeClass('d-none');
-        
+
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Article
                 var article = $(document.createElement('div')).attr({
                     'id': this._component.id + 'article' + id,
@@ -3400,31 +3400,31 @@ class Builder {
                 }).appendTo(this._component.articles.container.articles);
                 article.id = article.attr('id');
                 article.properties = properties;
-        
+
                 // Set Article Class
                 if(properties.class.article){
                     article.addClass(properties.class.article);
                 }
-        
+
                 // Set Content
                 if (properties.content.length > 100) {
                     properties.content = properties.content.slice(0, 100) + '...';
                 }
-        
+
                 // Create Card
                 article.card = $(document.createElement('div')).addClass('card card-body').appendTo(article);
-        
+
                 // Create Card Header
                 article.card.title = $(document.createElement('h4')).addClass('card-title').text(properties.title).appendTo(article.card);
-        
+
                 // Create Card Body
                 article.card.body = $(document.createElement('p')).addClass('card-text mt-2').html(properties.content).appendTo(article.card);
-                
+
                 // Check if callback is a function
                 if(typeof callback === "function"){
                     callback(article);
                 }
-        
+
                 // Return
                 return this;
             }
@@ -3432,7 +3432,7 @@ class Builder {
         settings: class extends this.ComponentClass {
 
             #forms = {};
-        
+
             _init(){
                 this._properties = {
                     class: {
@@ -3442,19 +3442,19 @@ class Builder {
                     },
                 };
             }
-        
+
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'layout' + this._id,
                     'class': 'row',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Create side menu
                 this._component.menu = $(document.createElement('div')).addClass('col-4 col-lg-3').appendTo(this._component);
                 this._component.menu.accordion = $(document.createElement('div')).attr({
@@ -3462,7 +3462,7 @@ class Builder {
                     'class': 'accordion',
                 }).appendTo(this._component.menu);
                 this._component.menu.id = this._component.menu.accordion.attr('id');
-        
+
                 // Create content
                 this._component.content = $(document.createElement('div')).addClass('col-8 col-lg-9').appendTo(this._component);
                 this._component.content.card = $(document.createElement('div')).addClass('card').appendTo(this._component.content);
@@ -3471,30 +3471,30 @@ class Builder {
                     'class': 'accordion',
                 }).appendTo(this._component.content.card);
                 this._component.content.id = this._component.content.accordion.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Menu Class
                 if(this._properties.class.menu){
                     this._component.menu.addClass(this._properties.class.menu);
                 }
-        
+
                 // Set Content Class
                 if(this._properties.class.content){
                     this._component.content.addClass(this._properties.class.content);
                 }
             }
-        
+
             add(param1 = null, param2 = null){
-        
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -3505,13 +3505,13 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {
                     icon: 'gear',
                     label: null,
                     class: null,
                 };
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -3531,10 +3531,10 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Category
                 var category = $(document.createElement('div')).attr({
                     'id': this._component.menu.id + 'category' + id,
@@ -3542,10 +3542,10 @@ class Builder {
                 }).appendTo(this._component.menu.accordion);
                 category.id = category.attr('id');
                 category.properties = properties;
-        
+
                 // Create Header
                 category.header = $(document.createElement('h2')).addClass('accordion-header').appendTo(category);
-        
+
                 // Create Button
                 category.button = $(document.createElement('button')).attr({
                     'id': category.id + 'button',
@@ -3556,7 +3556,7 @@ class Builder {
                 }).text(properties.label).appendTo(category.header);
                 category.button.id = category.button.attr('id');
                 category.button.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(category.button);
-        
+
                 // Create Collapse
                 category.collapse = $(document.createElement('div')).attr({
                     'id': category.id + 'collapse',
@@ -3564,13 +3564,13 @@ class Builder {
                     'data-bs-parent': '#' + this._component.menu.id,
                 }).appendTo(category);
                 category.collapse.id = category.collapse.attr('id');
-        
+
                 // Configure Button
                 category.button.attr({
                     'aria-controls': category.collapse.id,
                     'data-bs-target': '#' + category.collapse.id,
                 });
-        
+
                 // Create Menu
                 category.menu = $(document.createElement('div')).attr({
                     'id': category.id + 'menu',
@@ -3578,47 +3578,47 @@ class Builder {
                     'data-bs-parent': '#' + this._component.menu.id,
                 }).appendTo(category.collapse);
                 category.menu.id = category.menu.attr('id');
-        
+
                 // Create Menu List
                 category.menu.list = $(document.createElement('ul')).attr({
                     'id': category.menu.id + 'list',
                     'class': 'list-group list-group-flush w-100',
                 }).appendTo(category.menu);
                 category.menu.list.id = category.menu.list.attr('id');
-        
+
                 // Add method to add content
                 category.add = function(param1 = null, param2 = null){
                     self.#item(category,param1,param2);
                 }
-        
+
                 if(properties.icon == null){
                     category.button.icon.remove();
                 }
-        
+
                 if(properties.class){
                     category.addClass(properties.class);
                 }
-        
+
                 if(this._count <= 1){
                     category.button.removeClass('collapsed').attr('aria-expanded',true);
                     category.collapse.addClass('show');
                 }
-        
+
                 if(typeof callback === "function"){
                     callback(category,self);
                 }
-        
+
                 // Return
                 return this;
             }
-        
+
             #item(category, param1 = null, param2 = null){
-        
+
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -3629,7 +3629,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {
                     icon: 'gear',
                     label: null,
@@ -3643,7 +3643,7 @@ class Builder {
                         clear: function(form){},
                     },
                 };
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -3663,10 +3663,10 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Content Item
                 var content = $(document.createElement('div')).attr({
                     'id': category.id + 'content' + id,
@@ -3675,14 +3675,14 @@ class Builder {
                 }).appendTo(this._component.content.accordion);
                 content.id = content.attr('id');
                 content.properties = properties;
-        
+
                 // Create Header
                 content.header = $(document.createElement('div')).attr({
                     'class': 'accordion-header card-body pb-0',
                 }).appendTo(content);
                 content.header.title = $(document.createElement('h4')).text(properties.label).appendTo(content.header);
                 content.header.title.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(content.header.title);
-        
+
                 // Create Form
                 content.form = this._builder.Component(
                     'form',
@@ -3693,28 +3693,28 @@ class Builder {
                         },
                         callback:{
                             submit: function(form){
-        
+
                                 // Check if Submit Callback is a function
                                 if(typeof properties.callback.submit === 'function'){
                                     properties.callback.submit(form);
                                 }
                             },
                             val: function(form){
-        
+
                                 // Check if Val Callback is a function
                                 if(typeof properties.callback.val === 'function'){
                                     properties.callback.val(form);
                                 }
                             },
                             reset: function(form){
-        
+
                                 // Check if Reset Callback is a function
                                 if(typeof properties.callback.reset === 'function'){
                                     properties.callback.reset(form);
                                 }
                             },
                             clear: function(form){
-        
+
                                 // Check if Clear Callback is a function
                                 if(typeof properties.callback.clear === 'function'){
                                     properties.callback.clear(form);
@@ -3724,10 +3724,10 @@ class Builder {
                     },
                     function(form,component){},
                 );
-        
+
                 // Create Body
                 content.body = $(document.createElement('div')).appendTo(content.form._component);
-        
+
                 // Create Menu Item
                 var item = $(document.createElement('li')).attr({
                     'id': category.id + 'item' + id,
@@ -3738,24 +3738,24 @@ class Builder {
                 }).appendTo(category.menu.list);
                 item.id = item.attr('id');
                 item.properties = properties;
-        
+
                 // Create Flex
                 item.flex = $(document.createElement('div')).addClass('d-flex align-items-center').appendTo(item);
                 item.flex.icon = $(document.createElement('div')).addClass('flex-shrink-1 px-1').appendTo(item.flex);
                 item.flex.icon.i = $(document.createElement('i')).addClass('bi bi-' + properties.icon).appendTo(item.flex.icon);
                 item.flex.label = $(document.createElement('div')).addClass('flex-grow-1 px-1 text-break').text(properties.label).appendTo(item.flex);
-        
+
                 // Check for an icon
                 if(properties.icon == null){
                     content.header.title.icon.remove();
                     item.flex.icon.remove();
                 }
-        
+
                 // Check for classes to add
                 if(properties.class){
                     content.addClass(properties.class);
                 }
-        
+
                 // Add Event Listener
                 content.on('show.bs.collapse', function(){
                     // Clear Active
@@ -3763,29 +3763,29 @@ class Builder {
                     // Set Active
                     self._component.menu.find('[data-bs-target="#'+content.id+'"]').addClass('active');
                 });
-        
+
                 // Open first item
                 if(this._component.content.accordion.children().length > 0){
-        
+
                     var firstContent = this._component.content.accordion.children().first();
                     firstContent.addClass('show');
-        
+
                     var firstItem = this._component.menu.find('[data-bs-target="#'+firstContent.attr('id')+'"]');
                     firstItem.addClass('active');
-        
+
                     var firstCategory = firstItem.parents('.accordion-item');
-        
+
                     var firstCategoryCollapse = firstCategory.find('.collapse');
                     firstCategoryCollapse.addClass('show');
-        
+
                     var firstCategoryBtn = firstCategory.find('[data-bs-target="#'+firstCategoryCollapse.attr('id')+'"]');
                     firstCategoryBtn.removeClass('collapsed');
                 }
-        
+
                 if(typeof callback === "function"){
                     callback(item,content,self);
                 }
-        
+
                 // Return
                 return this;
             }
@@ -3815,7 +3815,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'code' + this._id,
@@ -3848,7 +3848,7 @@ class Builder {
                 this._component.body = $(document.createElement('div')).addClass('card-body p-0').appendTo(this._component.collapse);
                 this._component.pre = $(document.createElement('pre')).addClass('m-0 p-3 h-100').appendTo(this._component.body);
                 this._component.code = $(document.createElement('code')).addClass('language-*').css('transition','all 400ms ease').appendTo(this._component.pre);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -3955,7 +3955,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'card' + this._id,
@@ -3969,15 +3969,15 @@ class Builder {
                     'class': 'card',
                     'style': 'transition: all 400ms ease',
                 }).appendTo(this._component);
-                
+
                 // Create Card Header
                 this._component.header = $(document.createElement('div')).addClass('card-header user-select-none').appendTo(this._component.card);
-                
+
                 // Create Card Header Title
                 this._component.header.heading = $(document.createElement('h5')).addClass('card-title d-flex justify-content-start align-items-center').appendTo(this._component.header);
                 this._component.header.icon = $(document.createElement('i')).addClass('me-1 bi bi-'+this._properties.icon).appendTo(this._component.header.heading);
                 this._component.header.title = $(document.createElement('span')).appendTo(this._component.header.heading);
-                
+
                 // Create Card Header Tools
                 this._component.tools = $(document.createElement('span')).addClass('ms-auto d-flex align-items-center').appendTo(this._component.header.heading);
                 this._component.tools.collapse = $(document.createElement('a')).addClass('ms-3 text-decoration-none cursor-pointer').appendTo(this._component.tools);
@@ -3986,7 +3986,7 @@ class Builder {
                 this._component.tools.fullscreen.icon = $(document.createElement('i')).addClass('bi-fullscreen').appendTo(this._component.tools.fullscreen);
                 this._component.tools.close = $(document.createElement('a')).addClass('ms-3 text-decoration-none cursor-pointer').appendTo(this._component.tools);
                 this._component.tools.close.icon = $(document.createElement('i')).addClass('bi-x-lg').appendTo(this._component.tools.close);
-                
+
                 // Create Card Collapse
                 this._component.collapse = $(document.createElement('div')).attr({
                     'id': this._component.id + 'collapse',
@@ -3994,41 +3994,41 @@ class Builder {
                     'style': 'transition: all 400ms ease',
                 }).appendTo(this._component.card);
                 this._component.collapse.id = this._component.collapse.attr('id');
-                
+
                 // Create Card Body
                 this._component.body = $(document.createElement('div')).attr({
                     'class': 'card-body',
                     'style': 'transition: all 400ms ease',
                 }).html(this._properties.body).appendTo(this._component.collapse);
-                
+
                 // Create Card Footer
                 this._component.footer = $(document.createElement('div')).addClass('card-footer').appendTo(this._component.card);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Card Class
                 if(this._properties.class.card){
                     this._component.card.addClass(this._properties.class.card);
                 }
-        
+
                 // Set Card Header Class
                 if(this._properties.class.header){
                     this._component.header.addClass(this._properties.class.header);
                 }
-                
+
                 // Set Card Body Class
                 if(this._properties.class.body){
                     this._component.body.addClass(this._properties.class.body);
                 }
-                
+
                 // Set Card Footer Class
                 if(this._properties.class.footer){
                     this._component.footer.addClass(this._properties.class.footer);
                 }
-                
+
                 // Configure Card
                 if(this._properties.stretch){
                     this._component.addClass('h-100');
@@ -4036,7 +4036,7 @@ class Builder {
                     this._component.collapse.addClass('h-100');
                     this._component.body.addClass('d-flex h-100 overflow-auto');
                 }
-                
+
                 // Configure Card Header
                 if(this._properties.icon == null){
                     this._component.header.icon.remove();
@@ -4047,7 +4047,7 @@ class Builder {
                 if(this._properties.hideHeader){
                     this._component.header.addClass('d-none');
                 }
-                
+
                 // Configure Card Tools
                 // Close Button
                 if(this._properties.close){
@@ -4130,7 +4130,7 @@ class Builder {
                         this._component.footer.addClass('border-0');
                     }
                 }
-                
+
                 // Configure Card Footer
                 if(this._properties.footer){
                     this._component.footer.html(this._properties.footer);
@@ -4190,26 +4190,26 @@ class Builder {
 
                     // ID
                     self.#id = component.id;
-        
+
                     // Set Card Class
                     component.header.title.addClass('d-flex justify-content-start align-items-center');
-        
+
                     // Create Tabs Nav
                     self.#navbar = $(document.createElement('div')).addClass('nav').attr('role','tablist').appendTo(component.header.title);
-        
+
                     // If a card title is set, add margin to the left of the tabs
                     if(self._properties.title){
                         self.#navbar.addClass('ms-2');
                     }
-        
+
                     // Set Tabs Nav Class
                     if(self._properties.class.navbar){
                         self.#navbar.addClass(self._properties.class.navbar);
                     }
-        
+
                     // Create Tabs Content
                     self.#content = $(document.createElement('div')).addClass('tab-content').appendTo(component.body);
-        
+
                     // Set Tabs Content Class
                     if(self._properties.class.content){
                         self.#content.addClass(self._properties.class.content);
@@ -4218,14 +4218,14 @@ class Builder {
             }
 
             add(param1 = null, param2 = null, param3 = null){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 let name = null;
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2, param3].forEach(param => {
                     if(param !== null){
@@ -4238,17 +4238,17 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Set Properties
                 var properties = {};
-        
+
                 // Configure Properties
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
                         properties[key] = value;
                     }
                 }
-            
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -4274,7 +4274,7 @@ class Builder {
                     console.log('This Tab Already Exists');
                     return false;
                 }
-            
+
                 // Create Tab
                 var tab = {};
 
@@ -4283,7 +4283,7 @@ class Builder {
 
                 // Set Properties
                 tab.properties = properties;
-            
+
                 // Create Tab Nav
                 tab.nav = $(document.createElement('button')).attr({
                     'id': this.#id + 'nav' + tab.id,
@@ -4297,7 +4297,7 @@ class Builder {
                 }).appendTo(this.#navbar);
                 tab.nav.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).appendTo(tab.nav);
                 tab.nav.label = $(document.createElement('span')).addClass('text-capitalize').appendTo(tab.nav);
-            
+
                 // Create Tab Content
                 tab.tab = $(document.createElement('div')).attr({
                     'id': this.#id + 'tab' + tab.id,
@@ -4305,34 +4305,34 @@ class Builder {
                     'role': 'tabpanel',
                     'aria-labelledby': this.#id + 'nav' + tab.id,
                 }).appendTo(this.#content);
-            
+
                 // Set Tab Nav Class
                 if(properties.class.nav){
                     tab.nav.addClass(properties.class.nav);
                 }
-    
+
                 // Set Tab Content Class
                 if(properties.class.tab){
                     tab.tab.addClass(properties.class.tab);
                 }
-            
+
                 // Set Tab Nav Icon
                 if(properties.icon == null){
                     tab.nav.icon.remove();
                 }
-            
+
                 // Set Tab Nav Label
                 if(properties.label){
                     tab.nav.label.text(properties.label);
                 } else {
                     tab.nav.label.text(name);
                 }
-            
+
                 // Execute Callback
                 if(typeof properties.callback === 'function'){
                     properties.callback(tab.tab,tab.nav,this);
                 }
-    
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(tab.tab,tab.nav,this);
@@ -4350,13 +4350,13 @@ class Builder {
 
                 // Save Tab
                 this.#tabs[name] = tab;
-            
+
                 // Return Object
                 return this;
             }
-        
+
             outerHTML(){
-        
+
                 // Return Object
                 return this._component.outerHTML();
             }
@@ -4406,7 +4406,7 @@ class Builder {
 
                     // Add Class to Selector
                     this._selector.addClass('cursor-pointer');
-            
+
                     // Add Event to Selector
                     this._selector.click(function(){
                         self.toggle();
@@ -4418,7 +4418,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'modal' + this._id,
@@ -4429,42 +4429,42 @@ class Builder {
 
                 // Create Dialog
                 this._component.dialog = $(document.createElement('div')).addClass('modal-dialog').appendTo(this._component);
-        
+
                 // Create Content
                 this._component.dialog.content = $(document.createElement('div')).addClass('modal-content').appendTo(this._component.dialog);
-        
+
                 // Create Header
                 this._component.dialog.content.header = $(document.createElement('div')).addClass('modal-header').appendTo(this._component.dialog.content);
                 this._component.header = this._component.dialog.content.header;
-        
+
                 // Create Title
                 this._component.dialog.content.header.title = $(document.createElement('h5')).addClass('modal-title').appendTo(this._component.dialog.content.header);
                 this._component.dialog.content.header.title.icon = $(document.createElement('i')).addClass('me-2 bi').appendTo(this._component.dialog.content.header.title);
                 this._component.dialog.content.header.title.label = $(document.createElement('span')).appendTo(this._component.dialog.content.header.title);
-        
+
                 // Create Tools
                 this._component.dialog.content.header.tools = $(document.createElement('div')).addClass('btn-group').appendTo(this._component.dialog.content.header);
-        
+
                 // Create FullScreen Button
                 this._component.dialog.content.header.tools.fullscreen = $(document.createElement('button')).attr('type','button').addClass('btn btn-lg btn-link').html('<i class="bi-fullscreen"></i>').attr('data-bs-toggle','modal-fullscreen').attr('data-bs-target','#' + this._component.id).attr('aria-label','Fullscreen').appendTo(this._component.dialog.content.header.tools);
-        
+
                 // Create Close Button
                 this._component.dialog.content.header.tools.close = $(document.createElement('button')).attr('type','button').addClass('btn btn-lg btn-link').html('<i class="bi-x-lg"></i>').attr('data-bs-dismiss','modal').attr('aria-label','Close').appendTo(this._component.dialog.content.header.tools);
-        
+
                 // Create Body
                 this._component.dialog.content.body = $(document.createElement('div')).addClass('modal-body').appendTo(this._component.dialog.content);
                 this._component.body = this._component.dialog.content.body;
-        
+
                 // Create Footer
                 this._component.dialog.content.footer = $(document.createElement('div')).addClass('modal-footer p-0').appendTo(this._component.dialog.content);
                 this._component.footer = this._component.dialog.content.footer;
-        
+
                 // Create Submit Button
                 this._component.dialog.content.footer.submit = $(document.createElement('button')).attr('type','button').css({'border-top-left-radius': 'none','border-top-right-radius': 'none'}).addClass('btn btn-lg btn-link fs-6 text-decoration-none col py-3 m-0 rounded-0 border-end').text('Save changes').appendTo(this._component.dialog.content.footer);
-        
+
                 // Create Cancel Button
                 this._component.dialog.content.footer.cancel = $(document.createElement('button')).attr('type','button').css({'border-top-left-radius': 'none','border-top-right-radius': 'none'}).addClass('btn btn-lg btn-link fs-6 text-decoration-none col py-3 m-0 rounded-0').attr('data-bs-dismiss','modal').text('Cancel').appendTo(this._component.dialog.content.footer);
-        
+
                 // Set Size
                 if(this._properties.size != null && typeof this._properties.size === 'string'){
                     switch(this._properties.size){
@@ -4489,74 +4489,74 @@ class Builder {
                             break
                     }
                 }
-        
+
                 // Set Center
                 if(this._properties.center != null && typeof this._properties.center === 'boolean' && this._properties.center){
                     this._component.dialog.addClass('modal-dialog-centered');
                 }
-        
+
                 // Set Static
                 if(this._properties.static != null && typeof this._properties.static === 'boolean' && this._properties.static){
                     this._component.attr('data-bs-backdrop','static').attr('data-bs-keyboard',false);
                 }
-        
+
                 // Set Icon
                 if(this._properties.icon != null){
                     this._component.dialog.content.header.title.icon.addClass('bi-' + this._properties.icon);
                 } else {
                     this._component.dialog.content.header.title.icon.addClass('d-none');
                 }
-        
+
                 // Set Title
                 if(this._properties.title != null){
                     this._component.dialog.content.header.title.label.html(this._properties.title);
                 }
-        
+
                 // Set Body
                 if(this._properties.body != null){
                     this._component.dialog.content.body.html(this._properties.body);
                 }
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Dialog Class
                 if(this._properties.class.dialog){
                     this._component.dialog.addClass(this._properties.class.dialog);
                 }
-        
+
                 // Set Content Class
                 if(this._properties.class.content){
                     this._component.dialog.content.addClass(this._properties.class.content);
                 }
-        
+
                 // Set Header Class
                 if(this._properties.class.header){
                     this._component.dialog.content.header.addClass(this._properties.class.header);
                 }
-        
+
                 // Set Body Class
                 if(this._properties.class.body){
                     this._component.dialog.content.body.addClass(this._properties.class.body);
                 }
-        
+
                 // Set Footer Class
                 if(this._properties.class.footer){
                     this._component.dialog.content.footer.addClass(this._properties.class.footer);
                 }
-        
+
                 // Initialize Bootstrap Modal
                 this._bootstrap = new bootstrap.Modal(this._component);
-        
+
                 // Destroy
                 if(this._properties.destroy){
                     this._component.on('hide.bs.modal',function(){
                         $(this).remove();
                     });
                 }
-        
+
                 // onEnter
                 if(this._properties.onEnter){
                     this._component.on('keypress',function(e){
@@ -4565,7 +4565,7 @@ class Builder {
                         }
                     });
                 }
-        
+
                 // Fullscreen
                 if(this._properties.fullscreen){
                     this._component.dialog.content.header.tools.fullscreen.click(function(){
@@ -4580,57 +4580,57 @@ class Builder {
                 } else {
                     this._component.dialog.content.header.tools.fullscreen.addClass('d-none');
                 }
-        
+
                 // Close
                 if(!this._properties.close){
                     this._component.dialog.content.header.tools.close.addClass('d-none');
                 }
-        
+
                 // Cancel
                 if(!this._properties.cancel){
                     this._component.dialog.content.footer.cancel.remove();
                 }
-        
+
                 // Submit
                 if(!this._properties.submit){
                     this._component.dialog.content.footer.submit.remove();
                 }
-        
+
                 // Callback Function on Show
                 if(typeof this._properties.callback.onShow === 'function'){
                     this._component.on('show.bs.modal',function(){
                         self._properties.callback.onShow(self._component,self);
                     });
                 }
-        
+
                 // Callback Function on Hide
                 if(typeof this._properties.callback.onHide === 'function'){
                     this._component.on('hide.bs.modal',function(){
                         self._properties.callback.onHide(self._component,self);
                     });
                 }
-        
+
                 // Callback Function on Close
                 if(typeof this._properties.callback.close === 'function'){
                     this._component.dialog.content.header.tools.close.click(function(){
                         self._properties.callback.close(self._component,self);
                     });
                 }
-        
+
                 // Callback Function on Fullscreen
                 if(typeof this._properties.callback.fullscreen === 'function'){
                     this._component.dialog.content.header.tools.fullscreen.click(function(){
                         self._properties.callback.fullscreen(self._component,self);
                     });
                 }
-        
+
                 // Callback Function on Cancel
                 if(typeof this._properties.callback.cancel === 'function'){
                     this._component.dialog.content.footer.cancel.click(function(){
                         self._properties.callback.cancel(self._component,self);
                     });
                 }
-        
+
                 // Callback Function on Submit
                 if(typeof this._properties.callback.submit === 'function'){
                     this._component.dialog.content.footer.submit.click(function(){
@@ -4640,19 +4640,19 @@ class Builder {
             }
 
             add(param1 = null, param2 = null){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 let properties = {
                     icon: null,
                     label: null,
                     color: null,
                 };
-        
+
                 // Set options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -4663,7 +4663,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -4683,7 +4683,7 @@ class Builder {
                         }
                     }
                 }
-            
+
                 // Create Action Button
                 let action = $(document.createElement('button')).attr({
                     'class': 'btn btn-lg btn-link fs-6 text-decoration-none col py-3 m-0 rounded-0 border-end',
@@ -4693,27 +4693,27 @@ class Builder {
                 action.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + properties.icon).prependTo(action);
                 action.label = $(document.createElement('span')).appendTo(action);
                 action.properties = properties;
-            
+
                 // Set icon
                 if(properties.icon == null){
                     action.icon.remove();
                 }
-            
+
                 // Set label
                 if(properties.label){
                     action.label.text(properties.label);
                 }
-            
+
                 // Set color
                 if(properties.color){
                     action.removeClass('btn-link').addClass('btn-' + properties.color);
                 }
-            
+
                 // Set Border Radius
                 this._component.dialog.content.footer.find('button').removeClass('rounded-start rounded-end');
                 this._component.dialog.content.footer.find('button').first().addClass('rounded-start');
                 this._component.dialog.content.footer.find('button').last().addClass('rounded-end').removeClass('border-end');
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     action.click(function(){
@@ -4729,11 +4729,11 @@ class Builder {
             show(){
                 this._bootstrap.show();
             }
-        
+
             hide(){
                 this._bootstrap.hide();
             }
-        
+
             toggle(){
                 this._bootstrap.toggle();
             }
@@ -4761,18 +4761,18 @@ class Builder {
                     side: null,
                 };
             }
-            
+
             _insert(){
 
                 // Set Self
                 const self = this;
-            
+
                 // Check if Selector is Set
                 if(this._component && this._selector){
 
                     // Add Class to Selector
                     this._selector.addClass('cursor-pointer');
-            
+
                     // Add Event to Selector
                     this._selector.click(function(){
                         self.toggle();
@@ -4787,11 +4787,11 @@ class Builder {
             show(){
                 this._bootstrap.show();
             }
-        
+
             hide(){
                 this._bootstrap.hide();
             }
-        
+
             toggle(){
                 this._bootstrap.toggle();
             }
@@ -4800,7 +4800,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'offcanvas' + this._id,
@@ -4814,13 +4814,13 @@ class Builder {
                 // Create Header
                 this._component.header = $(document.createElement('div')).addClass('offcanvas-header').appendTo(this._component);
                 this._component.header.title = $(document.createElement('h5')).addClass('offcanvas-title').appendTo(this._component.header);
-        
+
                 // Create Icon
                 this._component.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + this._properties.icon).appendTo(this._component.header.title);
 
                 // Create Title
                 this._component.title = $(document.createElement('span')).text(this._properties.title).appendTo(this._component.header.title);
-        
+
                 // Create Close Button
                 this._component.close = $(document.createElement('button')).attr({
                     'class': 'btn-close',
@@ -4828,10 +4828,10 @@ class Builder {
                     'aria-label': 'Close',
                     'data-bs-dismiss': 'offcanvas',
                 }).appendTo(this._component.header);
-        
+
                 // Create Body
                 this._component.body = $(document.createElement('div')).addClass('offcanvas-body').html(this._properties.body).appendTo(this._component);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -4841,12 +4841,12 @@ class Builder {
                 if(this._properties.icon == null){
                     this._component.icon.remove();
                 }
-                
+
                 // Set Color
                 if(this._properties.color){
                     this._component.addClass('text-bg-' + this._properties.color);
                 }
-        
+
                 // Set Dismissible
                 if(!this._properties.dismissible){
                     this._component.close.remove();
@@ -4909,52 +4909,52 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).addClass('dropdown').attr('id','dropdown' + this._id);
                 this._component.id = this._component.attr('id');
-        
+
                 // Create Button
                 this._component.btn = $(document.createElement('button')).addClass('btn btn-link').attr('type','button').attr('data-bs-toggle','dropdown').attr('aria-expanded','false').appendTo(this._component);
                 this._component.btn.icon = $(document.createElement('i')).addClass('bi').appendTo(this._component.btn);
                 this._component.btn.label = $(document.createElement('span')).appendTo(this._component.btn);
                 this._component.menu = $(document.createElement('ul')).addClass('dropdown-menu').appendTo(this._component);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Menu Class
                 if(this._properties.class.menu){
                     this._component.menu.addClass(this._properties.class.menu);
                 }
-        
+
                 // Set Button Class
                 if(this._properties.class.button){
                     this._component.btn.addClass(this._properties.class.button);
                 }
-        
+
                 // Set Button Icon
                 if(this._properties.icon){
                     this._component.btn.icon.addClass('bi-' + this._properties.icon);
                 }
-        
+
                 // Set Button Label
                 if(this._properties.label){
                     this._component.btn.label.text(this._properties.label);
                     this._component.btn.icon.addClass('me-1');
                 }
             }
-        
+
             item(param1 = null, param2 = null){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -4965,7 +4965,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {
                     class: {
                         item: null, //string
@@ -4978,7 +4978,7 @@ class Builder {
                     visible: null, //function
                     click: function(item,self){}, //function
                 };
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -4998,47 +4998,47 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Create Item
                 var item = $(document.createElement('li')).appendTo(this._component.menu);
-        
+
                 // Save Item options
                 item.properties = properties;
-        
+
                 // Set Item Link/Button
                 if(item.properties.link != null){
                     item.btn = $(document.createElement('a')).attr('href',item.properties.link).addClass('dropdown-item').appendTo(item);
                 } else {
                     item.btn = $(document.createElement('button')).attr('type','button').addClass('dropdown-item').appendTo(item);
                 }
-                
+
                 // Set Item Icon
                 item.icon = $(document.createElement('i')).addClass('me-1 bi').appendTo(item.btn);
                 if(item.properties.icon != null){
                     item.icon.addClass('bi-' + item.properties.icon);
                 }
-                
+
                 // Set Item Label
                 item.label = $(document.createElement('span')).appendTo(item.btn);
                 if(item.properties.label != null){
                     item.label.text(item.properties.label);
                 }
-        
+
                 // Set Item Class
                 if(item.properties.class.item){
                     item.addClass(item.properties.class.item);
                 }
-        
+
                 // Set Button Class
                 if(item.properties.class.button){
                     item.btn.addClass(item.properties.class.button);
                 }
-        
+
                 // Set Label Class
                 if(item.properties.class.label){
                     item.label.addClass(item.properties.class.label);
                 }
-        
+
                 // Set Item Visibility
                 if(item.properties.visible !== null){
                     if(typeof item.properties.visible === 'function'){
@@ -5051,7 +5051,7 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Set Item Click Event
                 if(item.properties.click !== null){
                     if(typeof item.properties.click === 'function'){
@@ -5060,25 +5060,25 @@ class Builder {
                         });
                     }
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(item,this);
                 }
-        
+
                 // Return
                 return this;
             }
-        
+
             seperator(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Seperator
                 var seperator = $(document.createElement('li')).appendTo(this._component.menu);
                 seperator.hr = $(document.createElement('hr')).addClass('dropdown-divider').appendTo(seperator);
-        
+
                 // Return
                 return this;
             }
@@ -5110,49 +5110,49 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr('id','progress' + this._id).addClass('progress');
-                
+
                 // Create Progress Bar
                 this._component.bar = $(document.createElement('div')).addClass('progress-bar').appendTo(this._component);
                 this._component.bar.label = $(document.createElement('span')).addClass('progress-label').appendTo(this._component.bar);
-                
+
                 // Set Progress Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-                
+
                 // Set Bar Class
                 if(this._properties.class.bar){
                     this._component.bar.addClass(this._properties.class.bar);
                 }
-        
+
                 // Set Label Class
                 if(this._properties.class.label){
                     this._component.bar.label.addClass(this._properties.class.label);
                 }
-        
+
                 // Set Size
                 if(this._properties.size){
                     this._component.css({height:this._properties.size});
                 }
-        
+
                 // Set Color
                 if(this._properties.color){
                     this._component.bar.addClass('text-bg-' + this._properties.color);
                 }
-        
+
                 // Set Striped
                 if(this._properties.striped){
                     this._component.bar.addClass('progress-bar-striped');
                 }
-        
+
                 // Set Animated
                 if(this._properties.animated){
                     this._component.bar.addClass('progress-bar-animated');
                 }
-        
+
                 // Set Label
                 if(this._properties.label){
                     this._component.bar.label.html(this._properties.label);
@@ -5160,35 +5160,35 @@ class Builder {
             }
 
             set(value){
-        
+
                 // Set Scale
                 this._component.bar.attr('aria-valuemin',0).attr('aria-valuemax',this._properties.scale);
-        
+
                 // Calculate Value
                 value = Math.round((value / this._properties.scale) * 100);
-        
+
                 // Save Value
                 this.#value = value;
-        
+
                 // Set Value
                 this._component.bar.css({width:value + '%'}).attr('aria-valuenow',value);
-        
+
                 // Set Label
                 if(this._properties.label){
                     this._component.bar.label.html(this._properties.label.replace('{progress}', value).replace('{percent}', value + '%').replace('{scale}', this._properties.scale));
                 }
-        
+
                 // Execute Callback
                 if(typeof this._properties.callback.change === 'function'){
                     this._properties.callback.change(this);
                 }
-        
+
                 // Return Object
                 return this;
             }
-        
+
             get(){
-        
+
                 // Return Value
                 return this.#value;
             }
@@ -5227,7 +5227,7 @@ class Builder {
                     console.log('Gravatar: Email is required');
                     return false;
                 }
-        
+
                 // Create Component
                 this._component = $(document.createElement('img')).attr({
                     'id': 'avatar' + this._id,
@@ -5236,12 +5236,12 @@ class Builder {
                     'alt': this._properties.email,
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-                
+
                 // Set Size
                 if(this._properties.size){
                     this._component.css({
@@ -5281,14 +5281,14 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('ul')).attr({
                     'id': 'list' + this._id,
                     'class': 'list-group list-group-flush',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -5314,10 +5314,10 @@ class Builder {
                     action.name = name;
                     this.action(action);
                 }
-                
+
                 // Generate Tools
                 this.#genTools();
-                
+
                 // Generate Actions
                 for(var [id, item] of Object.entries(this.#items)){
                     this.#genActions(item);
@@ -5347,7 +5347,7 @@ class Builder {
                         properties[key] = value;
                     }
                 }
-            
+
                 // Check if Action Name is Set
                 if(properties.name == null){
                     console.log('List: Action name is required');
@@ -5362,7 +5362,7 @@ class Builder {
 
                 // Store Action
                 this.#actions[properties.name] = properties;
-            
+
                 // Return Object
                 return this;
             }
@@ -5383,7 +5383,7 @@ class Builder {
                         properties[key] = value;
                     }
                 }
-            
+
                 // Check if Tool Name is Set
                 if(properties.name == null){
                     console.log('List: Tool name is required');
@@ -5398,13 +5398,13 @@ class Builder {
 
                 // Store Tool
                 this.#tools[properties.name] = properties;
-            
+
                 // Return Object
                 return this;
             }
 
             #genActions(item){
-            
+
                 // Set Self
                 const self = this;
 
@@ -5426,13 +5426,13 @@ class Builder {
 
                 // Save Actions in Item
                 this.#items[item.id].actions = actions;
-            
+
                 // Return Actions
                 return actions;
             }
 
             #genAction(item, actions, name){
-            
+
                 // Set Self
                 const self = this;
 
@@ -5448,35 +5448,35 @@ class Builder {
                     'class': 'btn btn-sm btn-light',
                     'data-action': name,
                 }).appendTo(actions);
-        
+
                 // Save Action Properties
                 action.properties = this.#actions[name];
-        
+
                 // Add Action Button Class
                 if(action.properties.class){
                     action.addClass(action.properties.class);
                 }
-        
+
                 // Set Action Button Color
                 if(action.properties.color){
                     action.removeClass('btn-light').addClass('btn-' + action.properties.color);
                 }
-        
+
                 // Add Action Button Icon
                 if(action.properties.icon){
                     action.icon = $(document.createElement('i')).addClass('bi bi-' + action.properties.icon).appendTo(action);
                 }
-        
+
                 // Add Action Button Label
                 if(action.properties.label){
                     action.label = $(document.createElement('span')).addClass('text-capitalize').html(action.properties.label).appendTo(action)
                 }
-        
+
                 // Add Action Button Icon Spacing
                 if(action.properties.icon && action.properties.label){
                     action.icon.addClass('me-1')
                 }
-        
+
                 // Add Action Button Click Event
                 action.click(function(){
                     if(typeof action.properties.callback === 'function'){
@@ -5492,7 +5492,7 @@ class Builder {
             }
 
             #genTools(){
-            
+
                 // Set Self
                 const self = this;
 
@@ -5511,13 +5511,13 @@ class Builder {
 
                 // Save Tools in Component
                 this._component.tools = tools;
-            
+
                 // Return Tools
                 return tools;
             }
 
             #genTool(tools, name){
-            
+
                 // Set Self
                 const self = this;
 
@@ -5533,42 +5533,42 @@ class Builder {
                     'class': 'btn btn-light',
                     'data-action': name,
                 }).appendTo(tools.group);
-        
+
                 // Save Tool Properties
                 tool.properties = this.#tools[name];
-        
+
                 // Add Tool Button Class
                 if(tool.properties.class){
                     tool.addClass(tool.properties.class);
                 }
-            
+
                 // Add Tool Color
                 if(tool.properties.color){
                     tool.removeClass('btn-light').addClass('btn-' + tool.properties.color)
                 }
-        
+
                 // Add Tool Icon
                 if(tool.properties.icon){
                     tool.icon = $(document.createElement('i')).addClass('bi bi-' + tool.properties.icon).appendTo(tool)
                 }
-        
+
                 // Add Tool Label
                 if(tool.properties.label){
                     tool.label = $(document.createElement('span')).addClass('text-capitalize').html(tool.properties.label).appendTo(tool)
                 }
-            
+
                 // Add Icon Spacing
                 if(tool.properties.icon && tool.properties.label){
                     tool.icon.addClass('me-1')
                 }
-        
+
                 // Add Tool Callback
                 tool.click(function(){
                     if(typeof tool.properties.callback === 'function'){
                         tool.properties.callback(tool, self)
                     }
                 });
-            
+
                 // Return Tool
                 return tool;
             }
@@ -5578,13 +5578,13 @@ class Builder {
             }
 
             add(param1 = null, param2 = null){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -5595,7 +5595,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Options
                 let properties = {
                     icon: null,
@@ -5629,7 +5629,7 @@ class Builder {
 
                 // Create ID
                 let id = this._count();
-        
+
                 // Create Item
                 let item = $(document.createElement('li')).attr({
                     'id': this._component.id + 'item' + id,
@@ -5639,51 +5639,51 @@ class Builder {
 
                 // Save ID
                 item.id = item.attr('id');
-            
+
                 // Save Options
                 item.properties = properties;
-            
+
                 // Add Item Row
                 item.container = $(document.createElement('div')).addClass('d-flex align-items-center').appendTo(item);
-            
+
                 // Add Item Icon
                 if(properties.icon){
                     item.container.icon = $(document.createElement('div')).addClass('flex-shrink-1').appendTo(item.container);
                     item.icon = $(document.createElement('i')).appendTo(item.container.icon);
                     item.icon.addClass('bi bi-' + properties.icon);
                 }
-            
+
                 // Add Item Field
                 item.field = $(document.createElement('div')).addClass('flex-grow-1 px-1 text-break').appendTo(item.container);
-            
+
                 // Add Item Field Content
                 if(properties.field){
                     item.field.html(properties.field);
                 }
-            
+
                 // Add Item Class
                 if(this._properties.class.item){
                     item.addClass(this._properties.class.item);
                 }
-            
+
                 // Add Item Class
                 if(item.properties.class){
                     item.addClass(item.properties.class);
                 }
-            
+
                 // Add Item Click and Double Click Events
                 if(item.properties.click || item.properties.dblclick){
-        
+
                     // Add Item Cursor Pointer
                     item.addClass('cursor-pointer')
-        
+
                     // Add Item Hover Effect
                     item.hover(function(){
                         item.addClass("text-bg-primary");
                     }, function(){
                         item.removeClass("text-bg-primary");
                     });
-        
+
                     // Add Item Click Event
                     if(item.properties.click){
                         item.field.click(function(){
@@ -5695,7 +5695,7 @@ class Builder {
                             });
                         }
                     }
-        
+
                     // Add Item Double Click Event
                     if(item.properties.dblclick){
                         item.field.dblclick(function(){
@@ -5708,17 +5708,17 @@ class Builder {
                         }
                     }
                 }
-            
+
                 // Add List Callback
                 if(typeof this._properties.callback.item === 'function'){
                     this._properties.callback.item(item,self);
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(item,self);
                 }
-            
+
                 // Check if rounded
                 if(this._component.hasClass('rounded') && this._component.find('li').length > 0){
                     this._component.find('li').removeClass('rounded rounded-top rounded-bottom');
@@ -5729,13 +5729,13 @@ class Builder {
                         this._component.find('li:last').addClass('rounded-bottom');
                     }
                 }
-            
+
                 // Set Item Search
                 this._builder.Search.set(item);
 
                 // Save Item
                 this.#items[item.id] = item;
-            
+
                 // Return Object
                 return this;
             }
@@ -5760,7 +5760,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'ribbon' + this._id,
@@ -5772,7 +5772,7 @@ class Builder {
                 this._component.ribbon = $(document.createElement('div')).addClass('ribbon').appendTo(this._component);
                 this._component.ribbon.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + this._properties.icon).appendTo(this._component.ribbon);
                 this._component.ribbon.label = $(document.createElement('span')).appendTo(this._component.ribbon);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -5782,7 +5782,7 @@ class Builder {
                 if(this._properties.class.wrapper){
                     this._component.addClass(this._properties.class.wrapper);
                 }
-        
+
                 // Set Ribbon Class
                 if(this._properties.class.ribbon){
                     this._component.ribbon.addClass(this._properties.class.ribbon);
@@ -5792,12 +5792,12 @@ class Builder {
                 if(this._properties.color){
                     this._component.ribbon.addClass('text-bg-' + this._properties.color);
                 }
-        
+
                 // Set Label
                 if(this._properties.label){
                     this._component.ribbon.label.html(this._properties.label);
                 }
-        
+
                 // Set Icon
                 if(this._properties.icon == null){
                     this._component.ribbon.icon.remove();
@@ -5838,7 +5838,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'alert' + this._id,
@@ -5855,21 +5855,21 @@ class Builder {
 
                 // Create Header
                 this._component.header = $(document.createElement('h5')).appendTo(this._component);
-        
+
                 // Create Icon
                 this._component.header.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + this._properties.icon).appendTo(this._component.header);
-        
+
                 // Create Title
                 this._component.header.title = $(document.createElement('span')).appendTo(this._component.header);
-        
+
                 // Create Content
                 this._component.content = $(document.createElement('p')).appendTo(this._component);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-                
+
                 // Set Alert Class
                 if(this._properties.class.alert){
                     this._component.addClass(this._properties.class.alert);
@@ -5879,14 +5879,14 @@ class Builder {
                 if(this._properties.color){
                     this._component.addClass('alert-' + this._properties.color);
                 }
-        
+
                 // Set Dismissible
                 if(this._properties.dismissible){
                     this._component.addClass('alert-dismissible fade show');
                 } else {
                     this._component.close.addClass('d-none');
                 }
-        
+
                 // Set Icon
                 if(this._properties.icon){
                     this._component.header.icon.remove();
@@ -5896,7 +5896,7 @@ class Builder {
                 if(this._properties.title){
                     this._component.header.title.text(this._properties.title);
                 }
-        
+
                 // Set Content
                 if(this._properties.content){
                     this._component.content.html(this._properties.content);
@@ -5924,7 +5924,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('figure')).attr({
                     'id': 'blockquote' + this._id,
@@ -5935,13 +5935,13 @@ class Builder {
                 // Create Blockquote
                 this._component.blockquote = $(document.createElement('blockquote')).addClass('blockquote').appendTo(this._component);
                 this._component.blockquote.quote = $(document.createElement('p')).appendTo(this._component.blockquote);
-        
+
                 // Create Figcaption
                 this._component.figcaption = $(document.createElement('figcaption')).addClass('blockquote-footer').appendTo(this._component.blockquote);
                 this._component.figcaption.author = $(document.createElement('span')).appendTo(this._component.figcaption);
                 this._component.figcaption.seperator = $(document.createElement('span')).text(' in ').appendTo(this._component.figcaption);
                 this._component.figcaption.source = $(document.createElement('cite')).appendTo(this._component.figcaption);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -5951,17 +5951,17 @@ class Builder {
                 if(this._properties.class.figure){
                     this._component.addClass(this._properties.class.figure);
                 }
-        
+
                 // Set Blockquote Class
                 if(this._properties.class.blockquote){
                     this._component.blockquote.addClass(this._properties.class.blockquote);
                 }
-        
+
                 // Set Figcaption Class
                 if(this._properties.class.figcaption){
                     this._component.figcaption.addClass(this._properties.class.figcaption);
                 }
-        
+
                 // Set Cite Class
                 if(this._properties.class.cite){
                     this._component.figcaption.source.addClass(this._properties.class.cite);
@@ -5971,22 +5971,22 @@ class Builder {
                 if(this._properties.quote){
                     this._component.blockquote.quote.text(this._properties.quote);
                 }
-        
+
                 // Set Author
                 if(this._properties.author){
                     this._component.figcaption.author.text(this._properties.author);
                 }
-        
+
                 // Set Source
                 if(this._properties.source){
                     this._component.figcaption.source.text(this._properties.source);
                 }
-        
+
                 // Hide Figcaption if No Author or Source
                 if(!this._properties.author && !this._properties.source){
                     this._component.figcaption.addClass('d-none');
                 }
-        
+
                 // Hide Seperator if No Author or Source
                 if(!this._properties.author || !this._properties.source){
                     this._component.figcaption.seperator.addClass('d-none');
@@ -6021,24 +6021,24 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'accordion' + this._id,
                     'class': 'accordion',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Accordion Class
                 if(this._properties.class.accordion){
                     this._component.addClass(this._properties.class.accordion);
                 }
-        
+
                 // Set Object Flush
                 if(this._properties.flush){
                     this._component.addClass('accordion-flush');
@@ -6052,10 +6052,10 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -6066,9 +6066,9 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {};
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -6093,7 +6093,7 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Generate ID
                 let id = this._count();
 
@@ -6118,13 +6118,13 @@ class Builder {
                     'aria-controls': collapse.id + 'collapse',
                     'aria-expanded': 'false',
                 }).appendTo(collapse.header);
-        
+
                 // Create Icon
                 collapse.icon = $(document.createElement('i')).addClass('me-1 bi bi-' + collapse.properties.icon).appendTo(collapse.header.button);
-        
+
                 // Create Title
                 collapse.title = $(document.createElement('span')).appendTo(collapse.header.button);
-        
+
                 // Create Collapse
                 collapse.collapse = $(document.createElement('div')).attr({
                     'id': collapse.id + 'collapse',
@@ -6132,7 +6132,7 @@ class Builder {
                     'data-bs-parent': '#' + this._component.id,
                 }).appendTo(collapse);
                 collapse.collapse.id = collapse.collapse.attr('id');
-        
+
                 // Create Content
                 collapse.content = $(document.createElement('div')).addClass('accordion-body').appendTo(collapse.collapse);
 
@@ -6143,7 +6143,7 @@ class Builder {
                 if(collapse.properties.class.collapse){
                     collapse.addClass(collapse.properties.class.collapse);
                 }
-        
+
                 // Set Button Class
                 if(this._properties.class.button){
                     collapse.header.button.addClass(this._properties.class.button);
@@ -6156,7 +6156,7 @@ class Builder {
                 if(this._properties.alwaysOpen){
                     collapse.collapse.attr('data-bs-parent','');
                 }
-        
+
                 // Set Icon
                 if(collapse.properties.icon == null){
                     collapse.icon.remove();
@@ -6166,7 +6166,7 @@ class Builder {
                 if(collapse.properties.title){
                     collapse.title.html(collapse.properties.title);
                 }
-        
+
                 // Set Content
                 if(collapse.properties.content){
                     collapse.content.html(collapse.properties.content);
@@ -6179,7 +6179,7 @@ class Builder {
 
                 // Set Search
                 this._builder.Search.set(collapse);
-        
+
                 // Return collapse
                 return collapse;
             }
@@ -6203,7 +6203,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'badge' + this._id,
@@ -6220,7 +6220,7 @@ class Builder {
 
                 // Create Content
                 this._component.content = $(document.createElement('div')).addClass('flex-grow-1 d-flex flex-column justify-content-center align-items-start ms-3').appendTo(this._component.row);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -6230,12 +6230,12 @@ class Builder {
                 if(this._properties.class.badge){
                     this._component.addClass(this._properties.class.badge);
                 }
-                
+
                 // Set Box Icon Frame Class
                 if(this._properties.class.icon){
                     this._component.iconFrame.addClass(this._properties.class.icon);
                 }
-        
+
                 // Set Box Content Class
                 if(this._properties.class.content){
                     this._component.content.addClass(this._properties.class.content);
@@ -6263,7 +6263,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'info' + this._id,
@@ -6285,7 +6285,7 @@ class Builder {
                 // Create Icon Frame
                 this._component.iconFrame = $(document.createElement('div')).appendTo(this._component.row);
                 this._component.iconFrame.icon = $(document.createElement('i')).addClass('text-dark opacity-50 bi bi-' + this._properties.icon).css({"font-size":"5rem"}).appendTo(this._component.iconFrame);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -6358,7 +6358,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'timeline' + this._id,
@@ -6373,7 +6373,7 @@ class Builder {
                     'aria-label': 'Filters',
                     'data-filters': '',
                 }).appendTo(this._component);
-        
+
                 // Add Filter 'All'
                 this._component.filters.all = $(document.createElement('button')).attr({
                     'class': 'btn btn-primary text-capitalize',
@@ -6388,17 +6388,17 @@ class Builder {
 
                 // Create Timeline
                 this._component.timeline = $(document.createElement('div')).addClass('timeline').appendTo(this._component);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Filters Class
                 if(this._properties.class.filters){
                     this._component.filters.addClass(this._properties.class.filters);
                 }
-        
+
                 // Set Timeline Class
                 if(this._properties.class.timeline){
                     this._component.timeline.addClass(this._properties.class.timeline);
@@ -6418,7 +6418,7 @@ class Builder {
 
                 // Remove Children
                 this._component.timeline.children().remove();
-        
+
                 // Show Start
                 if(this._properties.showStart){
                     this.add({order:'0000000000000',icon:'clock-history',label: false},function(object){
@@ -6426,7 +6426,7 @@ class Builder {
                         object.removeAttr('data-search').removeAttr('data-type');
                     });
                 }
-        
+
                 // Show Now
                 if(this._properties.showNow){
                     this.add({order:'9999999999999',color:'success',icon:'clock',label: false},function(object){
@@ -6434,26 +6434,26 @@ class Builder {
                         object.removeAttr('data-search').removeAttr('data-type');
                     });
                 }
-        
+
                 // Return Object
                 return this;
             }
 
             sort(order = null){
-        
+
                 // Set Order
                 if(order == null){
                     order = this._properties.order;
                 }
-        
+
                 // Sanitize Order
                 if(order != 'ASC' && order != 'DESC'){
                     order = 'DESC';
                 }
-        
+
                 // Retrieve Objects
                 let objects = this._component.timeline.children('div').detach().get();
-        
+
                 // Sort Objects
                 objects.sort(function(a, b){
                     if(order == 'ASC'){
@@ -6462,10 +6462,10 @@ class Builder {
                         return new Date($(b).data('order')) - new Date($(a).data('order'));
                     }
                 });
-        
+
                 // Append Objects
                 this._component.timeline.append(objects)
-        
+
                 // Return Object
                 return this;
             }
@@ -6486,19 +6486,19 @@ class Builder {
             }
 
             addFilter(type = '', string = null){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Set Label
                 var label = string;
                 if(label == null && type != ''){
                     label = type;
                 }
-        
+
                 // Check if Filter Exists
                 if(label != null && this._component.filters.children('[data-label="' + label + '"]').length <= 0){
-        
+
                     // Create Filter
                     var filter = $(document.createElement('button')).attr({
                         'class': 'btn btn-light text-capitalize',
@@ -6506,10 +6506,10 @@ class Builder {
                         'data-type': type,
                         'data-label': label,
                     }).html(label).appendTo(this._component.filters);
-        
+
                     // Add Filter Event
                     filter.click(function(){
-        
+
                         // Get Current Filters
                         var current = self._component.filters.attr('data-filters').split(',')
                         if(self._builder.Helper.inArray(type,current)){
@@ -6530,20 +6530,20 @@ class Builder {
             }
 
             label(timestamp, color = 'primary'){
-        
+
                 // Sanitize Timestamp
                 let datetime = new Date(timestamp);
-        
+
                 // Set Order
                 let order = datetime.setHours(0,0,0,0);
-        
+
                 // Check if Label Exists
                 if(this._component.timeline.find('div.time-label[data-order="'+order+'"]').length > 0){
-        
+
                     // Return Object
                     return this;
                 }
-        
+
                 // Create Label
                 var label = $(document.createElement('div')).attr({
                     'class': 'time-label',
@@ -6555,16 +6555,16 @@ class Builder {
                     'data-bs-toggle': 'tooltip',
                     'data-bs-placement': 'right',
                 }).html(datetime.toLocaleDateString('en-US',{day: 'numeric', month: 'long', year: 'numeric'})).appendTo(label);
-        
+
                 // Return Object
                 return this;
             }
 
             add(options = {}, callback = null){
-        
+
                 // Check if options is a Function
                 if(options instanceof Function){ callback = options; options = {}; }
-        
+
                 // Create Properties Options
                 let properties = {};
                 for(const [key, value] of Object.entries(this._properties.properties)){
@@ -6589,7 +6589,7 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Set Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -6612,17 +6612,17 @@ class Builder {
 
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Timeline
                 var object = $(document.createElement('div')).attr({
                     'id': this._component.id + 'object' + id,
                     'class': 'timeline-object',
                 }).appendTo(this._component.timeline);
                 object.id = object.attr('id');
-        
+
                 // Set Properties
                 object.properties = properties;
-        
+
                 // Set object Class
                 if(this._properties.class.object){
                     object.addClass(this._properties.class.object);
@@ -6630,36 +6630,36 @@ class Builder {
                 if(properties.class.object){
                     object.addClass(properties.class.itobjectem);
                 }
-        
+
                 // Set DateTime
                 if(properties.datetime == null){
                     properties.datetime = new Date();
                 }
                 var datetime = new Date(properties.datetime);
-        
+
                 // Set Order
                 var order = Date.parse(datetime);
                 if(properties.order != null){
                     order = properties.order;
                 }
                 object.attr('data-order',order);
-        
+
                 // Set Type
                 if(properties.type != null){
                     object.attr('data-type',properties.type);
                 }
-        
+
                 // Add Filter
                 if(properties.type != null){
                     this.addFilter(properties.type);
                 }
-        
+
                 // Set Icon
                 object.icon = $(document.createElement('i')).addClass('bi bi-' + properties.icon + ' text-bg-'+properties.color).appendTo(object);
                 if(properties.class.icon){
                     object.icon.addClass(properties.class.icon);
                 }
-        
+
                 // Set item
                 object.item = $(document.createElement('div')).addClass('timeline-item').appendTo(object);
                 if(this._properties.class.item){
@@ -6668,10 +6668,10 @@ class Builder {
                 if(properties.class.item){
                     object.item.addClass(properties.class.item);
                 }
-        
+
                 // Set Tools
                 object.tools = $(document.createElement('div')).addClass('tools').appendTo(object.item);
-        
+
                 // Set Time
                 var time = $(document.createElement('span')).appendTo(object.tools);
                 time.icon = $(document.createElement('i')).addClass('bi bi-clock me-1').appendTo(time);
@@ -6686,23 +6686,23 @@ class Builder {
                 time.ago.timeago();
                 time.ago.bootstrap = new bootstrap.Tooltip(time.ago);
                 object.time = time;
-        
+
                 // Add Label
                 if(properties.label){
                     this.label(order)
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(object,this);
                 }
-        
+
                 // Sort
                 this.sort();
-        
+
                 // Set Search
                 this._builder.Search.set(object);
-        
+
                 // Return Object
                 return this;
             }
@@ -6733,19 +6733,19 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'feed' + this._id,
                     'class': 'feed',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Feed Class
                 if(this._properties.class.feed){
                     this._component.addClass(this._properties.class.feed);
@@ -6754,31 +6754,31 @@ class Builder {
                 // Add Search
                 this._builder.Search.add(this._component);
             }
-    
+
             clear(){
-        
+
                 // Clear Feed's Children
                 this._component.children().remove();
-        
+
                 // Return Object
                 return this;
             }
 
             sort(order = null){
-        
+
                 // Set Order
                 if(order == null){
                     order = this._properties.order;
                 }
-        
+
                 // Sanitize Order
                 if(order != 'ASC' && order != 'DESC'){
                     order = 'DESC';
                 }
-        
+
                 // Retrieve Objects
                 let objects = this._component.children('div').detach().get();
-        
+
                 // Sort Objects
                 objects.sort(function(a, b){
                     if(order == 'ASC'){
@@ -6787,22 +6787,22 @@ class Builder {
                         return new Date($(b).data('order')) - new Date($(a).data('order'));
                     }
                 });
-        
+
                 // Append Objects
                 this._component.append(objects)
-        
+
                 // Return Object
                 return this;
             }
 
             add(options = {}, callback = null){
-        
+
                 // Set Self
                 const self = this
-        
+
                 // Check if Options is a Function
                 if(options instanceof Function){ callback = options; options = {}; }
-        
+
                 // Create properties Options
                 let properties = {};
                 for(const [key, value] of Object.entries(this._properties.properties)){
@@ -6827,7 +6827,7 @@ class Builder {
                         }
                     }
                 }
-        
+
                 // Set Options
                 for(const [key, value] of Object.entries(options)){
                     if(typeof properties[key] !== 'undefined'){
@@ -6850,7 +6850,7 @@ class Builder {
 
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Post
                 var post = $(document.createElement('div')).attr({
                     'id': this._component.id + 'post' + id,
@@ -6858,31 +6858,31 @@ class Builder {
                 }).appendTo(this._component);
                 post.id = post.attr('id');
                 post.properties = properties;
-        
+
                 // Set Post Class
                 if(this._properties.class.post){
                     post.addClass(this._properties.class.post);
                 }
-        
+
                 // Set DateTime
                 var datetime = new Date(properties.datetime);
-        
+
                 // Set Order
                 var order = Date.parse(datetime);
                 if(properties.order != null){
                     order = properties.order;
                 }
                 post.attr('data-order',order);
-        
+
                 // Create Title Block
                 post.title = $(document.createElement('div')).addClass('title-block').appendTo(post);
                 post.title.header = $(document.createElement('h2')).addClass('title').appendTo(post.title);
-        
+
                 // Set Title
                 if(properties.title != null){
                     post.title.header.text(properties.title);
                 }
-        
+
                 // Create User Block
                 post.user = $(document.createElement('div')).addClass('user-block user-select-none').appendTo(post);
                 post.user.avatar = $(document.createElement('img')).addClass('img-circle rounded-circle img-bordered-sm').attr('alt','Avatar').appendTo(post.user);
@@ -6899,65 +6899,65 @@ class Builder {
                     'data-bs-title': datetime.toLocaleString(),
                 }).html(datetime.toLocaleString()).appendTo(post.user.date).timeago();
                 post.user.date.timeago.bootstrap = new bootstrap.Tooltip(post.user.date.timeago);
-        
+
                 // Set User Avatar
                 if(properties.username != null){
                     post.user.link.attr('href','/users/details?id=' + properties.username).html(properties.username);
                     post.user.avatar.attr('src',this._builder.Helper.gravatar(properties.username));
                 }
-        
+
                 // Create Content Block
                 post.content = $(document.createElement('p')).addClass('content').appendTo(post);
-        
+
                 // Set Content
                 if(properties.content != null){
                     post.content.html(properties.content);
                 }
-        
+
                 // Create Controls Block
                 post.controls = $(document.createElement('p')).addClass('controls user-select-none').appendTo(post);
-        
+
                 // Add Controls
                 for(const [name, control] of Object.entries(self._properties.controls)){
-        
+
                     // Create Control
                     var object = $(document.createElement('a')).addClass('text-decoration-none text-sm cursor-pointer me-2').appendTo(post.controls);
                     object.icon = $(document.createElement('i')).addClass('bi me-1').appendTo(object);
                     object.label = $(document.createElement('span')).appendTo(object);
-        
+
                     // Set Icon
                     if(control.icon){
                         object.icon.addClass('bi-' + control.icon);
                     }
-        
+
                     // Set Label
                     if(control.label){
                         object.label.html(control.label);
                     }
-        
+
                     // Set Callback
                     if(control.callback && control.callback instanceof Function){
                         control.callback(object,post,self);
                     }
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(post,this);
                 }
-        
+
                 // Sort
                 this.sort();
-        
+
                 // Set Search
                 this._builder.Search.set(post)
-        
+
                 // Return Object
                 return this;
             }
         },
         table: class extends this.ComponentClass {
-            
+
             #buttons = {
                 columnsVisibility:{
                     label:{
@@ -7235,7 +7235,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'table' + this._id,
@@ -7271,7 +7271,7 @@ class Builder {
                         },
                     );
                 }
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -7330,17 +7330,17 @@ class Builder {
                     this._properties.datatable.select = this._properties.selectTools
                     this._properties.datatable.buttons.push(self.#button('selectTools',this._properties.showButtonsLabel));
                 }
-        
+
                 // Add Export Tools
                 if(this._properties.exportTools){
                     this._properties.datatable.buttons.push(self.#button('exportTools',this._properties.showButtonsLabel));
                 }
-        
+
                 // Add Columns Visibility
                 if(this._properties.columnsVisibility){
                     this._properties.datatable.buttons.push(self.#button('columnsVisibility',this._properties.showButtonsLabel));
                 }
-        
+
                 // Add Advanced Search
                 if(this._properties.advancedSearch){
                     this._properties.datatable.buttons.push(self.#button('advancedSearch',this._properties.showButtonsLabel));
@@ -7370,17 +7370,17 @@ class Builder {
 
                 // drawCallback
                 this._properties.datatable.drawCallback = function(){
-        
+
                     setTimeout(function() {
                         // Tooltips
                         $('[data-bs-toggle="tooltip"]').tooltip();
-        
+
                         // Timeago
                         $('.timeago').timeago();
                     }, 0);
-                    
+
                     if(typeof self.#datatable !== 'undefined'){
-        
+
                         // Double Click Event
                         if(typeof self._properties.dblclick === 'function'){
                             self._component.table.find('tr').off().dblclick(
@@ -7391,7 +7391,7 @@ class Builder {
                                 },
                             );
                         }
-        
+
                         // Action Button Events
                         self._component.table.find('button.dropdown-item[data-action]').each(function(){
                             let node = $(this);
@@ -7460,7 +7460,7 @@ class Builder {
                     }, 100);
                 }
             }
-        
+
             update(row, data){
 
                 // Set Self
@@ -7469,7 +7469,7 @@ class Builder {
                 // Update Row
                 setTimeout(() => this.#datatable.row(row).data(data).draw(), 0);
             }
-        
+
             delete(row){
 
                 // Set Self
@@ -7513,7 +7513,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'carousel' + this._id,
@@ -7525,10 +7525,10 @@ class Builder {
                 if(this._properties.indicators){
                     this._component.indicators = $(document.createElement('div')).addClass('carousel-indicators').appendTo(this._component);
                 }
-        
+
                 // Create Inner
                 this._component.inner = $(document.createElement('div')).addClass('carousel-inner').appendTo(this._component);
-        
+
                 // Create Controls
                 this._component.controls = {};
                 this._component.controls.previous = $(document.createElement('button')).addClass('carousel-control-prev').attr('type','button').attr('data-bs-target','#' + this._component.id).attr('data-bs-slide','prev').appendTo(this._component);
@@ -7537,43 +7537,43 @@ class Builder {
                 this._component.controls.next = $(document.createElement('button')).addClass('carousel-control-next').attr('type','button').attr('data-bs-target','#' + this._component.id).attr('data-bs-slide','next').appendTo(this._component);
                 this._component.controls.next.icon = $(document.createElement('span')).addClass('carousel-control-next-icon').attr('aria-hidden','true').appendTo(this._component.controls.next);
                 this._component.controls.next.label = $(document.createElement('span')).addClass('visually-hidden').text('Next').appendTo(this._component.controls.next);
-        
+
                 // Set Fade
                 if(this._properties.fade){
                     this._component.addClass('carousel-fade');
                 }
-        
+
                 // Set Touch
                 if(!this._properties.touch){
                     this._component.attr('data-bs-touch','false');
                 }
-        
+
                 // Set Auto Play
                 if(this._properties.autoplay){
                     this._component.attr('data-bs-ride',this._properties.autoplay);
                 }
-        
+
                 // Set Controls
                 if(!this._properties.controls){
                     this._component.controls.previous.addClass('d-none');
                     this._component.controls.next.addClass('d-none');
                 }
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-                
+
                 // Set Carousel Class
                 if(this._properties.class.carousel){
                     this._component.addClass(this._properties.class.carousel);
                 }
-        
+
                 // Set Inner Class
                 if(this._properties.class.inner){
                     this._component.inner.addClass(this._properties.class.inner);
                 }
-        
+
                 // Set Indicators Class
                 if(this._properties.class.indicators){
                     this._component.indicators.addClass(this._properties.class.indicators);
@@ -7584,10 +7584,10 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -7598,9 +7598,9 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {};
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -7637,30 +7637,30 @@ class Builder {
 
                 // Create Slide
                 let slide = $(document.createElement('div')).addClass('carousel-item').appendTo(this._component.inner);
-        
+
                 // Create Image
                 slide.image = $(document.createElement('img')).addClass('d-block w-100').attr('src',properties.source).attr('alt',properties.alt).appendTo(slide);
-        
+
                 // Create Caption
                 slide.caption = $(document.createElement('div')).addClass('carousel-caption d-none d-md-block').appendTo(slide);
-        
+
                 // Create Indicator
                 if(this._properties.indicators){
                     slide.indicator = $(document.createElement('button')).attr('type','button').attr('data-bs-target','#' + this._component.id).attr('data-bs-slide-to',this._component.inner.children().length - 1).appendTo(this._component.indicators);
                 }
-        
+
                 // Set Interval
                 if(properties.interval){
                     slide.attr('data-bs-interval',properties.interval);
                 }
-        
+
                 // Set Caption
                 if(properties.caption){
                     slide.caption.removeClass('d-none').html(properties.caption);
                 } else {
                     slide.caption.remove();
                 }
-        
+
                 // Set Slide Class
                 if(this._properties.class.slide){
                     slide.addClass(this._properties.class.slide);
@@ -7668,17 +7668,17 @@ class Builder {
                 if(properties.class.slide){
                     slide.addClass(this._properties.class.slide);
                 }
-        
+
                 // Set Image Class
                 if(properties.class.image){
                     slide.image.addClass(this._properties.class.image);
                 }
-        
+
                 // Set Caption Class
                 if(properties.class.caption){
                     slide.caption.addClass(this._properties.class.caption);
                 }
-        
+
                 // Set Active
                 if(this._component.inner.children().length === 1){
                     slide.addClass('active');
@@ -7686,18 +7686,18 @@ class Builder {
                         slide.indicator.addClass('active');
                     }
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(slide, this);
                 }
-        
+
                 // Return
                 return this;
             }
         },
         stepper: class extends this.ComponentClass {
-            
+
             #current = 1;
             #steps = {};
 
@@ -7729,7 +7729,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'stepper' + this._id,
@@ -7745,12 +7745,12 @@ class Builder {
                 this._component.controls.position.absolute = $(document.createElement('div')).addClass('position-absolute w-100 top-0 start-50 translate-middle').appendTo(this._component.controls.position);
                 this._component.controls.list = $(document.createElement('div')).addClass('d-flex justify-content-between').attr('id',this._component.id + 'controls').appendTo(this._component.controls.position.absolute);
                 this._component.controls.id = this._component.controls.list.attr('id');
-        
+
                 // Create Steps
                 this._component.steps = $(document.createElement('div')).appendTo(this._component);
                 this._component.steps.accordion = $(document.createElement('div')).addClass('accordion').attr('id',this._component.id + 'steps').appendTo(this._component.steps);
                 this._component.steps.id = this._component.steps.accordion.attr('id');
-        
+
                 // Create Pagination
                 this._component.pagination = $(document.createElement('div')).appendTo(this._component);
                 this._component.pagination.list = $(document.createElement('div')).addClass('d-block text-center').attr('id',this._component.id + 'pagination').appendTo(this._component.pagination);
@@ -7760,12 +7760,12 @@ class Builder {
                 this._component.pagination.next = $(document.createElement('button')).addClass('btn btn-primary float-end').attr({'type':'button', 'data-bs-toggle':'collapse'}).appendTo(this._component.pagination.list);
                 this._component.pagination.next.text = $(document.createElement('span')).addClass('ms-1').text('Next').appendTo(this._component.pagination.next);
                 this._component.pagination.next.icon = $(document.createElement('i')).addClass('bi bi-chevron-right').appendTo(this._component.pagination.next);
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Stepper Class
                 if(this._properties.class.stepper){
                     this._component.addClass(this._properties.class.stepper);
@@ -7775,12 +7775,12 @@ class Builder {
                 if(this._properties.class.controls){
                     this._component.controls.addClass(this._properties.class.controls);
                 }
-        
+
                 // Set Steps Class
                 if(this._properties.class.steps){
                     this._component.steps.addClass(this._properties.class.steps);
                 }
-        
+
                 // Set Pagination Class
                 if(this._properties.class.pagination){
                     this._component.pagination.addClass(this._properties.class.pagination);
@@ -7791,10 +7791,10 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -7805,9 +7805,9 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {};
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -7883,38 +7883,38 @@ class Builder {
 
                 // Set Step Content Events
                 content.on('hide.bs.collapse', function (event) {
-        
+
                     // Execute Callback
                     if(typeof properties.callback.hide === 'function'){
                         properties.callback.hide(event,step,self);
                     }
                 });
                 content.on('hidden.bs.collapse', function (event) {
-        
+
                     // Execute Callback
                     if(typeof properties.callback.hidden === 'function'){
                         properties.callback.hidden(event,step,self);
                     }
                 });
                 content.on('show.bs.collapse', function (event) {
-        
+
                     // Set Current Step
                     self.#current = step.id;
-                    
+
                     // Check if Step is First
                     if(step.id === 1){
                         self._component.pagination.previous.attr('disabled',true).attr('data-bs-target','');
                     } else {
                         self._component.pagination.previous.attr('disabled',false).attr('data-bs-target','#' + self._component.steps.id + (step.id - 1));
                     }
-        
+
                     // Check if Step is Last
                     if(step.id === self._counter){
                         self._component.pagination.next.attr('disabled',true).attr('data-bs-target','');
                     } else {
                         self._component.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self._component.steps.id + (step.id + 1));
                     }
-        
+
                     // Set Steps
                     for (let id = 1; id <= self._counter; id++) {
                         if(id <= step.id){
@@ -7929,21 +7929,21 @@ class Builder {
                             self.#steps[id].control.attr('aria-expanded',true);
                         }
                     }
-        
+
                     // Set Progress Bar
                     let width = 0 + '%';
                     if(self._counter > 1){
                         width = (((step.id - 1) / (self._counter - 1)) * 100) + '%';
                     }
                     self._component.progress.bar.css('width',width);
-        
+
                     // Execute Callback
                     if(typeof properties.callback.show === 'function'){
                         properties.callback.show(event,step,self);
                     }
                 });
                 content.on('shown.bs.collapse', function (event) {
-        
+
                     // Execute Callback
                     if(typeof properties.callback.shown === 'function'){
                         properties.callback.shown(event,step,self);
@@ -7954,17 +7954,17 @@ class Builder {
                 if(step.id === 1){
                     content.bootstrap.show();
                 }
-        
+
                 // Check if Stepper contains a single step
                 if(this._counter > 1 && this._component.pagination.next.attr('disabled') === 'disabled'){
                     this._component.pagination.next.attr('disabled',false).attr('data-bs-target','#' + self._component.steps.id + '2');
                 }
-        
+
                 // Execute Callback
                 if(typeof callback === 'function'){
                     callback(step,this);
                 }
-        
+
                 // Return Object
                 return this;
             }
@@ -7995,7 +7995,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('form')).attr({
                     'id': 'form' + this._id,
@@ -8015,12 +8015,12 @@ class Builder {
                     e.preventDefault();
                     self.submit();
                 });
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-        
+
                 // Set Form Class
                 if(this._properties.class.form){
                     this._component.addClass(this._properties.class.form);
@@ -8048,7 +8048,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-    
+
                 // Reset Values
                 for(const [key, input] of Object.entries(self.#inputs)){
                     input.reset();
@@ -8067,7 +8067,7 @@ class Builder {
 
                 // Set Self
                 const self = this;
-    
+
                 // Reset Values
                 for(const [key, input] of Object.entries(self.#inputs)){
                     input.clear();
@@ -8097,7 +8097,7 @@ class Builder {
                         }
                     }
                 }
-    
+
                 // Retrieve Values
                 let object = {};
                 for(const [key, input] of Object.entries(self.#inputs)){
@@ -8108,7 +8108,7 @@ class Builder {
                 if(typeof self._properties.callback.val === 'function'){
                     object = self._properties.callback.val(object);
                 }
-    
+
                 // Return
                 return object;
             };
@@ -8121,7 +8121,7 @@ class Builder {
                 let selector = this._component;
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -8132,7 +8132,7 @@ class Builder {
                         }
                     }
                 });
-        
+
                 // Configure Default Options
                 let properties = {
                     name: null,
@@ -8242,7 +8242,7 @@ class Builder {
 
                 // Set ID
                 let id = this._count();
-        
+
                 // Create Field
                 let field = $(document.createElement('div')).attr({
                     'id': this._component.id + 'group' + id,
@@ -8250,7 +8250,7 @@ class Builder {
                 }).appendTo(selector);
                 field.id = field.attr('id');
                 field.properties = properties;
-        
+
                 // Set Field Class
                 if(this._properties.class.field){
                     field.addClass(this._properties.class.field);
@@ -8264,7 +8264,7 @@ class Builder {
                     'class': 'input-group-text',
                     'for': field.id + 'input',
                 }).text(properties.label).appendTo(field);
-        
+
                 // Set Label Class
                 if(this._properties.class.label){
                     field.label.addClass(this._properties.class.label);
@@ -8272,7 +8272,7 @@ class Builder {
                 if(properties.class.label){
                     field.label.addClass(properties.class.label);
                 }
-    
+
                 // Create Icon
                 field.label.icon = $(document.createElement('i')).addClass('bi bi-' + properties.icon).prependTo(field.label);
 
@@ -8303,10 +8303,10 @@ class Builder {
                             .keydown(function(e) {
                                 if(e.keyCode === 9) {
                                     e.preventDefault();
-                
+
                                     var start = this.selectionStart;
                                     var end = this.selectionEnd;
-                
+
                                     this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
                                     this.selectionStart = this.selectionEnd = start + 1;
                                 }
@@ -8409,7 +8409,9 @@ class Builder {
                             }
                         }
                         field.input.select2({
-                            theme: "bootstrap-5"
+                            theme: "bootstrap-5",
+                            allowClear: true,
+                            width: 'style'
                         });
                         field.input.val(properties.value);
                         break;
@@ -8502,7 +8504,7 @@ class Builder {
                         }).appendTo(field);
                         break;
                 }
-        
+
                 // Set Input Class
                 if(this._properties.class.input){
                     field.input.addClass(this._properties.class.input);
@@ -8534,12 +8536,12 @@ class Builder {
 
                 // Store Input
                 this.#inputs[field.name] = field;
-    
+
                 // Check for icon
                 if(field.properties.icon === null){
                     field.label.icon.remove();
                 }
-        
+
                 // Callback
                 if(typeof callback === 'function'){
                     callback(field, self);
@@ -8547,7 +8549,7 @@ class Builder {
 
                 // Set Search
                 this._builder.Search.set(field);
-        
+
                 // Return Field
                 return field;
             };
@@ -8606,7 +8608,7 @@ class Builder {
                     },
                 };
             }
-    
+
             _config(name,options){
                 if(typeof this._properties[name] !== 'undefined'){
                     switch(name){
@@ -8628,14 +8630,14 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'calendar' + this._id,
                     'class': '',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
@@ -8645,7 +8647,7 @@ class Builder {
                 if(this._properties.initialDate === null){
                     this._properties.initialDate = new Date();
                 }
-        
+
                 // Set Options
                 this._component.properties = {
                     themeSystem: this._properties.themeSystem,
@@ -8675,7 +8677,7 @@ class Builder {
 
                 // Create Calendar
                 this._component.fullCalendar = new FullCalendar.Calendar(this._component[0], this._component.properties);
-        
+
                 // Set header Class
                 setTimeout(function() {
                     if(self._properties.class.header){
@@ -8690,7 +8692,7 @@ class Builder {
                 for(const [key, value] of Object.entries(this._properties.events)){
                     this.add(value);
                 }
-        
+
                 // Add Event to Calendar on Sidebar Toggle
                 $('#sidebarToggle').click(function(){
                     self._component.fullCalendar.render();
@@ -8698,27 +8700,27 @@ class Builder {
             }
 
             render(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Get all ancestors of the calendar element
                 var ancestors = this._selector.parents();
-                
+
                 // Filter out only the collapsible ancestors
                 var collapsibles = ancestors.filter(function() {
                     return $(this).hasClass('collapse');
                 });
-                
+
                 // Listen for the shown.bs.collapse event on each collapsible ancestor
                 collapsibles.on('shown.bs.collapse', function () {
                     // Call the updateSize method after the collapsible is shown
                     self._component.fullCalendar.updateSize();
                 });
-                
+
                 // Render Calendar
                 this._component.fullCalendar.render();
-        
+
                 setTimeout(function() {
                     // Call the updateSize method after the timeout
                     self._component.fullCalendar.updateSize();
@@ -8726,13 +8728,13 @@ class Builder {
             }
 
             add(param1 = null, param2 = null){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 let options = {};
                 let callback = null;
-        
+
                 // Set selector, options, and callback
                 [param1, param2].forEach(param => {
                     if(param !== null){
@@ -8743,9 +8745,9 @@ class Builder {
                         }
                     }
                 });
-        
+
                 let properties = {};
-        
+
                 // Configure Options
                 for(const [key, value] of Object.entries(this._properties.properties)){
                     if(typeof properties[key] === 'undefined'){
@@ -8782,7 +8784,7 @@ class Builder {
 
                 // Set ID
                 const EventID = this._count();
-            
+
                 // Set Event
                 var event = {
                     title: properties.title,
@@ -8791,19 +8793,19 @@ class Builder {
                     allDay: properties.allDay,
                     id: EventID,
                 };
-        
+
                 if(properties.color){
                     event.classNames = 'text-bg-' + properties.color + ' border-' + properties.color;
                 }
-        
+
                 if(properties.icon){
                     event.extendedProps = {icon: properties.icon};
                 }
-        
+
                 if(properties.isBackground){
                     event.display = 'background';
                 }
-        
+
                 // Set Event
                 this.#events[EventID] = {
                     id: EventID,
@@ -8814,10 +8816,10 @@ class Builder {
 
                 // Add Timeout
                 setTimeout(function(){
-        
+
                     // Add Event to Calendar
                     var calendarEvent = self._component.fullCalendar.addEvent(event);
-            
+
                     // Set Calendar Event
                     self.#events[EventID].calEvent = calendarEvent;
 
@@ -8825,7 +8827,7 @@ class Builder {
             }
 
             #dateClick(info){
-            
+
                 // Execute Callback
                 if(typeof this._properties.callback.dateClick === 'function'){
                     this._properties.callback.dateClick(info,this);
@@ -8833,7 +8835,7 @@ class Builder {
             }
 
             #select(info){
-            
+
                 // Execute Callback
                 if(typeof this._properties.callback.select === 'function'){
                     this._properties.callback.select(info,this);
@@ -8842,145 +8844,145 @@ class Builder {
 
             #eventContent(arg) {
                 let arrayOfDomNodes = [];
-        
+
                 let spacerElement = document.createElement('span');
                 spacerElement.classList.add('ms-1');
                 arrayOfDomNodes.push(spacerElement);
-        
+
                 if (arg.event.extendedProps.icon) {
                     let iconElement = document.createElement('i');
                     iconElement.classList.add('me-1','bi', 'bi-' + arg.event.extendedProps.icon);
                     arrayOfDomNodes.push(iconElement);
                 }
-        
+
                 let titleElement = document.createElement('span');
                 titleElement.innerText = arg.event.title;
                 arrayOfDomNodes.push(titleElement);
-        
+
                 return { domNodes: arrayOfDomNodes };
             }
-            
+
             #eventClick(info){
                 const EventID = info.event._def.publicId;
                 const EventName = {calendar: 'eventClick', event: 'click'};
-        
+
                 // Check if Event Exists
                 if(typeof this.#events[EventID] !== 'undefined'){
-        
+
                     const Event = this.#events[EventID];
-        
+
                     // Execute Calendar Callback
                     if(typeof this._properties.callback[EventName.calendar] === 'function'){
                         this._properties.callback[EventName.calendar](Event,info,this);
                     }
-        
+
                     // Execute Event Callback
                     if(typeof Event.callback[EventName.event] === 'function'){
                         Event.callback[EventName.event](Event,info,this);
                     }
                 }
             }
-            
+
             #eventMouseEnter(info){
                 const EventID = info.event._def.publicId;
                 const EventName = {calendar: 'eventMouseEnter', event: 'mouseEnter'};
-        
+
                 // Check if Event Exists
                 if(typeof this.#events[EventID] !== 'undefined'){
-        
+
                     const Event = this.#events[EventID];
-        
+
                     // Execute Calendar Callback
                     if(typeof this._properties.callback[EventName.calendar] === 'function'){
                         this._properties.callback[EventName.calendar](Event,info,this);
                     }
-        
+
                     // Execute Event Callback
                     if(typeof Event.callback[EventName.event] === 'function'){
                         Event.callback[EventName.event](Event,info,this);
                     }
                 }
             }
-        
+
             #eventMouseLeave(info){
                 const EventID = info.event._def.publicId;
                 const EventName = {calendar: 'eventMouseLeave', event: 'mouseLeave'};
-        
+
                 // Check if Event Exists
                 if(typeof this.#events[EventID] !== 'undefined'){
-        
+
                     const Event = this.#events[EventID];
-        
+
                     // Execute Calendar Callback
                     if(typeof this._properties.callback[EventName.calendar] === 'function'){
                         this._properties.callback[EventName.calendar](Event,info,this);
                     }
-        
+
                     // Execute Event Callback
                     if(typeof Event.callback[EventName.event] === 'function'){
                         Event.callback[EventName.event](Event,info,this);
                     }
                 }
             }
-            
+
             #eventDrop(info){
                 const EventID = info.event._def.publicId;
                 const EventName = {calendar: 'eventDrop', event: 'drop'};
-        
+
                 // Check if Event Exists
                 if(typeof this.#events[EventID] !== 'undefined'){
-        
+
                     const Event = this.#events[EventID];
-        
+
                     // Execute Calendar Callback
                     if(typeof this._properties.callback[EventName.calendar] === 'function'){
                         this._properties.callback[EventName.calendar](Event,info,this);
                     }
-        
+
                     // Execute Event Callback
                     if(typeof Event.callback[EventName.event] === 'function'){
                         Event.callback[EventName.event](Event,info,this);
                     }
                 }
             }
-        
+
             #eventResize(info){
                 const EventID = info.event._def.publicId;
                 const EventName = {calendar: 'eventResize', event: 'resize'};
-        
+
                 // Check if Event Exists
                 if(typeof this.#events[EventID] !== 'undefined'){
-        
+
                     const Event = this.#events[EventID];
-        
+
                     // Execute Calendar Callback
                     if(typeof this._properties.callback[EventName.calendar] === 'function'){
                         this._properties.callback[EventName.calendar](Event,info,this);
                     }
-        
+
                     // Execute Event Callback
                     if(typeof Event.callback[EventName.event] === 'function'){
                         Event.callback[EventName.event](Event,info,this);
                     }
                 }
             }
-        
+
             #eventDidMount(info){
                 const EventID = info.event._def.publicId;
                 const EventName = {calendar: 'eventDidMount', event: 'didMount'};
-        
+
                 // Check if Event Exists
                 if(typeof this.#events[EventID] !== 'undefined'){
-        
+
                     const Event = this.#events[EventID];
-        
+
                     // Create Popover
                     if(Event.properties.popover){
                         // Create focus trigger
                         $(info.el).hover(function() {
                             $(this).trigger('focus');
                         });
-        
+
                         // Create Popover
                         var title = $(document.createElement('span')).text(Event.properties.title);
                         if(Event.properties.icon){
@@ -8993,12 +8995,12 @@ class Builder {
                         info.el.setAttribute('data-bs-content',Event.properties.description);
                         const popover = bootstrap.Popover.getOrCreateInstance(info.el);
                     }
-        
+
                     // Execute Calendar Callback
                     if(typeof this._properties.callback[EventName.calendar] === 'function'){
                         this._properties.callback[EventName.calendar](Event,info,this);
                     }
-        
+
                     // Execute Event Callback
                     if(typeof Event.callback[EventName.event] === 'function'){
                         Event.callback[EventName.event](Event,info,this);
@@ -9007,7 +9009,7 @@ class Builder {
             }
         },
         references: class extends this.ComponentClass {
-            
+
             #references = {};
 
             _init(){
@@ -9027,21 +9029,21 @@ class Builder {
             }
 
             _create(){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'component' + this._id,
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
                 }
-                
+
                 // Create References Form
                 this._component.form = self._builder.Component(
                     "form",
@@ -9055,18 +9057,18 @@ class Builder {
                         },
                         callback:{
                             submit: function(form){
-        
+
                                 // Retrieve Values
                                 var values = form.val();
-        
+
                                 // Add Reference
                                 self.add(values.type,values.reference);
-                                
+
                                 // Execute Callback
                                 if(typeof self._properties.callback.add === 'function'){
                                     self._properties.callback.add(values);
                                 }
-        
+
                                 // Reset Form
                                 form.reset();
                             },
@@ -9144,27 +9146,27 @@ class Builder {
                     },
                 );
             }
-        
+
             add(type,reference){
-        
+
                 // Set Self
                 const self = this;
-        
+
                 // Check if Type and Reference are provided
                 if(type == null || reference == null || typeof reference !== 'string' || reference.length <= 0){
                     return self;
                 }
-        
+
                 // Check if Reference Type is listed in References Types Array
                 for(const [key, value] of Object.entries(self._properties.types)){
                     if(value.id === type){
-        
+
                         // Check if Reference List Exists
                         if(typeof self.#references[type] === 'undefined'){
-        
+
                             // Create Reference Object
                             self.#references[type] = {};
-        
+
                             // Create Reference List Object and Element
                             self.#references[type].object = self._component.list.add(
                                 {
@@ -9172,25 +9174,25 @@ class Builder {
                                     field: type + ":",
                                 },
                                 function(item,list){
-        
+
                                     // Add Class
                                     item.field.addClass('text-uppercase');
-        
+
                                     // Save Reference Type Element
                                     self.#references[type].element = item;
                                 },
                             );
-        
+
                             // Create Reference List References Badges
                             self.#references[type].references = {};
                         }
-        
+
                         // Check if References Object Exists
                         if(typeof self.#references[type].references[reference] === 'undefined'){
-        
+
                             // Create Reference
                             self.#references[type].references[reference] = {};
-        
+
                             // Create Reference Badge
                             self.#references[type].references[reference].reference = $(document.createElement('span'))
                                 .addClass('badge text-bg-primary rounded-0 rounded-start ms-1 cursor-pointer')
@@ -9206,32 +9208,32 @@ class Builder {
                                     );
                                 })
                                 .appendTo(self.#references[type].element.field);
-        
+
                             // Create Delete Badge
                             self.#references[type].references[reference].delete = $(document.createElement('span'))
                                 .addClass('badge text-bg-danger rounded-0 rounded-end cursor-pointer')
                                 .html('<i class="bi bi-x-lg"></i>')
                                 .click(function(){
-        
+
                                     // Remove Reference
                                     self.#references[type].references[reference].reference.remove();
-        
+
                                     // Remove Delete
                                     self.#references[type].references[reference].delete.remove();
-        
+
                                     // Delete Reference
                                     delete self.#references[type].references[reference];
-        
+
                                     // Check for Empty References Type
                                     if(Object.entries(self.#references[type].references).length <= 0){
-                                            
+
                                             // Remove Reference Type
                                             self.#references[type].element.remove();
-            
+
                                             // Delete Reference Type
                                             delete self.#references[type];
                                     }
-                                    
+
                                     // Check for Callback
                                     if(typeof self._properties.callback.remove === 'function'){
                                         self._properties.callback.remove(type,reference);
@@ -9239,12 +9241,12 @@ class Builder {
                                 })
                                 .appendTo(self.#references[type].element.field);
                         }
-                        
+
                         // Return
                         return self;
                     }
                 }
-        
+
                 console.log('Reference Type "' + type + '" is not listed in References Types');
                 return self;
             }
@@ -9259,14 +9261,14 @@ class Builder {
 
                 // Set Self
                 const self = this;
-        
+
                 // Create Component
                 this._component = $(document.createElement('div')).attr({
                     'id': 'component' + this._id,
                     'class': '',
                 });
                 this._component.id = this._component.attr('id');
-        
+
                 // Set Component Class
                 if(this._properties.class.component){
                     this._component.addClass(this._properties.class.component);
