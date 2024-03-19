@@ -12465,6 +12465,18 @@ body {
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 16px 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.select2-container--bootstrap-5 .select2-selection .select2-selection__rendered {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
 }
 
 .select2-container--bootstrap-5.select2-container--focus .select2-selection, .select2-container--bootstrap-5.select2-container--open .select2-selection {
@@ -12484,6 +12496,9 @@ body {
   color: rgba(255, 255, 255, 0.7);
   border-color: #528fb3;
   border-radius: 0.25rem;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  white-space: nowrap;
 }
 .select2-container--bootstrap-5 .select2-dropdown a {
   color: #fff;
