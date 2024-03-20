@@ -8063,6 +8063,18 @@ class Builder {
                 return this;
             };
 
+						focus(){
+
+                // Set Self
+                const self = this;
+
+                // Set focus on form
+								self._component.focus();
+
+                // Return
+                return this;
+            }
+
 						init(){
 
                 // Set Self
