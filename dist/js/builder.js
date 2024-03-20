@@ -4379,7 +4379,9 @@ class Builder {
                         fullscreen: null,
                         close: null,
                         onShow: null,
+                        onShown: null,
                         onHide: null,
+                        onHidden: null,
                     },
                     onEnter: true,
                     close:true,
@@ -4603,10 +4605,24 @@ class Builder {
                     });
                 }
 
+                // Callback Function on Show
+                if(typeof this._properties.callback.onShow === 'function'){
+                    this._component.on('shown.bs.modal',function(){
+                        self._properties.callback.onShown(self._component,self);
+                    });
+                }
+
                 // Callback Function on Hide
                 if(typeof this._properties.callback.onHide === 'function'){
                     this._component.on('hide.bs.modal',function(){
                         self._properties.callback.onHide(self._component,self);
+                    });
+                }
+
+                // Callback Function on Hide
+                if(typeof this._properties.callback.onHide === 'function'){
+                    this._component.on('hidden.bs.modal',function(){
+                        self._properties.callback.onHidden(self._component,self);
                     });
                 }
 
@@ -8178,6 +8194,7 @@ class Builder {
                     min: null,
                     max: null,
                     options: null,
+                    modal: null,
                     class: {
                         input: null,
                         label: null,
@@ -8442,11 +8459,15 @@ class Builder {
                             }
                         }
 												field.init = function(){
-													field.input.select2({
+													let defaults = {
 	                            theme: "bootstrap-5",
 	                            allowClear: true,
 	                            width: 'style'
-	                        });
+	                        }
+													if(properties.modal !== null){
+														defaults.dropdownParent = properties.modal;
+													}
+													field.input.select2(defaults);
 												}
                         field.init();
                         field.input.val(properties.value);
