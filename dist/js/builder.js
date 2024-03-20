@@ -8063,6 +8063,27 @@ class Builder {
                 return this;
             };
 
+						init(){
+
+                // Set Self
+                const self = this;
+
+                // Reset Values
+                for(const [key, input] of Object.entries(self.#inputs)){
+									if(typeof input.init === 'function'){
+										input.init();
+									}
+                }
+
+                // Callback
+                if(typeof self._properties.callback.init === 'function'){
+                    self._properties.callback.init(self);
+                }
+
+                // Return
+                return this;
+            }
+
             clear(){
 
                 // Set Self
@@ -8408,11 +8429,14 @@ class Builder {
                                 field.add(option.id,option.text);
                             }
                         }
-                        field.input.select2({
-                            theme: "bootstrap-5",
-                            allowClear: true,
-                            width: 'style'
-                        });
+												field.init = function(){
+													field.input.select2({
+	                            theme: "bootstrap-5",
+	                            allowClear: true,
+	                            width: 'style'
+	                        });
+												}
+                        field.init();
                         field.input.val(properties.value);
                         break;
                     case'clear':
