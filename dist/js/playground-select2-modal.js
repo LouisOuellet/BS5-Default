@@ -1971,8 +1971,7 @@ $(document).ready(function(){
                   AddTripModal.form.submit();
               },
               onShown: function(element,modal){
-                  // AddTripModal.form.focus();
-                  // AddTripModal.form.init();
+                  AddTripModal.form.init();
               },
           },
           onEnter: true,
@@ -2034,6 +2033,7 @@ $(document).ready(function(){
                       icon: 'truck',
                       type: 'select',
                       options: [
+                        {id: '2002', text: '2002 - 2736535 Canada Inc. (dba All Cities North American)'},
                         {id: '0001', text: '0001 - AMHERST, N.S.'},
                         {id: '0003', text: '0003 - ANTIGONISH, N.S.'},
                         {id: '0004', text: '0004 - BADDECK, N.S.'},

@@ -4606,7 +4606,7 @@ class Builder {
                 }
 
                 // Callback Function on Show
-                if(typeof this._properties.callback.onShow === 'function'){
+                if(typeof this._properties.callback.onShown === 'function'){
                     this._component.on('shown.bs.modal',function(){
                         self._properties.callback.onShown(self._component,self);
                     });
@@ -4620,7 +4620,7 @@ class Builder {
                 }
 
                 // Callback Function on Hide
-                if(typeof this._properties.callback.onHide === 'function'){
+                if(typeof this._properties.callback.onHidden === 'function'){
                     this._component.on('hidden.bs.modal',function(){
                         self._properties.callback.onHidden(self._component,self);
                     });
@@ -8296,7 +8296,7 @@ class Builder {
                 // Create Field
                 let field = $(document.createElement('div')).attr({
                     'id': this._component.id + 'group' + id,
-                    'class': 'input-group',
+                    'class': 'input-group d-flex flex-nowrap',
                 }).appendTo(selector);
                 field.id = field.attr('id');
                 field.properties = properties;
@@ -8334,7 +8334,7 @@ class Builder {
                 // Create Input
                 switch(properties.type){
                     case'ide':
-                        field.input = $(document.createElement('div')).addClass('ide form-control p-0').appendTo(field);
+                        field.input = $(document.createElement('div')).addClass('ide form-control p-0 flex-grow-1').appendTo(field);
                         field.input.lines = $(document.createElement('div')).addClass('ide-lines').appendTo(field.input);
                         field.input.editor = $(document.createElement('textarea')).attr({
                             'id': field.id + 'input',
@@ -8372,7 +8372,7 @@ class Builder {
                             .trigger('propertychange')
                         break;
                     case'mce':
-                        field.input = $(document.createElement('div')).addClass('mce form-control p-0').appendTo(field);
+                        field.input = $(document.createElement('div')).addClass('mce form-control p-0 flex-grow-1').appendTo(field);
                         field.input.editor = $(document.createElement('textarea')).attr({
                             'id': field.id + 'input',
                             'name': properties.name,
@@ -8422,7 +8422,7 @@ class Builder {
                     case 'textarea':
                         field.input = $(document.createElement('textarea')).attr({
                             'id': field.id + 'input',
-                            'class': 'form-control',
+                            'class': 'form-control flex-grow-1',
                             'name': properties.name,
                             'autocomplete': 'off',
                         }).text(properties.value).appendTo(field);
@@ -8430,7 +8430,7 @@ class Builder {
                     case 'select':
                         field.input = $(document.createElement('select')).attr({
                             'id': field.id + 'input',
-                            'class': 'form-select',
+                            'class': 'form-select flex-grow-1',
                             'name': properties.name,
                             'autocomplete': 'off',
                         }).appendTo(field);
@@ -8462,7 +8462,7 @@ class Builder {
 													let defaults = {
 	                            theme: "bootstrap-5",
 	                            allowClear: true,
-	                            width: 'style'
+	                            width: 'calc(100% - ' + field.label.outerWidth() + 'px)'
 	                        }
 													if(properties.modal !== null){
 														defaults.dropdownParent = properties.modal;
@@ -8475,7 +8475,7 @@ class Builder {
                     case'clear':
                         field.input = $(document.createElement('button')).attr({
                             'id': field.id + 'clear',
-                            'class': 'btn btn-' + properties.color,
+                            'class': 'flex-grow-1 btn btn-' + properties.color,
                             'name': properties.name,
                             'type': 'button',
                             'value': properties.value,
@@ -8494,7 +8494,7 @@ class Builder {
                     case'reset':
                         field.input = $(document.createElement('button')).attr({
                             'id': field.id + 'reset',
-                            'class': 'btn btn-' + properties.color,
+                            'class': 'flex-grow-1 btn btn-' + properties.color,
                             'name': properties.name,
                             'type': properties.type,
                             'value': properties.value,
@@ -8510,7 +8510,7 @@ class Builder {
                     case'submit':
                         field.input = $(document.createElement('button')).attr({
                             'id': field.id + 'submit',
-                            'class': 'btn btn-' + properties.color,
+                            'class': 'flex-grow-1 btn btn-' + properties.color,
                             'name': properties.name,
                             'type': properties.type,
                             'value': properties.value,
@@ -8524,11 +8524,10 @@ class Builder {
                         }
                         break;
                     case'range':
-                        field.addClass('d-flex');
                         field.input = $(document.createElement('div')).addClass('tooltip-range border border-start-0 rounded-end flex-grow-1 px-2 d-flex align-items-center').appendTo(field);
                         field.input.range = $(document.createElement('input')).attr({
                             'id': field.id + 'input',
-                            'class': 'form-range',
+                            'class': 'flex-grow-1 form-range',
                             'type': properties.type,
                             'step': properties.step,
                             'value': properties.value,
@@ -8553,7 +8552,7 @@ class Builder {
                     default:
                         field.input = $(document.createElement('input')).attr({
                             'id': field.id + 'input',
-                            'class': 'form-control',
+                            'class': 'flex-grow-1 form-control',
                             'name': properties.name,
                             'autocomplete': 'off',
                             'type': properties.type,
