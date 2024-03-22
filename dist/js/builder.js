@@ -2705,10 +2705,10 @@ class Builder {
 
                 // Create Columns
                 this._component.col1 = $(document.createElement('div')).attr({
-                    class: 'col-4 col-lg-3',
+                    class: 'col-4',
                 }).appendTo(this._component);
                 this._component.col2 = $(document.createElement('div')).attr({
-                    class: 'col-8 col-lg-9',
+                    class: 'col-8',
                 }).appendTo(this._component);
 
                 // Create Profile Details Section
