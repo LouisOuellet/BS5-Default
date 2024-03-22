@@ -3703,7 +3703,7 @@ class Builder {
 
                                 // Check if Val Callback is a function
                                 if(typeof properties.callback.val === 'function'){
-                                    return properties.callback.val(form);
+                                    return properties.callback.val(values);
                                 } else {
                                     return values;
                                 }
