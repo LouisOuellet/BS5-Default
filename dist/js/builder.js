@@ -3638,7 +3638,7 @@ class Builder {
                     form: true,
                     callback:{
                         submit: function(form){},
-                        val: function(form){},
+                        val: function(values){ return values; },
                         reset: function(form){},
                         clear: function(form){},
                     },
@@ -3699,11 +3699,13 @@ class Builder {
                                     properties.callback.submit(form);
                                 }
                             },
-                            val: function(form){
+                            val: function(values){
 
                                 // Check if Val Callback is a function
                                 if(typeof properties.callback.val === 'function'){
-                                    properties.callback.val(form);
+                                    return properties.callback.val(form);
+                                } else {
+                                    return values;
                                 }
                             },
                             reset: function(form){
