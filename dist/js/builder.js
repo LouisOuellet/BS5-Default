@@ -8224,6 +8224,14 @@ class Builder {
 
                 // Add Default Options
                 switch(properties.type){
+                    case 'color':
+                        if(properties.icon === null){
+                            properties.icon = 'palette';
+                        }
+                        if(properties.color === null){
+                            properties.color = null;
+                        }
+                        break;
                     case 'textarea':
                         if(properties.icon === null){
                             properties.icon = 'textarea-t';
@@ -8333,6 +8341,14 @@ class Builder {
 
                 // Create Input
                 switch(properties.type){
+                    case 'color':
+                        field.input = $(document.createElement('input')).attr({
+                            'id': field.id + 'input',
+                            'class': 'form-control form-control-color flex-grow-1',
+                            'type': 'color',
+                            'name': properties.name,
+                        }).val(properties.value).appendTo(field);
+                        break;
                     case'ide':
                         field.input = $(document.createElement('div')).addClass('ide form-control p-0 flex-grow-1').appendTo(field);
                         field.input.lines = $(document.createElement('div')).addClass('ide-lines').appendTo(field.input);
@@ -8461,7 +8477,6 @@ class Builder {
 												field.init = function(){
 													let defaults = {
 	                            theme: "bootstrap-5",
-	                            allowClear: true,
 	                            width: 'calc(100% - ' + field.label.outerWidth() + 'px)'
 	                        }
 													if(properties.modal !== null){
