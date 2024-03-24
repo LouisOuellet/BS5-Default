@@ -8197,6 +8197,8 @@ class Builder {
                     max: null,
                     options: null,
                     modal: null,
+                    multiple: false,
+                    allowNew: false,
                     class: {
                         input: null,
                         label: null,
@@ -8452,6 +8454,9 @@ class Builder {
                             'name': properties.name,
                             'autocomplete': 'off',
                         }).appendTo(field);
+                        if(properties.multiple){
+                            field.input.attr('multiple',true);
+                        }
                         field.options = {};
                         field.delete = function(id = null){
                             if(id){
@@ -8476,16 +8481,22 @@ class Builder {
                                 field.add(option.id,option.text);
                             }
                         }
-												field.init = function(){
-													let defaults = {
-	                            theme: "bootstrap-5",
-	                            width: 'calc(100% - ' + field.label.outerWidth() + 'px)'
-	                        }
-													if(properties.modal !== null){
-														defaults.dropdownParent = properties.modal;
-													}
-													field.input.select2(defaults);
-												}
+                        field.init = function(){
+                            let defaults = {
+                                theme: "bootstrap-5",
+                                width: 'calc(100% - ' + field.label.outerWidth() + 'px)'
+                            }
+                            if(properties.multiple){
+                                defaults.allowClear = true;
+                            }
+                            if(properties.allowNew){
+                                defaults.tags = true;
+                            }
+                            if(properties.modal !== null){
+                                defaults.dropdownParent = properties.modal;
+                            }
+                            field.input.select2(defaults);
+                        }
                         field.init();
                         field.input.val(properties.value);
                         break;

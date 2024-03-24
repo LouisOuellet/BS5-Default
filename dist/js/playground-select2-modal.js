@@ -2032,6 +2032,8 @@ $(document).ready(function(){
                       label: 'Shipper',
                       icon: 'truck',
                       type: 'select',
+                      multiple: true,
+                      allowNew: true,
                       options: [
                         {id: '2002', text: '2002 - 2736535 Canada Inc. (dba All Cities North American)'},
                         {id: '0001', text: '0001 - AMHERST, N.S.'},
