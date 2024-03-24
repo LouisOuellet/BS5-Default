@@ -8552,7 +8552,7 @@ class Builder {
                         }
                         break;
                     case'range':
-                        field.input = $(document.createElement('div')).addClass('tooltip-range border border-start-0 rounded-end flex-grow-1 px-2 d-flex align-items-center').appendTo(field);
+                        field.input = $(document.createElement('div')).addClass('tooltip-range form-control border border-start-0 rounded-end flex-grow-1 px-2 d-flex align-items-center').appendTo(field);
                         field.input.range = $(document.createElement('input')).attr({
                             'id': field.id + 'input',
                             'class': 'flex-grow-1 form-range',

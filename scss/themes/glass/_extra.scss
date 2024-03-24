@@ -85,6 +85,10 @@ body {
 
 // Forms
 
+.form-control {
+  @include glass();
+}
+
 .input-group-text,
 .form-control::file-selector-button {
   background-color: transparent;
@@ -364,6 +368,7 @@ body {
   border: 1px solid $border-color;
 }
 .select2-container--bootstrap-5 .select2-selection {
+  @include glass();
   background-color: transparent !important;
   border: 1px solid $border-color;
 }
