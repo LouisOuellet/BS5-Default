@@ -11889,6 +11889,20 @@ body {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+.form-control {
+  border: none;
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.2), inset -1px -1px rgba(255, 255, 255, 0.1), 1px 3px 24px -1px rgba(0, 0, 0, 0.15);
+  background-color: transparent;
+  background-image: linear-gradient(125deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2) 70%);
+  backdrop-filter: blur(5px);
+}
+.form-control a {
+  color: #fff;
+}
+.form-control .text-muted {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .input-group-text,
 .form-control::file-selector-button {
   background-color: transparent;
@@ -12442,8 +12456,19 @@ body {
 }
 
 .select2-container--bootstrap-5 .select2-selection {
+  border: none;
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.2), inset -1px -1px rgba(255, 255, 255, 0.1), 1px 3px 24px -1px rgba(0, 0, 0, 0.15);
+  background-color: transparent;
+  background-image: linear-gradient(125deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2) 70%);
+  backdrop-filter: blur(5px);
   background-color: transparent !important;
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.select2-container--bootstrap-5 .select2-selection a {
+  color: #fff;
+}
+.select2-container--bootstrap-5 .select2-selection .text-muted {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .input-group > .btn ~ .select2-container--bootstrap-5 .select2-selection, .input-group > .dropdown-menu ~ .select2-container--bootstrap-5 .select2-selection, .input-group > .input-group-text ~ .select2-container--bootstrap-5 .select2-selection {
@@ -12526,6 +12551,16 @@ body {
 .select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option.select2-results__option--selected, .select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
   color: #fff;
   background-color: #528fb3;
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #528fb3;
+}
+
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice .select2-selection__choice__remove {
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") 50%/0.75rem auto no-repeat;
 }
 
 .bg-black-0 {
