@@ -8003,6 +8003,8 @@ class Builder {
                     callback:{
                         submit: function(form){},
                         val: function(values){ return values; },
+                        init: function(form){},
+                        onChange: function(form){},
                         reset: function(form){},
                         clear: function(form){},
                     },
@@ -8133,6 +8135,27 @@ class Builder {
                 return this;
             };
 
+            onChange(){
+
+                // Set Self
+                const self = this;
+
+                // Reset Values
+                for(const [key, input] of Object.entries(self.#inputs)){
+                    if(typeof input.onChange === 'function'){
+                        input.onChange();
+                    }
+                }
+
+                // Callback
+                if(typeof self._properties.callback.onChange === 'function'){
+                    self._properties.callback.onChange(self);
+                }
+
+                // Return
+                return this;
+            }
+
             val(values = null){
 
                 // Set Self
@@ -8204,12 +8227,19 @@ class Builder {
                         label: null,
                         field: null,
                     },
+                    callback: {
+                        onChange: function(field,form){},
+                        condition: function(form){
+                            return true;
+                        },
+                    }
                 };
 
                 // Overwrite Default Options
                 for(const [key, value] of Object.entries(options)){
                     switch(key){
                         case 'class':
+                        case 'callback':
                             if(typeof properties[key] === 'object'){
                                 for(const [classKey, classValue] of Object.entries(value)){
                                     if(typeof properties[key][classKey] !== 'undefined'){
@@ -8321,6 +8351,31 @@ class Builder {
                     field.addClass(properties.class.field);
                 }
 
+                // condition method
+                field.condition = function(){
+
+                    // Set Condition
+                    if(typeof properties.callback.condition === 'function'){
+                        if(!properties.callback.condition(self)){
+                            field.addClass('d-none');
+                        } else {
+                            field.removeClass('d-none');
+                        }
+                    }
+                };
+
+                // onChange method
+                field.onChange = function(){
+
+                    // Test Condition
+                    field.condition();
+
+                    // Execute Callback
+                    if(typeof properties.callback.onChange === 'function'){
+                        properties.callback.onChange(field, self);
+                    }
+                }
+
                 // Create Label
                 field.label = $(document.createElement('label')).attr({
                     'class': 'input-group-text',
@@ -8352,6 +8407,10 @@ class Builder {
                             'type': 'color',
                             'name': properties.name,
                         }).val(properties.value).appendTo(field);
+                        // Execute onChange
+                        field.input.on('input',function(){
+                            self.onChange();
+                        });
                         break;
                     case'ide':
                         field.input = $(document.createElement('div')).addClass('ide form-control p-0 flex-grow-1').appendTo(field);
@@ -8390,6 +8449,10 @@ class Builder {
                                 field.input.lines.text(lineNumbers);
                             })
                             .trigger('propertychange')
+                        // Execute onChange
+                        field.input.editor.on('input',function(){
+                            self.onChange();
+                        });
                         break;
                     case'mce':
                         field.input = $(document.createElement('div')).addClass('mce form-control p-0 flex-grow-1').appendTo(field);
@@ -8417,6 +8480,11 @@ class Builder {
                                 } else {
                                     container.addClass("rounded-0 border-0");
                                 }
+                            },
+                            setup: function (editor) {
+                                editor.on('keyup', function () {
+                                    self.onChange();
+                                });
                             },
                         });
                         field.input.val = function(value = null){
@@ -8446,6 +8514,10 @@ class Builder {
                             'name': properties.name,
                             'autocomplete': 'off',
                         }).text(properties.value).appendTo(field);
+                        // Execute onChange
+                        field.input.on('input',function(){
+                            self.onChange();
+                        });
                         break;
                     case 'select':
                         field.input = $(document.createElement('select')).attr({
@@ -8576,6 +8648,10 @@ class Builder {
 
                             return field.input.range.val();
                         };
+                        // Execute onChange
+                        field.input.range.on('change',function(){
+                            self.onChange();
+                        });
                         break;
                     case'switch':
                         field.input = $(document.createElement('div')).addClass('form-control form-check form-switch m-0 px-2 border border-start-0 rounded-end flex-grow-1 d-flex align-items-center').appendTo(field);
@@ -8598,9 +8674,12 @@ class Builder {
                                 }
                             }
 
-                            return field.input.switch.val();
+                            return field.input.switch.prop('checked');
                         };
                         field.input.val(properties.value);
+                        field.input.switch.on('change',function(){
+                            self.onChange();
+                        });
                         break;
                     default:
                         field.input = $(document.createElement('input')).attr({
@@ -8611,6 +8690,9 @@ class Builder {
                             'type': properties.type,
                             'value': properties.value,
                         }).appendTo(field);
+                        field.input.on('keyup',function(){
+                            self.onChange();
+                        });
                         break;
                 }
 
@@ -8627,9 +8709,18 @@ class Builder {
 
                 // Val method
                 field.val = function(param1 = null){
-                    if(param1){
-                        return field.input.val(param1);
+
+                    // Set Value
+                    if(param1 !== null){
+
+                        // Execute onChange
+                        self.onChange();
+
+                        // Set Value
+                        field.input.val(param1);
                     }
+
+                    // Return Value
                     return field.input.val();
                 }
 
@@ -8658,6 +8749,9 @@ class Builder {
 
                 // Set Search
                 this._builder.Search.set(field);
+
+                // Execute onChange
+                self.onChange();
 
                 // Return Field
                 return field;
