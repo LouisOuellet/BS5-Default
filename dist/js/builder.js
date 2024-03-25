@@ -8216,8 +8216,8 @@ class Builder {
                     type: 'text',
                     value: null,
                     step: null,
-                    min: null,
-                    max: null,
+                    min: 0,
+                    max: 100,
                     options: null,
                     modal: null,
                     multiple: false,
@@ -8628,6 +8628,9 @@ class Builder {
                         });
                         break;
                     case'range':
+                        if(properties.value === null){
+                            properties.value = properties.min;
+                        }
                         field.input = $(document.createElement('div')).addClass('tooltip-range form-control border border-start-0 rounded-end flex-grow-1 px-2 d-flex align-items-center').appendTo(field);
                         field.input.range = $(document.createElement('input')).attr({
                             'id': field.id + 'input',
@@ -8640,9 +8643,18 @@ class Builder {
                         }).appendTo(field.input);
                         field.input.output = $(document.createElement('output')).attr({
                             'for': field.id + 'input',
-                        }).html(properties.options[properties.value]).appendTo(field.input);
+                        }).appendTo(field.input);
+                        if(properties.options !== null && typeof properties.options === "object" && typeof properties.options[properties.value] !== "undefined"){
+                            field.input.output.html(properties.options[properties.value]);
+                        } else {
+                            field.input.output.html(properties.value);
+                        }
                         field.input.range.on('input',function(){
-                            field.input.output.html(properties.options[field.input.range.val()]);
+                            if(properties.options !== null && typeof properties.options === "object" && typeof properties.options[field.input.range.val()] !== "undefined"){
+                                field.input.output.html(properties.options[field.input.range.val()]);
+                            } else {
+                                field.input.output.html(field.input.range.val());
+                            }
                         });
                         field.input.val = function(value = null){
                             if(value !== null){
