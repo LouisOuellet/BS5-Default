@@ -8083,28 +8083,28 @@ class Builder {
                 return this;
             };
 
-						focus(){
+            focus(){
 
                 // Set Self
                 const self = this;
 
                 // Set focus on form
-								self._component.focus();
+                self._component.focus();
 
                 // Return
                 return this;
             }
 
-						init(){
+            init(){
 
                 // Set Self
                 const self = this;
 
                 // Reset Values
                 for(const [key, input] of Object.entries(self.#inputs)){
-									if(typeof input.init === 'function'){
-										input.init();
-									}
+                    if(typeof input.init === 'function'){
+                        input.init();
+                    }
                 }
 
                 // Callback
@@ -8400,6 +8400,57 @@ class Builder {
 
                 // Create Input
                 switch(properties.type){
+                    case'clear':
+                        field.input = $(document.createElement('button')).attr({
+                            'id': field.id + 'clear',
+                            'class': 'flex-grow-1 btn btn-' + properties.color,
+                            'name': properties.name,
+                            'type': 'button',
+                            'value': properties.value,
+                        }).html(field.label.html()).appendTo(field);
+                        field.label.remove();
+                        if(this._properties.class.label){
+                            field.input.addClass(this._properties.class.label);
+                        }
+                        if(properties.class.label){
+                            field.input.addClass(properties.class.label);
+                        }
+                        field.input.click(function(){
+                            self.clear();
+                        });
+                        break;
+                    case'reset':
+                        field.input = $(document.createElement('button')).attr({
+                            'id': field.id + 'reset',
+                            'class': 'flex-grow-1 btn btn-' + properties.color,
+                            'name': properties.name,
+                            'type': properties.type,
+                            'value': properties.value,
+                        }).html(field.label.html()).appendTo(field);
+                        field.label.remove();
+                        if(this._properties.class.label){
+                            field.input.addClass(this._properties.class.label);
+                        }
+                        if(properties.class.label){
+                            field.input.addClass(properties.class.label);
+                        }
+                        break;
+                    case'submit':
+                        field.input = $(document.createElement('button')).attr({
+                            'id': field.id + 'submit',
+                            'class': 'flex-grow-1 btn btn-' + properties.color,
+                            'name': properties.name,
+                            'type': properties.type,
+                            'value': properties.value,
+                        }).html(field.label.html()).appendTo(field);
+                        field.label.remove();
+                        if(this._properties.class.label){
+                            field.input.addClass(this._properties.class.label);
+                        }
+                        if(properties.class.label){
+                            field.input.addClass(properties.class.label);
+                        }
+                        break;
                     case 'color':
                         field.input = $(document.createElement('input')).attr({
                             'id': field.id + 'input',
@@ -8571,57 +8622,10 @@ class Builder {
                         }
                         field.init();
                         field.input.val(properties.value);
-                        break;
-                    case'clear':
-                        field.input = $(document.createElement('button')).attr({
-                            'id': field.id + 'clear',
-                            'class': 'flex-grow-1 btn btn-' + properties.color,
-                            'name': properties.name,
-                            'type': 'button',
-                            'value': properties.value,
-                        }).html(field.label.html()).appendTo(field);
-                        field.label.remove();
-                        if(this._properties.class.label){
-                            field.input.addClass(this._properties.class.label);
-                        }
-                        if(properties.class.label){
-                            field.input.addClass(properties.class.label);
-                        }
-                        field.input.click(function(){
-                            self.clear();
+                        // Execute onChange
+                        field.input.on('change',function(){
+                            self.onChange();
                         });
-                        break;
-                    case'reset':
-                        field.input = $(document.createElement('button')).attr({
-                            'id': field.id + 'reset',
-                            'class': 'flex-grow-1 btn btn-' + properties.color,
-                            'name': properties.name,
-                            'type': properties.type,
-                            'value': properties.value,
-                        }).html(field.label.html()).appendTo(field);
-                        field.label.remove();
-                        if(this._properties.class.label){
-                            field.input.addClass(this._properties.class.label);
-                        }
-                        if(properties.class.label){
-                            field.input.addClass(properties.class.label);
-                        }
-                        break;
-                    case'submit':
-                        field.input = $(document.createElement('button')).attr({
-                            'id': field.id + 'submit',
-                            'class': 'flex-grow-1 btn btn-' + properties.color,
-                            'name': properties.name,
-                            'type': properties.type,
-                            'value': properties.value,
-                        }).html(field.label.html()).appendTo(field);
-                        field.label.remove();
-                        if(this._properties.class.label){
-                            field.input.addClass(this._properties.class.label);
-                        }
-                        if(properties.class.label){
-                            field.input.addClass(properties.class.label);
-                        }
                         break;
                     case'range':
                         field.input = $(document.createElement('div')).addClass('tooltip-range form-control border border-start-0 rounded-end flex-grow-1 px-2 d-flex align-items-center').appendTo(field);
