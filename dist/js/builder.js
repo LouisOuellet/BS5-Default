@@ -8577,6 +8577,31 @@ class Builder {
                             return field.input.range.val();
                         };
                         break;
+                    case'switch':
+                        field.input = $(document.createElement('div')).addClass('form-control form-check form-switch m-0 px-2 border border-start-0 rounded-end flex-grow-1 d-flex align-items-center').appendTo(field);
+                        field.input.switch = $(document.createElement('input')).attr({
+                            'id': field.id + 'input',
+                            'class': 'flex-grow-1 form-check-input m-0',
+                            'type': 'checkbox',
+                            'role': 'switch',
+                            'value': properties.value,
+                            'style': 'height: 24px;',
+                        }).appendTo(field.input);
+                        field.input.val = function(value = null){
+                            if(value !== null){
+                                if(value){
+                                    field.input.switch.attr('value',true);
+                                    field.input.switch.attr('checked','checked');
+                                } else {
+                                    field.input.switch.attr('value',false);
+                                    field.input.switch.removeAttr('checked');
+                                }
+                            }
+
+                            return field.input.switch.val();
+                        };
+                        field.input.val(properties.value);
+                        break;
                     default:
                         field.input = $(document.createElement('input')).attr({
                             'id': field.id + 'input',
