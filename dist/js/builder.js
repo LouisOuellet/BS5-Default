@@ -2683,6 +2683,17 @@ class Builder {
                     isActive: false,
                     isDeleted: false,
                     isBanned: false,
+                    callback: {
+                        isActive: function(value,layout){
+                            console.log('isActive',value,layout);
+                        },
+                        isDeleted: function(value,layout){
+                            console.log('isDeleted',value,layout);
+                        },
+                        isBanned: function(value,layout){
+                            console.log('isBanned',value,layout);
+                        },
+                    }
                 };
             }
 
