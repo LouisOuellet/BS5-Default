@@ -8470,7 +8470,7 @@ class Builder {
                             'name': properties.name,
                         }).val(properties.value).appendTo(field);
                         // Execute onChange
-                        field.input.on('input',function(){
+                        field.input.on('input change keyup',function(){
                             self.onChange();
                         });
                         break;
@@ -8512,7 +8512,7 @@ class Builder {
                             })
                             .trigger('propertychange')
                         // Execute onChange
-                        field.input.editor.on('input',function(){
+                        field.input.editor.on('input change keyup',function(){
                             self.onChange();
                         });
                         break;
@@ -8544,7 +8544,7 @@ class Builder {
                                 }
                             },
                             setup: function (editor) {
-                                editor.on('keyup', function () {
+                                editor.on('input change keyup',function(){
                                     self.onChange();
                                 });
                             },
@@ -8577,7 +8577,7 @@ class Builder {
                             'autocomplete': 'off',
                         }).text(properties.value).appendTo(field);
                         // Execute onChange
-                        field.input.on('input',function(){
+                        field.input.on('input change keyup',function(){
                             self.onChange();
                         });
                         break;
@@ -8634,7 +8634,7 @@ class Builder {
                         field.init();
                         field.input.val(properties.value);
                         // Execute onChange
-                        field.input.on('change',function(){
+                        field.input.on('input change keyup',function(){
                             self.onChange();
                         });
                         break;
@@ -8676,7 +8676,7 @@ class Builder {
                             return field.input.range.val();
                         };
                         // Execute onChange
-                        field.input.range.on('change',function(){
+                        field.input.range.on('input change keyup',function(){
                             self.onChange();
                         });
                         break;
@@ -8704,7 +8704,7 @@ class Builder {
                             return field.input.switch.prop('checked');
                         };
                         field.input.val(properties.value);
-                        field.input.switch.on('change',function(){
+                        field.input.switch.on('input change keyup',function(){
                             self.onChange();
                         });
                         break;
@@ -8717,7 +8717,7 @@ class Builder {
                             'type': properties.type,
                             'value': properties.value,
                         }).appendTo(field);
-                        field.input.on('keyup',function(){
+                        field.input.on('input change keyup',function(){
                             self.onChange();
                         });
                         break;
