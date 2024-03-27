@@ -2684,14 +2684,14 @@ class Builder {
                     isDeleted: false,
                     isBanned: false,
                     callback: {
-                        isActive: function(value,layout){
-                            console.log('isActive',value,layout);
+                        isActive: function(value, button,layout){
+                            console.log('isActive',value,button,layout);
                         },
-                        isDeleted: function(value,layout){
-                            console.log('isDeleted',value,layout);
+                        isDeleted: function(value,button,layout){
+                            console.log('isDeleted',value,button,layout);
                         },
-                        isBanned: function(value,layout){
-                            console.log('isBanned',value,layout);
+                        isBanned: function(value,button,layout){
+                            console.log('isBanned',value,button,layout);
                         },
                     }
                 };
@@ -2768,12 +2768,12 @@ class Builder {
                         body.list.item2 = $(document.createElement('li')).text('Ban/Unban: Toggling this button will either ban or unban the user. Banning a user will restrict their access and participation on the platform. Unbanning the user will lift the restrictions.').appendTo(body.list);
                         body.list.item3 = $(document.createElement('li')).text('Activate/Deactivate: Toggling this button will either activate or deactivate the user\'s account. Activating the account will enable the user to access and use the platform. Deactivating the account will temporarily disable their access.').appendTo(body.list);
                         body.p2 = $(document.createElement('p')).text('Please note that these actions can have significant consequences, so exercise caution when making changes to a user\'s profile. Always review the situation and ensure the appropriate action is taken.').appendTo(body);
-                        let modal = self._builder.Component(
+                        let modals = self._builder.Component(
                             'modal',
                             component.footer.group.status,
                             {
                                 onEnter: false,
-                                destroy:true,
+                                destroy: false,
                                 icon: "gear",
                                 title: "User Profile Controls",
                                 body: body,
@@ -2781,98 +2781,127 @@ class Builder {
                                 size: "lg",
                             },
                             function(modal,element){
-                                if(self._properties.isActive){
-                                    modal.add(
+                                element.btn = {
+                                    deactivate: modal.add(
                                         {
                                             label: "Deactivate",
                                             color: "danger",
                                         },
-                                        function(action){
+                                        function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isActive === 'function'){
-                                                    self._properties.callback.isActive(0,self);
+                                                    self._properties.callback.isActive(0,action,modal);
                                                 }
                                                 modal.hide();
                                             });
                                         },
-                                    );
-                                } else {
-                                    modal.add(
+                                    ),
+                                    activate: modal.add(
                                         {
                                             label: "Activate",
                                             color: "info",
                                         },
-                                        function(action){
+                                        function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isActive === 'function'){
-                                                    self._properties.callback.isActive(1,self);
+                                                    self._properties.callback.isActive(1,action,modal);
                                                 }
                                                 modal.hide();
                                             });
                                         },
-                                    );
-                                }
-                                if(self._properties.isBanned){
-                                    modal.add(
+                                    ),
+                                    unban: modal.add(
                                         {
                                             label: "Unban",
                                             color: "info",
                                         },
-                                        function(action){
+                                        function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isBanned === 'function'){
-                                                    self._properties.callback.isBanned(1,self);
+                                                    self._properties.callback.isBanned(1,action,modal);
                                                 }
                                                 modal.hide();
                                             });
                                         },
-                                    );
-                                } else {
-                                    modal.add(
+                                    ),
+                                    ban: modal.add(
                                         {
                                             label: "Ban",
                                             color: "danger",
                                         },
-                                        function(action){
+                                        function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isBanned === 'function'){
-                                                    self._properties.callback.isBanned(0,self);
+                                                    self._properties.callback.isBanned(0,action,modal);
                                                 }
                                                 modal.hide();
                                             });
                                         },
-                                    );
-                                }
-                                if(self._properties.isDeleted){
-                                    modal.add(
+                                    ),
+                                    restore: modal.add(
                                         {
                                             label: "Restore",
                                             color: "info",
                                         },
                                         function(action){
+                                            action.attr('style','border-bottom-left-radius:var(--bs-border-radius)!important;');
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isDeleted === 'function'){
-                                                    self._properties.callback.isDeleted(1,self);
+                                                    self._properties.callback.isDeleted(1,action,modal);
                                                 }
                                                 modal.hide();
                                             });
                                         },
-                                    );
-                                } else {
-                                    modal.add(
+                                    ),
+                                    delete: modal.add(
                                         {
                                             label: "Delete",
                                             color: "danger",
                                         },
                                         function(action){
+                                            action.attr('style','border-bottom-left-radius:var(--bs-border-radius)!important;');
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isDeleted === 'function'){
-                                                    self._properties.callback.isDeleted(0,self);
+                                                    self._properties.callback.isDeleted(0,action,modal);
                                                 }
                                                 modal.hide();
                                             });
                                         },
-                                    );
+                                    ),
+                                }
+                                for(const [name, btn] of Object.entries(element.btn)){
+                                    btn.click(function(){
+                                        if(self._properties.isActive){
+                                            element.btn.activate.hide();
+                                        } else {
+                                            element.btn.deactivate.hide();
+                                        }
+                                        if(self._properties.isBanned){
+                                            element.btn.ban.hide();
+                                        } else {
+                                            element.btn.unban.hide();
+                                        }
+                                        if(self._properties.isDeleted){
+                                            element.btn.delete.hide();
+                                        } else {
+                                            element.btn.restore.hide();
+                                        }
+                                    });
+                                }
+                                if(self._properties.isActive){
+                                    element.btn.activate.hide();
+                                } else {
+                                    element.btn.deactivate.hide();
+                                }
+                                if(self._properties.isBanned){
+                                    element.btn.ban.hide();
+                                } else {
+                                    element.btn.unban.hide();
+                                }
+                                if(self._properties.isDeleted){
+                                    element.btn.delete.hide();
+                                } else {
+                                    element.btn.restore.hide();
                                 }
                             },
                         );
@@ -4610,7 +4639,7 @@ class Builder {
                 // Destroy
                 if(this._properties.destroy){
                     this._component.on('hide.bs.modal',function(){
-                        $(this).remove();
+                        this._component.remove();
                     });
                 }
 
@@ -4787,10 +4816,11 @@ class Builder {
 
                 // Execute Callback
                 if(typeof callback === 'function'){
-                    action.click(function(){
-                        callback(action,self._component,self);
-                    });
+                    callback(action,self._component,self);
                 }
+
+                // Return
+                return action;
             }
 
             bootstrap(){

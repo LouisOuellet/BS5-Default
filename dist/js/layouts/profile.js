@@ -12,6 +12,17 @@ $(document).ready(function(){
             isActive: true, //Active
             isDeleted: false, //Deleted
             isBanned: false, //Banned
+            callback: { //Callbacks
+                isActive: function(value, button,layout){ //isActive Callback
+                    console.log('isActive',value,button,layout);
+                },
+                isDeleted: function(value,button,layout){ //isDeleted Callback
+                    console.log('isDeleted',value,button,layout);
+                },
+                isBanned: function(value,button,layout){ //isBanned Callback
+                    console.log('isBanned',value,button,layout);
+                },
+            },
         },
         function(layout,component){ //Callback
 
