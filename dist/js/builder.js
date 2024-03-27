@@ -2788,6 +2788,7 @@ class Builder {
                                             color: "danger",
                                         },
                                         function(action){
+                                            console.log(action)
                                             if(typeof self._properties.callback.isActive === 'function'){
                                                 self._properties.callback.isActive(0,self);
                                             }
@@ -2801,6 +2802,7 @@ class Builder {
                                             color: "info",
                                         },
                                         function(action){
+                                            console.log(action)
                                             if(typeof self._properties.callback.isActive === 'function'){
                                                 self._properties.callback.isActive(1,self);
                                             }
@@ -2815,8 +2817,9 @@ class Builder {
                                             color: "info",
                                         },
                                         function(action){
+                                            console.log(action)
                                             if(typeof self._properties.callback.isBanned === 'function'){
-                                                self._properties.callback.isBanned(0,self);
+                                                self._properties.callback.isBanned(1,self);
                                             }
                                             modal.hide();
                                         },
@@ -2828,8 +2831,9 @@ class Builder {
                                             color: "danger",
                                         },
                                         function(action){
+                                            console.log(action)
                                             if(typeof self._properties.callback.isBanned === 'function'){
-                                                self._properties.callback.isBanned(1,self);
+                                                self._properties.callback.isBanned(0,self);
                                             }
                                             modal.hide();
                                         },
@@ -2842,8 +2846,9 @@ class Builder {
                                             color: "info",
                                         },
                                         function(action){
+                                            console.log(action)
                                             if(typeof self._properties.callback.isDeleted === 'function'){
-                                                self._properties.callback.isDeleted(0,self);
+                                                self._properties.callback.isDeleted(1,self);
                                             }
                                             modal.hide();
                                         },
@@ -2855,8 +2860,9 @@ class Builder {
                                             color: "danger",
                                         },
                                         function(action){
+                                            console.log(action)
                                             if(typeof self._properties.callback.isDeleted === 'function'){
-                                                self._properties.callback.isDeleted(1,self);
+                                                self._properties.callback.isDeleted(0,self);
                                             }
                                             modal.hide();
                                         },
