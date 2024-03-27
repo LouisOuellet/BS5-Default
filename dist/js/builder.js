@@ -2684,14 +2684,14 @@ class Builder {
                     isDeleted: false,
                     isBanned: false,
                     callback: {
-                        isActive: function(value, button,layout){
-                            console.log('isActive',value,button,layout);
+                        isActive: function(value, button, modal, layout){
+                            console.log('isActive',value, button, modal, layout);
                         },
-                        isDeleted: function(value,button,layout){
-                            console.log('isDeleted',value,button,layout);
+                        isDeleted: function(value, button, modal, layout){
+                            console.log('isDeleted',value, button, modal, layout);
                         },
-                        isBanned: function(value,button,layout){
-                            console.log('isBanned',value,button,layout);
+                        isBanned: function(value, button, modal, layout){
+                            console.log('isBanned',value, button, modal, layout);
                         },
                     }
                 };
@@ -2790,7 +2790,7 @@ class Builder {
                                         function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isActive === 'function'){
-                                                    self._properties.callback.isActive(0,action,modal);
+                                                    self._properties.callback.isActive(0,action,modal,self);
                                                 }
                                                 modal.hide();
                                             });
@@ -2804,7 +2804,7 @@ class Builder {
                                         function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isActive === 'function'){
-                                                    self._properties.callback.isActive(1,action,modal);
+                                                    self._properties.callback.isActive(1,action,modal,self);
                                                 }
                                                 modal.hide();
                                             });
@@ -2818,7 +2818,7 @@ class Builder {
                                         function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isBanned === 'function'){
-                                                    self._properties.callback.isBanned(1,action,modal);
+                                                    self._properties.callback.isBanned(1,action,modal,self);
                                                 }
                                                 modal.hide();
                                             });
@@ -2832,7 +2832,7 @@ class Builder {
                                         function(action,button,modal){
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isBanned === 'function'){
-                                                    self._properties.callback.isBanned(0,action,modal);
+                                                    self._properties.callback.isBanned(0,action,modal,self);
                                                 }
                                                 modal.hide();
                                             });
@@ -2847,7 +2847,7 @@ class Builder {
                                             action.attr('style','border-bottom-left-radius:var(--bs-border-radius)!important;');
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isDeleted === 'function'){
-                                                    self._properties.callback.isDeleted(1,action,modal);
+                                                    self._properties.callback.isDeleted(1,action,modal,self);
                                                 }
                                                 modal.hide();
                                             });
@@ -2862,7 +2862,7 @@ class Builder {
                                             action.attr('style','border-bottom-left-radius:var(--bs-border-radius)!important;');
                                             action.click(function(){
                                                 if(typeof self._properties.callback.isDeleted === 'function'){
-                                                    self._properties.callback.isDeleted(0,action,modal);
+                                                    self._properties.callback.isDeleted(0,action,modal,self);
                                                 }
                                                 modal.hide();
                                             });
